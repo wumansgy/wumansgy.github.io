@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[新文件上传测试]]></title>
-    <url>%2F2018%2F08%2F30%2F2018-8-30-%E6%96%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%2F</url>
-    <content type="text"><![CDATA[踩了很多坑，看看能不能上传 #不知道]]></content>
-  </entry>
-  <entry>
-    <title><![CDATA[Helloworld]]></title>
-    <url>%2F2018%2F08%2F29%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+    <title><![CDATA[go语言中的面向对象，接口类型，工厂设计模式解读]]></title>
+    <url>%2F2018%2F09%2F01%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[###工厂模式： 定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂方法模式 抽象工厂模式针对的是一个产品等级结构 针对的是面向多个产品等级结构一个抽象产品类 多个抽象产品类可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例加减乘除四则运算器工厂模式举例子 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677package mainimport "fmt"type operation struct&#123; //定义一个父类两个数据 num1 float64 num2 float64&#125;type operationAdd struct&#123; //加法子类 operation&#125;func (op *operationAdd)getresult()float64&#123; //加法类的方法 return op.num1+op.num2&#125;type operationSub struct&#123; //减法子类 operation&#125;func (sub *operationSub)getresult()float64&#123; //减法类的方法 return sub.num1-sub.num2&#125;type operationMult struct&#123; //乘法子类 operation&#125;func (mult *operationMult)getresult()float64&#123; return mult.num1*mult.num2&#125;type operationDivi struct&#123; operation&#125; //除法子类func (divi *operationDivi)getresult()float64&#123; return divi.num1/divi.num2&#125;type operationer interface&#123; //定义接口 getresult() float64 //加法的方法&#125;type operationfactor struct &#123; //operation //用于创建对象的类，工厂模式&#125;func (op *operationfactor)creatoperation(ope string,num1 float64,num2 float64)float64&#123; //用于构件对象类 var result float64 switch ope &#123; case "+": add:=&amp;operationAdd&#123;operation&#123;num1,num2&#125;&#125; //按照传过来的符号来创建相应的对象 result=operationwho(add) //传递给多态的函数，直接调用 case "-": sub:=&amp;operationSub&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(sub) case "*": mult:=&amp;operationMult&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(mult) case "/": divi:=&amp;operationDivi&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(divi) &#125; return result&#125;func operationwho(i operationer)float64&#123; return i.getresult() //此处为创建一个多态的函数&#125;func main()&#123; //m:=&amp;operationAdd&#123;operation&#123;3,4&#125;&#125; //var iop operationer //iop=m //sum:=iop.getresult() //fmt.Println(sum) var op1 operationfactor //直接创建工厂类对象 sum:=op1.creatoperation("+",9,6) //直接调用工厂类的方法 fmt.Println(sum) var op2 operationfactor sub:=op2.creatoperation("-",9,8) fmt.Println(sub) var op3 operationfactor mult:=op3.creatoperation("*",3,4) fmt.Println(mult) var op4 operationfactor div:=op4.creatoperation("/",9,10) fmt.Println(div)&#125; 在上面的例子当中，如果对面向对象没有接触的话可能会有一些不好理解，在go语言当中面向对象可能和别的语言有一些不同，go语言是利用匿名字段来实现继承，在上面的例子中多态函数的实现可以让函数调用更加方便，比如每个结构体类都有10几个甚至更多的函数，那么直接都把这些函数封装在多态的函数里面，那么每次调用直接传递一个结构体类给多态函数就直接全部调用了，这样就是很方便的]]></content>
+      <categories>
+        <category>编程语言</category>
+      </categories>
+      <tags>
+        <tag>go语言</tag>
+      </tags>
   </entry>
 </search>
