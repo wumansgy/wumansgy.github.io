@@ -110,12 +110,12 @@
 <meta property="og:site_name" content="Wuman&#39;s Blog">
 <meta property="og:description" content="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序  1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="c:/Users/Administrator/Desktop/20180811125041554.png">
-<meta property="og:updated_time" content="2018-09-01T05:41:54.538Z">
+<meta property="og:image" content="d:/git/git图片/20180811125041554.png">
+<meta property="og:updated_time" content="2018-09-01T10:38:42.990Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go语言简单排序之冒泡和插入排序">
 <meta name="twitter:description" content="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序  1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码">
-<meta name="twitter:image" content="c:/Users/Administrator/Desktop/20180811125041554.png">
+<meta name="twitter:image" content="d:/git/git图片/20180811125041554.png">
 
 
 
@@ -366,7 +366,7 @@
                 
               
 
-              <time title="创建时间：2018-09-01 12:36:40 / 修改时间：13:41:54" itemprop="dateCreated datePublished" datetime="2018-09-01T12:36:40+08:00">2018-09-01</time>
+              <time title="创建时间：2018-09-01 12:36:40 / 修改时间：18:38:42" itemprop="dateCreated datePublished" datetime="2018-09-01T12:36:40+08:00">2018-09-01</time>
             
 
             
@@ -424,7 +424,7 @@
       
         <h6 id="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡"><a href="#编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡" class="headerlink" title="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡"></a>编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡</h6><h6 id="排序之后的插入排序-1："><a href="#排序之后的插入排序-1：" class="headerlink" title="排序之后的插入排序  1："></a>排序之后的插入排序  1：</h6><h4 id="冒泡排序："><a href="#冒泡排序：" class="headerlink" title="冒泡排序："></a>冒泡排序：</h4><p>见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码，然后慢慢分析</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="comment">//func main() &#123;</span></span><br><span class="line">    arr := [<span class="number">10</span>]<span class="keyword">int</span>&#123;<span class="number">9</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">4</span>&#125;  <span class="comment">//先定义一个乱序数组</span></span><br><span class="line">    <span class="comment">//冒泡排序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span><span class="number">-1</span>; i++ &#123;         <span class="comment">//外面的循环用来循环次数</span></span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">10</span><span class="number">-1</span>-i; j++ &#123;    <span class="comment">//里面的循环用来循环 每次对比到哪里</span></span><br><span class="line">            <span class="keyword">if</span> arr[j] &gt; arr[j+<span class="number">1</span>] &#123;</span><br><span class="line">                <span class="comment">//数据交换</span></span><br><span class="line">                arr[j], arr[j+<span class="number">1</span>] = arr[j+<span class="number">1</span>], arr[j]  <span class="comment">//go语言的多个数据交换格式</span></span><br><span class="line">                <span class="comment">//temp := arr[j]   //普通数据交换格式</span></span><br><span class="line">                <span class="comment">//arr[j] = arr[j+1]</span></span><br><span class="line">                <span class="comment">//arr[j+1] = temp</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(arr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="C:\Users\Administrator\Desktop\20180811125041554.png" alt=""></p>
+<p><img src="D:\git\git图片\20180811125041554.png" alt=""></p>
 <p>我们看到这个代码和这张图片，在图片中我们只写了前面几次，先来看第一次，第一个元素和第二个相比4比2大，如果第一个元素比第二个大那么就交换一下，然后第二个元素和第三个相比，如果大就交换，然后第三第四相比，第四第五相比，一直比到最后一个和倒数第一个，有没有发现这样比一次就能确定一个最大的数，而且最大的数是放在最后一个元素里面的，这样一次就是外面的外循环</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span><span class="number">-1</span>; i++ &#123;  <span class="comment">//这句话就是外面的循环</span></span><br></pre></td></tr></table></figure>
 <p>然后确定第一个最大的放最后一个，那么我们然后怎么办呢 ，然后我们当然继续下一次对比然后再确定一个第二大的放在倒数第二的位置啊，最大的确定下来后，我们继续从第一个开始遍历，但是这次遍历要注意了，不需要遍历到最后一个元素，而只需遍历到倒数第二个就行了，这是为什么呢，因为最后一个元素已经确定下来是最大的了，所以就不需要对比了，我们来看内循环</p>
@@ -488,18 +488,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/01/go语言工厂模式/" rel="next" title="go语言中的面向对象，接口类型，工厂设计模式解读">
-                <i class="fa fa-chevron-left"></i> go语言中的面向对象，接口类型，工厂设计模式解读
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/01/区块简单实现/" rel="prev" title="一个简单区块的实现">
-                一个简单区块的实现 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/01/go语言工厂模式/" rel="prev" title="go语言中的面向对象，接口类型，工厂设计模式解读">
+                go语言中的面向对象，接口类型，工厂设计模式解读 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -570,7 +566,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -589,7 +585,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -608,7 +606,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
