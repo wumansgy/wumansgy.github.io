@@ -102,24 +102,27 @@
 
 
 
-  <meta name="description" content="canvas-nest.js for NexT  Installation  Step 1 &amp;rarr; Go to NexT dir  Change dir to NexT directory. There must be layout, source, languages and other directories: 123$ cd themes/next$ lsbower.json  _co">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Wuman&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/lib/canvas-nest/README.html">
+  <meta name="description" content="简单区块实现区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。  我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现   创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据 创">
+<meta name="keywords" content="go语言,区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个简单区块的实现">
+<meta property="og:url" content="http://yoursite.com/2018/09/01/区块简单实现/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="canvas-nest.js for NexT  Installation  Step 1 &amp;rarr; Go to NexT dir  Change dir to NexT directory. There must be layout, source, languages and other directories: 123$ cd themes/next$ lsbower.json  _co">
+<meta property="og:description" content="简单区块实现区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。  我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现   创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据 创">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-30T12:15:16.213Z">
+<meta property="og:image" content="c:/Users/Administrator/Desktop/[R5XG%606J]9%MIXF9EHSR%7D@E.png">
+<meta property="og:updated_time" content="2018-09-01T09:10:44.741Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wuman&#39;s Blog">
-<meta name="twitter:description" content="canvas-nest.js for NexT  Installation  Step 1 &amp;rarr; Go to NexT dir  Change dir to NexT directory. There must be layout, source, languages and other directories: 123$ cd themes/next$ lsbower.json  _co">
+<meta name="twitter:title" content="一个简单区块的实现">
+<meta name="twitter:description" content="简单区块实现区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。  我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现   创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据 创">
+<meta name="twitter:image" content="c:/Users/Administrator/Desktop/[R5XG%606J]9%MIXF9EHSR%7D@E.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/lib/canvas-nest/README.html"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/01/区块简单实现/"/>
 
 
 
@@ -129,7 +132,7 @@
   };
 </script>
 
-  <title> | Wuman's Blog</title>
+  <title>一个简单区块的实现 | Wuman's Blog</title>
   
 
 
@@ -301,153 +304,228 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/01/区块简单实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline"></h1>
-
-<div class="post-meta">
-  
-  
-
-
-  
-  
-  <ul class="breadcrumb">
-    
-      
-      
         
-          <li><a href="/lib/">LIB</a></li>
+        
+          <h1 class="post-title" itemprop="name headline">一个简单区块的实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-01 16:46:40 / 修改时间：17:10:44" itemprop="dateCreated datePublished" datetime="2018-09-01T16:46:40+08:00">2018-09-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
           
             
           
-        
-      
-    
-      
-      
-        
-          <li>CANVAS-NEST</li>
-        
-      
-    
-      
-      
-        
-          <li><a href="/lib/README.html/">README.HTML</a></li>
+
           
-            
           
-        
-      
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
     
-  </ul>
 
-
-</div>
-
-</header>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
+
       
-      <div class="post-body">
-        
-        
-          <h1 align="center"><a href="https://github.com/hustcc/canvas-nest.js" target="_blank" rel="noopener">canvas-nest.js</a> for <a href="https://github.com/theme-next" target="_blank" rel="noopener">NexT</a></h1>
+        <h4 id="简单区块实现"><a href="#简单区块实现" class="headerlink" title="简单区块实现"></a>简单区块实现</h4><p>区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。</p>
+<blockquote>
+<p>我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现</p>
+</blockquote>
+<ul>
+<li>创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据</li>
+<li>创建第一个区块并给其中的数据赋值，也就相当于一个创世块，注意这里创世块的前哈希传一个空值就可以</li>
+<li>给这个区块的数据处理一下然后加密得到本区块的哈希</li>
+<li>主函数里面打印看一下本区块的哈希  //哈希用16进制打印</li>
+</ul>
+<p>大概这样思路就可以理顺了，然后我们就可以一步一步实现了</p>
+<p><strong>1：第一步创建一个区块结构体</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Block <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//创建一个区块结构体</span></span><br><span class="line">	Timer    <span class="keyword">int64</span>  <span class="comment">//时间戳</span></span><br><span class="line">	Data     []<span class="keyword">byte</span> <span class="comment">//数据</span></span><br><span class="line">	prevHash []<span class="keyword">byte</span> <span class="comment">//前一个区块的哈希值</span></span><br><span class="line">	Hash     []<span class="keyword">byte</span> <span class="comment">//本区块的哈希值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>区块结构体创建完成，继续下一步</p>
+<p><strong>2：创建第一个区块</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Firstblosk</span><span class="params">()</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建第一个区块信息，相当于一个创始块</span></span><br><span class="line">	firstblock := NewBlock(<span class="string">"This is firstblock"</span>, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//传入参数，返回结构体指针类型</span></span><br><span class="line">	<span class="keyword">return</span> firstblock                                      <span class="comment">//返回的是结构体指针类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBlock</span><span class="params">(data <span class="keyword">string</span>, prevhash []<span class="keyword">byte</span>)</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建区块的函数</span></span><br><span class="line">	block1 := Block&#123;&#125;                <span class="comment">//创建一个区块结构体</span></span><br><span class="line">	block1.Timer = time.Now().Unix() <span class="comment">//得到时间</span></span><br><span class="line">	block1.Data = []<span class="keyword">byte</span>(data)       <span class="comment">//传入数据参数</span></span><br><span class="line">	block1.prevHash = prevhash       <span class="comment">//前一个哈希值为传入的数据</span></span><br><span class="line">	block1.setHash()                 <span class="comment">//setHash 方法加密得到自己的hash</span></span><br><span class="line">	<span class="keyword">return</span> &amp;block1                   <span class="comment">//返回区块指针</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用来创建第一个区块</p>
+<p><strong>3：给区块信息数据处理</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(block *Block)</span> <span class="title">setHash</span><span class="params">()</span></span> &#123;</span><br><span class="line">	time := []<span class="keyword">byte</span>(strconv.FormatInt(block.Timer, <span class="number">10</span>))                         <span class="comment">//将区块的时间转为字符切片类型，方便加密</span></span><br><span class="line">	heards := bytes.Join([][]<span class="keyword">byte</span>&#123;time, block.Data, block.prevHash&#125;, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//将时间，数据，前一个哈希拼接一下</span></span><br><span class="line">	hash := sha256.Sum256(heards)                                              <span class="comment">//用sha256包的Sum256函数加密</span></span><br><span class="line">	block.Hash = hash[:]                                                       <span class="comment">//加密后的直接赋值给本哈希</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>4:主函数里面打印看一下本区块的哈希  //哈希用16进制打印</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	firstblock := Firstblosk()</span><br><span class="line">	fmt.Printf(<span class="string">"%x"</span>,<span class="keyword">string</span>(firstblock.Hash)) <span class="comment">//16进制打印</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样一个简单的区块就创建成功了，我们把所有代码连接起来然后来看一下打印结果</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="comment">/*一个简单的区块创建实现*/</span></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"strconv"</span></span><br><span class="line">	<span class="string">"bytes"</span></span><br><span class="line">	<span class="string">"crypto/sha256"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Block <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//创建一个区块结构体</span></span><br><span class="line">	Timer    <span class="keyword">int64</span>  <span class="comment">//时间戳</span></span><br><span class="line">	Data     []<span class="keyword">byte</span> <span class="comment">//数据</span></span><br><span class="line">	prevHash []<span class="keyword">byte</span> <span class="comment">//前一个区块的哈希值</span></span><br><span class="line">	Hash     []<span class="keyword">byte</span> <span class="comment">//本区块的哈希值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(block *Block)</span> <span class="title">setHash</span><span class="params">()</span></span> &#123;</span><br><span class="line">	time := []<span class="keyword">byte</span>(strconv.FormatInt(block.Timer, <span class="number">10</span>))                         <span class="comment">//将区块的时间转为字符切片类型，方便加密</span></span><br><span class="line">	heards := bytes.Join([][]<span class="keyword">byte</span>&#123;time, block.Data, block.prevHash&#125;, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//将时间，数据，前一个哈希拼接一下</span></span><br><span class="line">	hash := sha256.Sum256(heards)                                              <span class="comment">//用sha256包的Sum256函数加密</span></span><br><span class="line">	block.Hash = hash[:]                                                       <span class="comment">//加密后的直接赋值给本哈希</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Firstblosk</span><span class="params">()</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建第一个区块信息，相当于一个创始块</span></span><br><span class="line">	firstblock := NewBlock(<span class="string">"This is firstblock"</span>, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//传入参数，返回结构体指针类型</span></span><br><span class="line">	<span class="keyword">return</span> firstblock                                      <span class="comment">//返回的是结构体指针类型</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBlock</span><span class="params">(data <span class="keyword">string</span>, prevhash []<span class="keyword">byte</span>)</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建区块的函数</span></span><br><span class="line">	block1 := Block&#123;&#125;                <span class="comment">//创建一个区块结构体</span></span><br><span class="line">	block1.Timer = time.Now().Unix() <span class="comment">//得到时间</span></span><br><span class="line">	block1.Data = []<span class="keyword">byte</span>(data)       <span class="comment">//传入数据参数</span></span><br><span class="line">	block1.prevHash = prevhash       <span class="comment">//前一个哈希值为传入的数据</span></span><br><span class="line">	block1.setHash()                 <span class="comment">//setHash 方法加密得到自己的hash</span></span><br><span class="line">	<span class="keyword">return</span> &amp;block1                   <span class="comment">//返回区块指针</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	firstblock := Firstblosk()</span><br><span class="line">	fmt.Printf(<span class="string">"%x"</span>,<span class="keyword">string</span>(firstblock.Hash)) <span class="comment">//16进制打印</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来看一下哈希打印结果</p>
+<p><img src="C:\Users\Administrator\Desktop\[R5XG`6J]9%MIXF9EHSR}@E.png" alt=""></p>
+<p>这样一个简单的区块就实现了，那么如果要实现一个简单的区块链呢？其实也按照这样的思路写下去也很容易实现，记住：区块链的本区块的哈希是下一个区块的前哈希，这样链接，下一章我们将讲解一个简单的区块链实现。</p>
 
-<h1 align="center">Installation</h1>
-
-<h2 align="center">Step 1 &rarr; Go to NexT dir</h2>
-
-<p>Change dir to <strong>NexT</strong> directory. There must be <code>layout</code>, <code>source</code>, <code>languages</code> and other directories:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes/next</span><br><span class="line">$ ls</span><br><span class="line">bower.json  _config.yml  docs  gulpfile.coffee  languages  layout  LICENSE.md  package.json  README.md  scripts  <span class="built_in">source</span>  <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<h2 align="center">Step 2 &rarr; Get module</h2>
-
-<p>Install module to <code>source/lib</code> directory:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/theme-next/theme-next-canvas-nest <span class="built_in">source</span>/lib/canvas-nest</span><br></pre></td></tr></table></figure>
-<h2 align="center">Step 3 &rarr; Set it up</h2>
-
-<p>Enable module in <strong>NexT</strong> <code>_config.yml</code> file:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">canvas_nest:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h1 align="center">Update</h1>
-
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes/next/<span class="built_in">source</span>/lib/canvas-nest</span><br><span class="line">$ git pull</span><br></pre></td></tr></table></figure>
-
-        
-      </div>
-      
-      
       
     </div>
+
     
 
 
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
+          
+            <a href="/tags/区块链/" rel="tag"><i class="fa fa-tag"></i> 区块链</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/01/go语言冒泡插入排序/" rel="next" title="go语言简单排序之冒泡和插入排序">
+                <i class="fa fa-chevron-left"></i> go语言简单排序之冒泡和插入排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
   
   
-  <ul class="breadcrumb">
-    
-      
-      
-        
-          <li><a href="/lib/">LIB</a></li>
-          
-            
-          
-        
-      
-    
-      
-      
-        
-          <li>CANVAS-NEST</li>
-        
-      
-    
-      
-      
-        
-          <li><a href="/lib/README.html/">README.HTML</a></li>
-          
-            
-          
-        
-      
-    
-  </ul>
+  
+  </article>
 
 
-    
-    
-    
   </div>
 
 
@@ -595,7 +673,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">canvas-nest.js for NexT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">Step 1 → Go to NexT dir</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">Step 2 → Get module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">Step 3 → Set it up</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Update</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单区块实现"><span class="nav-number">1.</span> <span class="nav-text">简单区块实现</span></a></li></ol></div>
             
 
           </div>
