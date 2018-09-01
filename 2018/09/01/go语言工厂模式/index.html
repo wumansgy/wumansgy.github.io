@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="###工厂模式：    定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构">
+  <meta name="description" content="工厂模式：   定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂">
 <meta name="keywords" content="go语言">
 <meta property="og:type" content="article">
 <meta property="og:title" content="go语言中的面向对象，接口类型，工厂设计模式解读">
-<meta property="og:url" content="http://yoursite.com/2018/09/01/hello-world/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/09/01/go语言工厂模式/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="###工厂模式：    定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构">
+<meta property="og:description" content="工厂模式：   定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-01T05:00:17.825Z">
+<meta property="og:updated_time" content="2018-09-01T05:12:07.692Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go语言中的面向对象，接口类型，工厂设计模式解读">
-<meta name="twitter:description" content="###工厂模式：    定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构">
+<meta name="twitter:description" content="工厂模式：   定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/01/hello-world/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/01/go语言工厂模式/"/>
 
 
 
@@ -328,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/01/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/01/go语言工厂模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -370,7 +370,7 @@
                 
               
 
-              <time title="创建时间：2018-09-01 12:36:40 / 修改时间：13:00:17" itemprop="dateCreated datePublished" datetime="2018-09-01T12:36:40+08:00">2018-09-01</time>
+              <time title="创建时间：2018-09-01 12:36:40 / 修改时间：13:12:07" itemprop="dateCreated datePublished" datetime="2018-09-01T12:36:40+08:00">2018-09-01</time>
             
 
             
@@ -426,8 +426,7 @@
       
 
       
-        <p>###工厂模式：</p>
-<p>   定义一个用于创建对象的接口，让子类决定实例化哪一个类<br>抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类<br>个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。<br>工厂方法模式 抽象工厂模式<br>针对的是一个产品等级结构 针对的是面向多个产品等级结构<br>一个抽象产品类 多个抽象产品类<br>可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类<br>一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类<br>每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例<br>加减乘除四则运算器工厂模式举例子</p>
+        <h3 id="工厂模式："><a href="#工厂模式：" class="headerlink" title="工厂模式："></a><strong>工厂模式：</strong></h3><p>   定义一个用于创建对象的接口，让子类决定实例化哪一个类<br>抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类<br>个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。<br>工厂方法模式 抽象工厂模式<br>针对的是一个产品等级结构 针对的是面向多个产品等级结构<br>一个抽象产品类 多个抽象产品类<br>可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类<br>一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类<br>每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例<br>加减乘除四则运算器工厂模式举例子</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">type</span> operation <span class="keyword">struct</span>&#123;  <span class="comment">//定义一个父类两个数据</span></span><br><span class="line">    num1 <span class="keyword">float64</span></span><br><span class="line">    num2 <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> operationAdd <span class="keyword">struct</span>&#123;   <span class="comment">//加法子类</span></span><br><span class="line">    operation</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(op *operationAdd)</span><span class="title">getresult</span><span class="params">()</span><span class="title">float64</span></span>&#123; <span class="comment">//加法类的方法</span></span><br><span class="line">    <span class="keyword">return</span> op.num1+op.num2</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> operationSub <span class="keyword">struct</span>&#123;          <span class="comment">//减法子类</span></span><br><span class="line">    operation</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(sub *operationSub)</span><span class="title">getresult</span><span class="params">()</span><span class="title">float64</span></span>&#123; <span class="comment">//减法类的方法</span></span><br><span class="line">    <span class="keyword">return</span> sub.num1-sub.num2</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> operationMult <span class="keyword">struct</span>&#123;    <span class="comment">//乘法子类</span></span><br><span class="line">    operation</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(mult *operationMult)</span><span class="title">getresult</span><span class="params">()</span><span class="title">float64</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mult.num1*mult.num2</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> operationDivi <span class="keyword">struct</span>&#123;</span><br><span class="line">    operation</span><br><span class="line">&#125;                          <span class="comment">//除法子类</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(divi *operationDivi)</span><span class="title">getresult</span><span class="params">()</span><span class="title">float64</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> divi.num1/divi.num2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> operationer <span class="keyword">interface</span>&#123;    <span class="comment">//定义接口</span></span><br><span class="line">    getresult() <span class="keyword">float64</span>     <span class="comment">//加法的方法</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> operationfactor <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">//operation                  //用于创建对象的类，工厂模式</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(op *operationfactor)</span><span class="title">creatoperation</span><span class="params">(ope <span class="keyword">string</span>,num1 <span class="keyword">float64</span>,num2 <span class="keyword">float64</span>)</span><span class="title">float64</span></span>&#123;  <span class="comment">//用于构件对象类</span></span><br><span class="line">    <span class="keyword">var</span> result <span class="keyword">float64</span></span><br><span class="line">    <span class="keyword">switch</span> ope &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"+"</span>:</span><br><span class="line">        add:=&amp;operationAdd&#123;operation&#123;num1,num2&#125;&#125;  <span class="comment">//按照传过来的符号来创建相应的对象</span></span><br><span class="line">        result=operationwho(add)   <span class="comment">//传递给多态的函数，直接调用</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">"-"</span>:</span><br><span class="line">        sub:=&amp;operationSub&#123;operation&#123;num1,num2&#125;&#125;</span><br><span class="line">        result=operationwho(sub)</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"*"</span>:</span><br><span class="line">        mult:=&amp;operationMult&#123;operation&#123;num1,num2&#125;&#125;</span><br><span class="line">        result=operationwho(mult)</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"/"</span>:</span><br><span class="line">        divi:=&amp;operationDivi&#123;operation&#123;num1,num2&#125;&#125;</span><br><span class="line">        result=operationwho(divi)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operationwho</span><span class="params">(i operationer)</span><span class="title">float64</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> i.getresult() <span class="comment">//此处为创建一个多态的函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//m:=&amp;operationAdd&#123;operation&#123;3,4&#125;&#125;</span></span><br><span class="line">    <span class="comment">//var iop operationer</span></span><br><span class="line">    <span class="comment">//iop=m</span></span><br><span class="line">    <span class="comment">//sum:=iop.getresult()</span></span><br><span class="line">    <span class="comment">//fmt.Println(sum)</span></span><br><span class="line">    <span class="keyword">var</span> op1 operationfactor  <span class="comment">//直接创建工厂类对象</span></span><br><span class="line">    sum:=op1.creatoperation(<span class="string">"+"</span>,<span class="number">9</span>,<span class="number">6</span>) <span class="comment">//直接调用工厂类的方法</span></span><br><span class="line">    fmt.Println(sum)</span><br><span class="line">    <span class="keyword">var</span> op2 operationfactor</span><br><span class="line">    sub:=op2.creatoperation(<span class="string">"-"</span>,<span class="number">9</span>,<span class="number">8</span>)</span><br><span class="line">    fmt.Println(sub)</span><br><span class="line">    <span class="keyword">var</span> op3 operationfactor</span><br><span class="line">    mult:=op3.creatoperation(<span class="string">"*"</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">    fmt.Println(mult)</span><br><span class="line">    <span class="keyword">var</span> op4 operationfactor</span><br><span class="line">    div:=op4.creatoperation(<span class="string">"/"</span>,<span class="number">9</span>,<span class="number">10</span>)</span><br><span class="line">    fmt.Println(div)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上面的例子当中，如果对面向对象没有接触的话可能会有一些不好理解，在go语言当中面向对象可能和别的语言有一些不同，go语言是利用匿名字段来实现继承，在上面的例子中多态函数的实现可以让函数调用更加方便，比如每个结构体类都有10几个甚至更多的函数，那么直接都把这些函数封装在多态的函数里面，那么每次调用直接传递一个结构体类给多态函数就直接全部调用了，这样就是很方便的</p>
 
@@ -518,8 +517,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -604,6 +612,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂模式："><span class="nav-number">1.</span> <span class="nav-text">工厂模式：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
