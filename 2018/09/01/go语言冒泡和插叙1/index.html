@@ -102,27 +102,27 @@
 
 
 
-  <meta name="description" content="简单区块实现区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。  我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现   创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据 创">
-<meta name="keywords" content="go语言,区块链">
+  <meta name="description" content="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序  1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码">
+<meta name="keywords" content="go语言,排序问题">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个简单区块的实现">
-<meta property="og:url" content="http://yoursite.com/2018/09/01/区块简单实现/index.html">
+<meta property="og:title" content="go语言简单排序之冒泡和插入排序">
+<meta property="og:url" content="http://yoursite.com/2018/09/01/go语言冒泡和插叙1/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="简单区块实现区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。  我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现   创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据 创">
+<meta property="og:description" content="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序  1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="d:/git/git图片/[R5XG%606J]9%MIXF9EHSR%7D@E.png">
-<meta property="og:updated_time" content="2018-09-01T10:39:10.119Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/01/go语言冒泡和插叙1/1.png">
+<meta property="og:updated_time" content="2018-09-01T11:25:07.648Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个简单区块的实现">
-<meta name="twitter:description" content="简单区块实现区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。  我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现   创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据 创">
-<meta name="twitter:image" content="d:/git/git图片/[R5XG%606J]9%MIXF9EHSR%7D@E.png">
+<meta name="twitter:title" content="go语言简单排序之冒泡和插入排序">
+<meta name="twitter:description" content="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序  1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/01/go语言冒泡和插叙1/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/01/区块简单实现/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/01/go语言冒泡和插叙1/"/>
 
 
 
@@ -132,7 +132,7 @@
   };
 </script>
 
-  <title>一个简单区块的实现 | Wuman's Blog</title>
+  <title>go语言简单排序之冒泡和插入排序 | Wuman's Blog</title>
   
 
 
@@ -324,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/01/区块简单实现/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/01/go语言冒泡和插叙1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -341,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一个简单区块的实现
+          <h1 class="post-title" itemprop="name headline">go语言简单排序之冒泡和插入排序
               
             
           </h1>
@@ -366,7 +366,7 @@
                 
               
 
-              <time title="创建时间：2018-09-01 16:46:40 / 修改时间：18:39:10" itemprop="dateCreated datePublished" datetime="2018-09-01T16:46:40+08:00">2018-09-01</time>
+              <time title="创建时间：2018-09-01 12:36:40 / 修改时间：19:25:07" itemprop="dateCreated datePublished" datetime="2018-09-01T12:36:40+08:00">2018-09-01</time>
             
 
             
@@ -388,7 +388,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构和算法/" itemprop="url" rel="index"><span itemprop="name">数据结构和算法</span></a></span>
 
                 
                 
@@ -422,33 +422,19 @@
       
 
       
-        <h4 id="简单区块实现"><a href="#简单区块实现" class="headerlink" title="简单区块实现"></a>简单区块实现</h4><p>区块链技术如今已经越来越成熟，但是我们怎么深入到本质用技术的眼光来看待区块链技术，见名知意，区块链的意思就是用链条把区块链接起来，那我们先用代码来看一下，今天我们用go语言来简单的实现一个区块并打印。</p>
-<blockquote>
-<p>我们可以先来理一下思路，我们想要实现一个区块该怎么办，思路理好然后再来代码一步一步实现</p>
-</blockquote>
-<ul>
-<li>创建一个结构体来保存一个区块的信息  //大概包括时间戳，数据，前哈希，本哈希这几个数据</li>
-<li>创建第一个区块并给其中的数据赋值，也就相当于一个创世块，注意这里创世块的前哈希传一个空值就可以</li>
-<li>给这个区块的数据处理一下然后加密得到本区块的哈希</li>
-<li>主函数里面打印看一下本区块的哈希  //哈希用16进制打印</li>
-</ul>
-<p>大概这样思路就可以理顺了，然后我们就可以一步一步实现了</p>
-<p><strong>1：第一步创建一个区块结构体</strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Block <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//创建一个区块结构体</span></span><br><span class="line">	Timer    <span class="keyword">int64</span>  <span class="comment">//时间戳</span></span><br><span class="line">	Data     []<span class="keyword">byte</span> <span class="comment">//数据</span></span><br><span class="line">	prevHash []<span class="keyword">byte</span> <span class="comment">//前一个区块的哈希值</span></span><br><span class="line">	Hash     []<span class="keyword">byte</span> <span class="comment">//本区块的哈希值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>区块结构体创建完成，继续下一步</p>
-<p><strong>2：创建第一个区块</strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Firstblosk</span><span class="params">()</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建第一个区块信息，相当于一个创始块</span></span><br><span class="line">	firstblock := NewBlock(<span class="string">"This is firstblock"</span>, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//传入参数，返回结构体指针类型</span></span><br><span class="line">	<span class="keyword">return</span> firstblock                                      <span class="comment">//返回的是结构体指针类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBlock</span><span class="params">(data <span class="keyword">string</span>, prevhash []<span class="keyword">byte</span>)</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建区块的函数</span></span><br><span class="line">	block1 := Block&#123;&#125;                <span class="comment">//创建一个区块结构体</span></span><br><span class="line">	block1.Timer = time.Now().Unix() <span class="comment">//得到时间</span></span><br><span class="line">	block1.Data = []<span class="keyword">byte</span>(data)       <span class="comment">//传入数据参数</span></span><br><span class="line">	block1.prevHash = prevhash       <span class="comment">//前一个哈希值为传入的数据</span></span><br><span class="line">	block1.setHash()                 <span class="comment">//setHash 方法加密得到自己的hash</span></span><br><span class="line">	<span class="keyword">return</span> &amp;block1                   <span class="comment">//返回区块指针</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>用来创建第一个区块</p>
-<p><strong>3：给区块信息数据处理</strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(block *Block)</span> <span class="title">setHash</span><span class="params">()</span></span> &#123;</span><br><span class="line">	time := []<span class="keyword">byte</span>(strconv.FormatInt(block.Timer, <span class="number">10</span>))                         <span class="comment">//将区块的时间转为字符切片类型，方便加密</span></span><br><span class="line">	heards := bytes.Join([][]<span class="keyword">byte</span>&#123;time, block.Data, block.prevHash&#125;, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//将时间，数据，前一个哈希拼接一下</span></span><br><span class="line">	hash := sha256.Sum256(heards)                                              <span class="comment">//用sha256包的Sum256函数加密</span></span><br><span class="line">	block.Hash = hash[:]                                                       <span class="comment">//加密后的直接赋值给本哈希</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>4:主函数里面打印看一下本区块的哈希  //哈希用16进制打印</strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	firstblock := Firstblosk()</span><br><span class="line">	fmt.Printf(<span class="string">"%x"</span>,<span class="keyword">string</span>(firstblock.Hash)) <span class="comment">//16进制打印</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样一个简单的区块就创建成功了，我们把所有代码连接起来然后来看一下打印结果</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="comment">/*一个简单的区块创建实现*/</span></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"strconv"</span></span><br><span class="line">	<span class="string">"bytes"</span></span><br><span class="line">	<span class="string">"crypto/sha256"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Block <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//创建一个区块结构体</span></span><br><span class="line">	Timer    <span class="keyword">int64</span>  <span class="comment">//时间戳</span></span><br><span class="line">	Data     []<span class="keyword">byte</span> <span class="comment">//数据</span></span><br><span class="line">	prevHash []<span class="keyword">byte</span> <span class="comment">//前一个区块的哈希值</span></span><br><span class="line">	Hash     []<span class="keyword">byte</span> <span class="comment">//本区块的哈希值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(block *Block)</span> <span class="title">setHash</span><span class="params">()</span></span> &#123;</span><br><span class="line">	time := []<span class="keyword">byte</span>(strconv.FormatInt(block.Timer, <span class="number">10</span>))                         <span class="comment">//将区块的时间转为字符切片类型，方便加密</span></span><br><span class="line">	heards := bytes.Join([][]<span class="keyword">byte</span>&#123;time, block.Data, block.prevHash&#125;, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//将时间，数据，前一个哈希拼接一下</span></span><br><span class="line">	hash := sha256.Sum256(heards)                                              <span class="comment">//用sha256包的Sum256函数加密</span></span><br><span class="line">	block.Hash = hash[:]                                                       <span class="comment">//加密后的直接赋值给本哈希</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Firstblosk</span><span class="params">()</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建第一个区块信息，相当于一个创始块</span></span><br><span class="line">	firstblock := NewBlock(<span class="string">"This is firstblock"</span>, []<span class="keyword">byte</span>&#123;&#125;) <span class="comment">//传入参数，返回结构体指针类型</span></span><br><span class="line">	<span class="keyword">return</span> firstblock                                      <span class="comment">//返回的是结构体指针类型</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBlock</span><span class="params">(data <span class="keyword">string</span>, prevhash []<span class="keyword">byte</span>)</span> *<span class="title">Block</span></span> &#123; <span class="comment">//创建区块的函数</span></span><br><span class="line">	block1 := Block&#123;&#125;                <span class="comment">//创建一个区块结构体</span></span><br><span class="line">	block1.Timer = time.Now().Unix() <span class="comment">//得到时间</span></span><br><span class="line">	block1.Data = []<span class="keyword">byte</span>(data)       <span class="comment">//传入数据参数</span></span><br><span class="line">	block1.prevHash = prevhash       <span class="comment">//前一个哈希值为传入的数据</span></span><br><span class="line">	block1.setHash()                 <span class="comment">//setHash 方法加密得到自己的hash</span></span><br><span class="line">	<span class="keyword">return</span> &amp;block1                   <span class="comment">//返回区块指针</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	firstblock := Firstblosk()</span><br><span class="line">	fmt.Printf(<span class="string">"%x"</span>,<span class="keyword">string</span>(firstblock.Hash)) <span class="comment">//16进制打印</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们来看一下哈希打印结果</p>
-<p><img src="D:\git\git图片\[R5XG`6J]9%MIXF9EHSR}@E.png" alt=""></p>
-<p>这样一个简单的区块就实现了，那么如果要实现一个简单的区块链呢？其实也按照这样的思路写下去也很容易实现，记住：区块链的本区块的哈希是下一个区块的前哈希，这样链接，下一章我们将讲解一个简单的区块链实现。</p>
+        <h6 id="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡"><a href="#编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡" class="headerlink" title="编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡"></a>编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡</h6><h6 id="排序之后的插入排序-1："><a href="#排序之后的插入排序-1：" class="headerlink" title="排序之后的插入排序  1："></a>排序之后的插入排序  1：</h6><h4 id="冒泡排序："><a href="#冒泡排序：" class="headerlink" title="冒泡排序："></a>冒泡排序：</h4><p>见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码，然后慢慢分析</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="comment">//func main() &#123;</span></span><br><span class="line">    arr := [<span class="number">10</span>]<span class="keyword">int</span>&#123;<span class="number">9</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">4</span>&#125;  <span class="comment">//先定义一个乱序数组</span></span><br><span class="line">    <span class="comment">//冒泡排序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span><span class="number">-1</span>; i++ &#123;         <span class="comment">//外面的循环用来循环次数</span></span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">10</span><span class="number">-1</span>-i; j++ &#123;    <span class="comment">//里面的循环用来循环 每次对比到哪里</span></span><br><span class="line">            <span class="keyword">if</span> arr[j] &gt; arr[j+<span class="number">1</span>] &#123;</span><br><span class="line">                <span class="comment">//数据交换</span></span><br><span class="line">                arr[j], arr[j+<span class="number">1</span>] = arr[j+<span class="number">1</span>], arr[j]  <span class="comment">//go语言的多个数据交换格式</span></span><br><span class="line">                <span class="comment">//temp := arr[j]   //普通数据交换格式</span></span><br><span class="line">                <span class="comment">//arr[j] = arr[j+1]</span></span><br><span class="line">                <span class="comment">//arr[j+1] = temp</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(arr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/09/01/go语言冒泡和插叙1/1.png" alt=""></p>
+<p>我们看到这个代码和这张图片，在图片中我们只写了前面几次，先来看第一次，第一个元素和第二个相比4比2大，如果第一个元素比第二个大那么就交换一下，然后第二个元素和第三个相比，如果大就交换，然后第三第四相比，第四第五相比，一直比到最后一个和倒数第一个，有没有发现这样比一次就能确定一个最大的数，而且最大的数是放在最后一个元素里面的，这样一次就是外面的外循环</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span><span class="number">-1</span>; i++ &#123;  <span class="comment">//这句话就是外面的循环</span></span><br></pre></td></tr></table></figure>
+<p>然后确定第一个最大的放最后一个，那么我们然后怎么办呢 ，然后我们当然继续下一次对比然后再确定一个第二大的放在倒数第二的位置啊，最大的确定下来后，我们继续从第一个开始遍历，但是这次遍历要注意了，不需要遍历到最后一个元素，而只需遍历到倒数第二个就行了，这是为什么呢，因为最后一个元素已经确定下来是最大的了，所以就不需要对比了，我们来看内循环</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">10</span><span class="number">-1</span>-i; j++ &#123;    <span class="comment">//里面的循环用来循环 每次对比到哪里</span></span><br><span class="line"><span class="comment">//这里的判断条件是 小于10-1-i，i是什么呢，就是外循环的次数，所以只需要对比到10-1-i就行</span></span><br></pre></td></tr></table></figure>
+<p>然后内循环每次对比相邻的两个元素，如果前面大于后面的那么就交换，</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//数据交换</span></span><br><span class="line">                arr[j], arr[j+<span class="number">1</span>] = arr[j+<span class="number">1</span>], arr[j]  <span class="comment">//go语言的多个数据交换格式</span></span><br><span class="line">                <span class="comment">//temp := arr[j]   //普通数据交换格式</span></span><br><span class="line">                <span class="comment">//arr[j] = arr[j+1]</span></span><br><span class="line">                <span class="comment">//arr[j+1] = temp</span></span><br></pre></td></tr></table></figure>
+<p>这里面数据交换 有两种格式，第一种就是GO语言里面的简单交换格式，第二种是常见的交换数据格式，需要定义一个临时变量  然后可以打印出来数组，就变成从小到大的升序数组了，  那么如果要变成降序排序怎么改呢？  来看这句话</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> arr[j] &gt; arr[j+<span class="number">1</span>] &#123;</span><br></pre></td></tr></table></figure>
+<p>我们只需要把这里的大于号改成小于号就行啦</p>
+<p>不喜勿喷，谢谢哈哈<br>插入排序后续</p>
 
       
     </div>
@@ -489,7 +475,7 @@
           
             <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
           
-            <a href="/tags/区块链/" rel="tag"><i class="fa fa-tag"></i> 区块链</a>
+            <a href="/tags/排序问题/" rel="tag"><i class="fa fa-tag"></i> 排序问题</a>
           
         </div>
       
@@ -502,15 +488,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/01/博客搭建/" rel="next" title="hexo+github博客搭建">
-                <i class="fa fa-chevron-left"></i> hexo+github博客搭建
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/01/go语言工厂模式/" rel="prev" title="go语言中的面向对象，接口类型，工厂设计模式解读">
+                go语言中的面向对象，接口类型，工厂设计模式解读 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -580,7 +566,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -677,7 +663,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单区块实现"><span class="nav-number">1.</span> <span class="nav-text">简单区块实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡"><span class="nav-number">1.</span> <span class="nav-text">编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#排序之后的插入排序-1："><span class="nav-number">2.</span> <span class="nav-text">排序之后的插入排序  1：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#冒泡排序："><span class="nav-number"></span> <span class="nav-text">冒泡排序：</span></a></div>
             
 
           </div>
