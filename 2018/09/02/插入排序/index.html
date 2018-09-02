@@ -109,23 +109,27 @@
 
 
 
-  <meta name="description" content="编程语言，区块连，Linux等相关技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Wuman&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/categories/数据结构和算法/index.html">
+  <meta name="description" content="插入排序在上一章中我们讲了算法排序中的最简单的冒泡排序，今天我们来讲解一下插入排序，后续将讲解快速排序，归并排序，希尔排序，二叉排序，这些等等，后续的排序都是在时间复杂度和空间复杂度上面优于这两种的，所以我们今天先来讲解一下插入排序 我们先来看以下的一张图  为了方便排序，我们一般将数据的第一个元素作为有序组，其他视为待插入组，图中以升序为例子进行讲解。  我们将第一个元素作为有序的数组，然后将后">
+<meta name="keywords" content="go语言,排序问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="插入排序">
+<meta property="og:url" content="http://yoursite.com/2018/09/02/插入排序/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="编程语言，区块连，Linux等相关技术">
+<meta property="og:description" content="插入排序在上一章中我们讲了算法排序中的最简单的冒泡排序，今天我们来讲解一下插入排序，后续将讲解快速排序，归并排序，希尔排序，二叉排序，这些等等，后续的排序都是在时间复杂度和空间复杂度上面优于这两种的，所以我们今天先来讲解一下插入排序 我们先来看以下的一张图  为了方便排序，我们一般将数据的第一个元素作为有序组，其他视为待插入组，图中以升序为例子进行讲解。  我们将第一个元素作为有序的数组，然后将后">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/09/02/插入排序/21.jpg">
+<meta property="og:updated_time" content="2018-09-02T10:34:52.871Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wuman&#39;s Blog">
-<meta name="twitter:description" content="编程语言，区块连，Linux等相关技术">
+<meta name="twitter:title" content="插入排序">
+<meta name="twitter:description" content="插入排序在上一章中我们讲了算法排序中的最简单的冒泡排序，今天我们来讲解一下插入排序，后续将讲解快速排序，归并排序，希尔排序，二叉排序，这些等等，后续的排序都是在时间复杂度和空间复杂度上面优于这两种的，所以我们今天先来讲解一下插入排序 我们先来看以下的一张图  为了方便排序，我们一般将数据的第一个元素作为有序组，其他视为待插入组，图中以升序为例子进行讲解。  我们将第一个元素作为有序的数组，然后将后">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/02/插入排序/21.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/数据结构和算法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/02/插入排序/"/>
 
 
 
@@ -135,7 +139,7 @@
   };
 </script>
 
-  <title>分类: 数据结构和算法 | Wuman's Blog</title>
+  <title>插入排序 | Wuman's Blog</title>
   
 
 
@@ -182,7 +186,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 <a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -235,7 +239,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
@@ -307,138 +311,251 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>数据结构和算法<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/插入排序/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/09/02/插入排序/" itemprop="url">
-              
-                <span itemprop="name">插入排序</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">插入排序
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-02T12:36:39+08:00"
-              content="2018-09-02" >
-          09-02
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-02 12:36:39 / 修改时间：18:34:52" itemprop="dateCreated datePublished" datetime="2018-09-02T12:36:39+08:00">2018-09-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构和算法/" itemprop="url" rel="index"><span itemprop="name">数据结构和算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/02/1/" itemprop="url">
-              
-                <span itemprop="name">每日一道编程算法题</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-02T10:14:49+08:00"
-              content="2018-09-02" >
-          09-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/01/go语言冒泡和插叙1/" itemprop="url">
-              
-                <span itemprop="name">go语言简单排序之冒泡和插入排序</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-01T12:36:40+08:00"
-              content="2018-09-01" >
-          09-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h3 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h3><p>在上一章中我们讲了算法排序中的最简单的冒泡排序，今天我们来讲解一下插入排序，后续将讲解快速排序，归并排序，希尔排序，二叉排序，这些等等，后续的排序都是在时间复杂度和空间复杂度上面优于这两种的，所以我们今天先来讲解一下插入排序</p>
+<p>我们先来看以下的一张图</p>
+<p><img src="/2018/09/02/插入排序/21.jpg" alt=""></p>
+<p>为了方便排序，我们一般将数据的第一个元素作为有序组，其他视为待插入组，图中以升序为例子进行讲解。</p>
+<ol>
+<li>我们将第一个元素作为有序的数组，然后将后面的元素视为无序的，将后面的无序组第一个元素和有序组最后一个元素比较，如果符合要求就插入进去然后有序组就多一个，无序组就少一个</li>
+<li>第二次排序的时候有序组就为两个元素，有序组的最后一个元素拿出来继续和无序组的第一个相比，然后再插入一个，这样有序组就又多了一个，无序组少一个</li>
+<li>这样一直循环到某个条件，这样无序组就没有了，剩下的都是有序组，这样排序就完成了。</li>
+<li>我们来看一下代码怎样实现，在这里我们就用GO语言来实现，在某些方面个人觉得go写的代码比C/C++要少很多，更加方便一点</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> arr [<span class="number">10</span>]<span class="keyword">int</span> = [<span class="number">10</span>]<span class="keyword">int</span>&#123;<span class="number">9</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">8</span>&#125; <span class="comment">//插入排序</span></span><br><span class="line">	<span class="keyword">var</span> temp ,j <span class="keyword">int</span>                                              <span class="comment">//临时变量temp</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="built_in">len</span>(arr); i++ &#123; <span class="comment">//遍历无序数组,下标1开始</span></span><br><span class="line">		<span class="keyword">if</span> arr[i] &lt; arr[i<span class="number">-1</span>] &#123; <span class="comment">//无序组第一个小于有序组最后一个才进入否则直接下一个元素</span></span><br><span class="line">			temp=arr[i]        <span class="comment">//用变量temp取出arr[i]的元素值</span></span><br><span class="line">			<span class="keyword">for</span> j=i<span class="number">-1</span>;j&gt;=<span class="number">0</span>&amp;&amp;arr[j]&gt;temp;j--&#123;   <span class="comment">//这里面temp不能写成arr[i]是因为下面</span></span><br><span class="line">				arr[j+<span class="number">1</span>]=arr[j]                   <span class="comment">// 有一个arr[j+1]=arr[j]那样会导致arr[i]会变</span></span><br><span class="line">			&#125;</span><br><span class="line">			arr[j+<span class="number">1</span>]=temp <span class="comment">//因为上面经过了j--所以这里需要arr[j+1]，for循环后就找到位置填充temp，也就是之前取出来的arr[i]</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">   fmt.Println(arr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面你可以自己去实现一下了，后续将讲解更难的排序方法。</p>
 
       
     </div>
 
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/09/02/插入排序/">插入排序</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年09月02日 - 12:09</p>
+  <p><span>最后更新:</span>2018年09月02日 - 18:09</p>
+  <p><span>原始链接:</span><a href="/2018/09/02/插入排序/" title="插入排序">http://yoursite.com/2018/09/02/插入排序/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/02/插入排序/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
+          
+            <a href="/tags/排序问题/" rel="tag"><i class="fa fa-tag"></i> 排序问题</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/02/1/" rel="next" title="每日一道编程算法题">
+                <i class="fa fa-chevron-left"></i> 每日一道编程算法题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -459,8 +576,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -579,6 +705,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入排序"><span class="nav-number">1.</span> <span class="nav-text">插入排序</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -723,6 +865,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
 
   
 
