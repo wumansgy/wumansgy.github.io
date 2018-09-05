@@ -109,30 +109,25 @@
 
 
 
-  <meta name="description" content="我们在上一篇的切片讲解中，我们讲解到在go语言中 map和切片都是传引用（地址），也就是在调用函数的时候都是可以直接修改变量的值，关于切片，在某种程度上表面上来说也是可以这样说的，我们先来看一下一个小小的例题 1234567891011package mainimport &amp;quot;fmt&amp;quot;func Change(s []int)&amp;#123;    s[0]=11    s[1]=22">
-<meta name="keywords" content="go语言">
+  <meta name="description" content="爬虫爬虫简介：    是一个程序，用来获取指定网站数据信息。  明确 url 。确定爬取对象 发送请求。获取服务器响应数据。 解析数据，提取有用数据内容。 保存、分析数据结果。  今天我们用go并发来简单写一个小Demo来爬取一下豆瓣评分网站的数据 首先来思路分析一下该怎么做：  明确 url。找出url之间的一些小规律，比如豆瓣的url规律如下  1234567https://movie.dou">
+<meta name="keywords" content="go语言,go并发简单爬虫Demo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="go语言切片深入讲解">
-<meta property="og:url" content="http://yoursite.com/2018/09/03/go语言切片深入讲解/index.html">
+<meta property="og:title" content="爬取豆瓣评分Demo">
+<meta property="og:url" content="http://yoursite.com/2018/09/05/爬取豆瓣评分Demo/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="我们在上一篇的切片讲解中，我们讲解到在go语言中 map和切片都是传引用（地址），也就是在调用函数的时候都是可以直接修改变量的值，关于切片，在某种程度上表面上来说也是可以这样说的，我们先来看一下一个小小的例题 1234567891011package mainimport &amp;quot;fmt&amp;quot;func Change(s []int)&amp;#123;    s[0]=11    s[1]=22">
+<meta property="og:description" content="爬虫爬虫简介：    是一个程序，用来获取指定网站数据信息。  明确 url 。确定爬取对象 发送请求。获取服务器响应数据。 解析数据，提取有用数据内容。 保存、分析数据结果。  今天我们用go并发来简单写一个小Demo来爬取一下豆瓣评分网站的数据 首先来思路分析一下该怎么做：  明确 url。找出url之间的一些小规律，比如豆瓣的url规律如下  1234567https://movie.dou">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/09/03/go语言切片深入讲解/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/03/go语言切片深入讲解/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/03/go语言切片深入讲解/3.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/03/go语言切片深入讲解/4.png">
-<meta property="og:updated_time" content="2018-09-05T04:45:17.308Z">
+<meta property="og:updated_time" content="2018-09-05T11:07:49.522Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="go语言切片深入讲解">
-<meta name="twitter:description" content="我们在上一篇的切片讲解中，我们讲解到在go语言中 map和切片都是传引用（地址），也就是在调用函数的时候都是可以直接修改变量的值，关于切片，在某种程度上表面上来说也是可以这样说的，我们先来看一下一个小小的例题 1234567891011package mainimport &amp;quot;fmt&amp;quot;func Change(s []int)&amp;#123;    s[0]=11    s[1]=22">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/03/go语言切片深入讲解/1.png">
+<meta name="twitter:title" content="爬取豆瓣评分Demo">
+<meta name="twitter:description" content="爬虫爬虫简介：    是一个程序，用来获取指定网站数据信息。  明确 url 。确定爬取对象 发送请求。获取服务器响应数据。 解析数据，提取有用数据内容。 保存、分析数据结果。  今天我们用go并发来简单写一个小Demo来爬取一下豆瓣评分网站的数据 首先来思路分析一下该怎么做：  明确 url。找出url之间的一些小规律，比如豆瓣的url规律如下  1234567https://movie.dou">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/03/go语言切片深入讲解/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/05/爬取豆瓣评分Demo/"/>
 
 
 
@@ -142,7 +137,7 @@
   };
 </script>
 
-  <title>go语言切片深入讲解 | Wuman's Blog</title>
+  <title>爬取豆瓣评分Demo | Wuman's Blog</title>
   
 
 
@@ -334,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/03/go语言切片深入讲解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/05/爬取豆瓣评分Demo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -351,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">go语言切片深入讲解
+          <h1 class="post-title" itemprop="name headline">爬取豆瓣评分Demo
               
             
           </h1>
@@ -376,24 +371,12 @@
                 
               
 
-              <time title="创建时间：2018-09-03 18:24:55" itemprop="dateCreated datePublished" datetime="2018-09-03T18:24:55+08:00">2018-09-03</time>
+              <time title="创建时间：2018-09-05 18:49:47 / 修改时间：19:07:49" itemprop="dateCreated datePublished" datetime="2018-09-05T18:49:47+08:00">2018-09-05</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-05 12:45:17" itemprop="dateModified" datetime="2018-09-05T12:45:17+08:00">2018-09-05</time>
               
             
           </span>
@@ -444,20 +427,67 @@
       
 
       
-        <p>我们在上一篇的切片讲解中，我们讲解到在go语言中 map和切片都是传引用（地址），也就是在调用函数的时候都是可以直接修改变量的值，关于切片，在某种程度上表面上来说也是可以这样说的，我们先来看一下一个小小的例题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line">func Change(s []int)&#123;</span><br><span class="line">    s[0]=11</span><br><span class="line">    s[1]=22</span><br><span class="line">&#125;</span><br><span class="line">func main()&#123;</span><br><span class="line">    slice:=[]int&#123;1,2,3,4,5&#125;</span><br><span class="line">    Change(slice)</span><br><span class="line">    fmt.Println(slice)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们先来看一下结果 </p>
-<p><img src="/2018/09/03/go语言切片深入讲解/1.png" alt=""></p>
-<p>我们可以看到切片当作函数参数的时候调用之后值确实改变了，这也间接的可以认为切片是地址传递，但是我们想要了解的更深入的话可以继续了解下去  我们继续来看一个小例子</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Add</span><span class="params">(s []<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    s=<span class="built_in">append</span>(s,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    slice:=[]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;</span><br><span class="line">    Add(slice)</span><br><span class="line">    fmt.Println(slice)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在这里函数调用了append这个函数来增加切片的个数，</p>
-<p><img src="/2018/09/03/go语言切片深入讲解/2.png" alt=""></p>
-<p>我们可以清晰的看到打印的结果并没有变，我们在之前讲到过这里是因为append扩容使得地址发生了变化，所以不是指向原来的切片也就导致了并不是在原来的切片上面增加了，这就说到了切片的本质，在这里详细说一下，切片的本质不是指向数组的指针，而是一种新定义的一种数据结构，这个数据结构里面包含一个指针，len，还有cap，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type slice struct &#123;</span><br><span class="line">            *Pointer    </span><br><span class="line">            len</span><br><span class="line">            cap</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>看到没，切片的本质是这样一个数据结构，而且在函数调用的时候切片做的其实是一个值的传递！！！只不过这个值是一个包含指针，长度，容量的一个结构体的值，这样我们一想就可以一目了然的知道了为什么前面我们所说的切片是地址传递了吧，那是因为他传的那个值里面包含一个指针，所以函数调用的时候就可以用这个值里面的指针来操作原来的切片，我们看如下的一张图片， </p>
-<p><img src="/2018/09/03/go语言切片深入讲解/3.png" alt=""></p>
-<p>我们看上面的图就可以更加的明白了，在函数调用的时候首先，在栈区里面main函数会得到一块内存（栈帧），然后调用testFunc函数的时候testFunc也会得到一块内存（栈帧），然后调用的时候把切片的值传递给形参，注意这里的值是包含一个指针，长度，容量的结构体值，我们在使用一般操作的时候不会改变那个地址，所以会正常操作main函数里面的切片，当我们使用append函数的时候就会导致保存的指针值发生变化，那样就会保存一个新的地址，操作也会在新的地方操作，这样的话原来的切片就不会发生变化，当testFunc函数调用完毕后，我们的testFunc函数就会释放，而原来的切片也没有得到改变，这就是我们所看到的，这才是切片的本质  所以最后得到的总结就是：切片当作参数传递的时候是值传递，但是这个值不是一个普通的值，而是一个包含指针，长度，容量的值，如果有不懂的也可以尝试着去看一看源码。  附图：（内存的微讲解） </p>
-<p><img src="/2018/09/03/go语言切片深入讲解/4.png" alt=""></p>
+        <h3 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h3><p>爬虫简介：<br>    是一个程序，用来获取指定网站数据信息。</p>
+<ul>
+<li>明确 url 。确定爬取对象</li>
+<li>发送请求。获取服务器响应数据。</li>
+<li>解析数据，提取有用数据内容。</li>
+<li>保存、分析数据结果。</li>
+</ul>
+<p>今天我们用go并发来简单写一个小Demo来爬取一下豆瓣评分网站的数据</p>
+<p>首先来思路分析一下该怎么做：</p>
+<ol>
+<li><strong>明确 url。找出url之间的一些小规律，比如豆瓣的url规律如下</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">https://movie.douban.com/top250?start=0&amp;filter=		    1</span><br><span class="line"></span><br><span class="line">https://movie.douban.com/top250?start=25&amp;filter=		2</span><br><span class="line">	</span><br><span class="line">https://movie.douban.com/top250?start=50&amp;filter=		3</span><br><span class="line"></span><br><span class="line">https://movie.douban.com/top250?start=75&amp;filter=		4</span><br></pre></td></tr></table></figure>
+<p>之间的规律很好找</p>
+<ol start="2">
+<li><p><strong>待提取字符特性：</strong></p>
+<pre><code>1）电影名称： &lt;img width=&quot;100&quot; alt=&quot;（电影名称）&quot; src=&quot;    —— `&lt;img width=&quot;100&quot; alt=&quot;(?s:(.*?))&quot; src=&quot;`      或 (.*?)
+
+2） 评分：&lt;span class=&quot;rating_num&quot; property=&quot;v:average&quot;&gt;（评分）&lt;/span&gt;
+
+3）评价人数： &lt;span&gt;（评价人数）人评价&lt;/span&gt;        —— `&lt;span&gt;(\d*?)人评价&lt;/span&gt;`
+</code></pre></li>
+<li><p><strong>提示用户指定爬取起始、终止页</strong></p>
+</li>
+<li><p><strong>封装 doWork 函数， 按起始、终止页面循环爬取网页数据</strong></p>
+</li>
+<li><p><strong>组织每个网页的 url。 下一页 = +25</strong></p>
+</li>
+<li><p><strong>封装函数 HttpGetDB（url）result，err { http.Get(url), resp.Body.Read(buf), n==0 break, result+= string(buf[:n}) }</strong></p>
+<p> <strong>爬取网页的所有数据 通过result 返回给调用者。</strong></p>
+</li>
+<li><p><strong>解析、编译正则表达式 —— 提取 “电影名称”fileNames 传出的是[][]string ， 下标为【1】是不带匹配参考项。</strong></p>
+</li>
+<li><p><strong>解析、编译正则表达式 —— 提取 “评分”传出的是[][]string ， 下标为【1】是不带匹配参考项。</strong></p>
+</li>
+<li><p><strong>解析、编译正则表达式 —— 提取 “评价人数”传出的是[][]string ， 下标为【1】是不带匹配参考项。</strong></p>
+</li>
+<li><p><strong>封装函数，将上述内容写入文件。save2File（ [][]string）</strong></p>
+<pre><code>1) Create()
+
+2) n = len(fileNames)
+
+3）for 循环 一次写入一条电影信息。 f.writeString()
+</code></pre></li>
+<li><p><strong>创建并发go程 提取所有网页数据。</strong></p>
+</li>
+<li><p><strong>创建阻止主go程提取退出的 channel ， SpiderPageDB() 末尾处，写channel</strong></p>
+</li>
+<li><p><strong>doWork 中，添加新 for ，读channel</strong></p>
+</li>
+</ol>
+<h4 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h4><p>首先可以封装一个函数来爬取多少页到多少页，并且每一页构造一个go程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">func doWork(start, end int)  &#123;</span><br><span class="line">	page := make(chan int)</span><br><span class="line"></span><br><span class="line">	// 循环创建多个goroutine，提高爬取效率</span><br><span class="line">	for i:=start; i&lt;=end; i++ &#123;</span><br><span class="line">		go SpiderPageDB(i, page)</span><br><span class="line">	&#125;</span><br><span class="line">	// 循环读取 channel， 协调主、子go程调用顺序</span><br><span class="line">	for i:=start; i&lt;=end; i++ &#123;</span><br><span class="line">		fmt.Printf(&quot;第%d页爬取完成\n&quot;, &lt;-page)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>获取每一页的数据函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">func HttpGetDB(url string) (result string, err error) &#123;</span><br><span class="line">	resp, err1 := http.Get(url)</span><br><span class="line">	if err1 != nil &#123;</span><br><span class="line">		err = err1</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	defer resp.Body.Close()</span><br><span class="line">	buf := make([]byte, 4096)</span><br><span class="line">	for &#123;</span><br><span class="line">		n, err2 := resp.Body.Read(buf)</span><br><span class="line">		if n == 0 &#123;</span><br><span class="line">			break</span><br><span class="line">		&#125;</span><br><span class="line">		if err2 != nil &amp;&amp; err2 != io.EOF &#123;</span><br><span class="line">			err = err2</span><br><span class="line">			return</span><br><span class="line">		&#125;</span><br><span class="line">		result += string(buf[:n])</span><br><span class="line">	&#125;</span><br><span class="line">	return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>得到每一个数据然后分析数据解析数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">func SpiderPageDB(i int, page chan&lt;- int)  &#123;</span><br><span class="line">	url := &quot;https://movie.douban.com/top250?start=&quot; + strconv.Itoa((i-1)*25) + &quot;&amp;filter=&quot;</span><br><span class="line">	result, err := HttpGetDB(url)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		fmt.Println(&quot;HttpGetDB err:&quot;, err)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	// 编译、解析正则表达式 —— 电影名</span><br><span class="line">	ret1 := regexp.MustCompile(`&lt;img width=&quot;100&quot; alt=&quot;(?s:(.*?))&quot; src=&quot;` )</span><br><span class="line">	// 提取有效信息</span><br><span class="line">	fileNames := ret1.FindAllStringSubmatch(result, -1)</span><br><span class="line"></span><br><span class="line">	// 编译、解析正则表达式 —— 分数</span><br><span class="line">	pattern := `&lt;span class=&quot;rating_num&quot; property=&quot;v:average&quot;&gt;(.*?)&lt;/span&gt;`</span><br><span class="line">	ret2 := regexp.MustCompile(pattern )</span><br><span class="line">	// 提取有效信息</span><br><span class="line">	fileScore := ret2.FindAllStringSubmatch(result, -1)</span><br><span class="line">/*	for _, one := range fileScore &#123;</span><br><span class="line">		fmt.Println(&quot;fileName:&quot;, one[1])</span><br><span class="line">	&#125;*/</span><br><span class="line">	// 编译、解析正则表达式 —— 评分人数</span><br><span class="line">	ret3 := regexp.MustCompile(`&lt;span&gt;(\d*?)人评价&lt;/span&gt;`)</span><br><span class="line">	// 提取有效信息</span><br><span class="line">	peopleNum := ret3.FindAllStringSubmatch(result, -1)</span><br><span class="line"></span><br><span class="line">	// 写入到一个文件中</span><br><span class="line">	save2file(i, fileNames, fileScore, peopleNum)</span><br><span class="line"></span><br><span class="line">	page &lt;- i	// 写入channel ，协调主go程与子go程调用顺序。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后保存数据到文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">func save2file(idx int, fileNames, fileScore, peopleNum [][]string)  &#123;</span><br><span class="line">	// 组织保存文件路径及名程</span><br><span class="line">	path := &quot;D:/ecec/第&quot; + strconv.Itoa(idx) + &quot;页.txt&quot;</span><br><span class="line"></span><br><span class="line">	f, err := os.Create(path)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		fmt.Println(&quot;Create err:&quot;, err)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	defer f.Close()</span><br><span class="line">	// 获取 一个网页中的条目数 —— 25</span><br><span class="line">	n := len(fileNames)</span><br><span class="line"></span><br><span class="line">	// 写一行标题</span><br><span class="line">	f.WriteString(&quot;电影名称&quot; + &quot;\t&quot; + &quot;评分&quot; + &quot;\t&quot; + &quot;评价人数&quot; + &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">	// 依次按序写入电影相关条目。</span><br><span class="line">	for i:=0; i&lt;n; i++ &#123;</span><br><span class="line">		f.WriteString(fileNames[i][1] + &quot;\t&quot; + fileScore[i][1] + &quot;\t&quot; + peopleNum[i][1] + &quot;\n&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后直接在main里面就可以调用</p>
+<h3 id="完整代码如下"><a href="#完整代码如下" class="headerlink" title="完整代码如下"></a>完整代码如下</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strconv"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line">	<span class="string">"io"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">HttpGetDB</span><span class="params">(url <span class="keyword">string</span>)</span> <span class="params">(result <span class="keyword">string</span>, err error)</span></span> &#123;</span><br><span class="line">	resp, err1 := http.Get(url)</span><br><span class="line">	<span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">		err = err1</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> resp.Body.Close()</span><br><span class="line">	buf := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">4096</span>)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		n, err2 := resp.Body.Read(buf)</span><br><span class="line">		<span class="keyword">if</span> n == <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> err2 != <span class="literal">nil</span> &amp;&amp; err2 != io.EOF &#123;</span><br><span class="line">			err = err2</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		result += <span class="keyword">string</span>(buf[:n])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SpiderPageDB</span><span class="params">(i <span class="keyword">int</span>, page <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span></span>  &#123;</span><br><span class="line">	url := <span class="string">"https://movie.douban.com/top250?start="</span> + strconv.Itoa((i<span class="number">-1</span>)*<span class="number">25</span>) + <span class="string">"&amp;filter="</span></span><br><span class="line">	result, err := HttpGetDB(url)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"HttpGetDB err:"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 编译、解析正则表达式 —— 电影名</span></span><br><span class="line">	ret1 := regexp.MustCompile(<span class="string">`&lt;img width="100" alt="(?s:(.*?))" src="`</span> )</span><br><span class="line">	<span class="comment">// 提取有效信息</span></span><br><span class="line">	fileNames := ret1.FindAllStringSubmatch(result, <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 编译、解析正则表达式 —— 分数</span></span><br><span class="line">	pattern := <span class="string">`&lt;span class="rating_num" property="v:average"&gt;(.*?)&lt;/span&gt;`</span></span><br><span class="line">	ret2 := regexp.MustCompile(pattern )</span><br><span class="line">	<span class="comment">// 提取有效信息</span></span><br><span class="line">	fileScore := ret2.FindAllStringSubmatch(result, <span class="number">-1</span>)</span><br><span class="line"><span class="comment">/*	for _, one := range fileScore &#123;</span></span><br><span class="line"><span class="comment">		fmt.Println("fileName:", one[1])</span></span><br><span class="line"><span class="comment">	&#125;*/</span></span><br><span class="line">	<span class="comment">// 编译、解析正则表达式 —— 评分人数</span></span><br><span class="line">	ret3 := regexp.MustCompile(<span class="string">`&lt;span&gt;(\d*?)人评价&lt;/span&gt;`</span>)</span><br><span class="line">	<span class="comment">// 提取有效信息</span></span><br><span class="line">	peopleNum := ret3.FindAllStringSubmatch(result, <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 写入到一个文件中</span></span><br><span class="line">	save2file(i, fileNames, fileScore, peopleNum)</span><br><span class="line"></span><br><span class="line">	page &lt;- i	<span class="comment">// 写入channel ，协调主go程与子go程调用顺序。</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">save2file</span><span class="params">(idx <span class="keyword">int</span>, fileNames, fileScore, peopleNum [][]<span class="keyword">string</span>)</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 组织保存文件路径及名程</span></span><br><span class="line">	path := <span class="string">"C:/exec/第"</span> + strconv.Itoa(idx) + <span class="string">"页.txt"</span></span><br><span class="line"></span><br><span class="line">	f, err := os.Create(path)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Create err:"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> f.Close()</span><br><span class="line">	<span class="comment">// 获取 一个网页中的条目数 —— 25</span></span><br><span class="line">	n := <span class="built_in">len</span>(fileNames)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 写一行标题</span></span><br><span class="line">	f.WriteString(<span class="string">"电影名称"</span> + <span class="string">"\t"</span> + <span class="string">"评分"</span> + <span class="string">"\t"</span> + <span class="string">"评价人数"</span> + <span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 依次按序写入电影相关条目。</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>; i&lt;n; i++ &#123;</span><br><span class="line">		f.WriteString(fileNames[i][<span class="number">1</span>] + <span class="string">"\t"</span> + fileScore[i][<span class="number">1</span>] + <span class="string">"\t"</span> + peopleNum[i][<span class="number">1</span>] + <span class="string">"\n"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doWork</span><span class="params">(start, end <span class="keyword">int</span>)</span></span>  &#123;</span><br><span class="line">	page := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 循环创建多个goroutine，提高爬取效率</span></span><br><span class="line">	<span class="keyword">for</span> i:=start; i&lt;=end; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> SpiderPageDB(i, page)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 循环读取 channel， 协调主、子go程调用顺序</span></span><br><span class="line">	<span class="keyword">for</span> i:=start; i&lt;=end; i++ &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"第%d页爬取完成\n"</span>, &lt;-page)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="keyword">var</span> start, end <span class="keyword">int</span></span><br><span class="line">	fmt.Print(<span class="string">"请输入爬取起始页面（&gt;=1）:"</span>)</span><br><span class="line">	fmt.Scan(&amp;start)</span><br><span class="line"></span><br><span class="line">	fmt.Print(<span class="string">"请输入爬取终止页面（&gt;=start）:"</span>)</span><br><span class="line">	fmt.Scan(&amp;end)</span><br><span class="line"></span><br><span class="line">	doWork(start, end)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -485,12 +515,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2018/09/03/go语言切片深入讲解/">go语言切片深入讲解</a></p>
+  <p><span>本文标题:</span><a href="/2018/09/05/爬取豆瓣评分Demo/">爬取豆瓣评分Demo</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
-  <p><span>发布时间:</span>2018年09月03日 - 18:09</p>
-  <p><span>最后更新:</span>2018年09月05日 - 12:09</p>
-  <p><span>原始链接:</span><a href="/2018/09/03/go语言切片深入讲解/" title="go语言切片深入讲解">http://yoursite.com/2018/09/03/go语言切片深入讲解/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/03/go语言切片深入讲解/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2018年09月05日 - 18:09</p>
+  <p><span>最后更新:</span>2018年09月05日 - 19:09</p>
+  <p><span>原始链接:</span><a href="/2018/09/05/爬取豆瓣评分Demo/" title="爬取豆瓣评分Demo">http://yoursite.com/2018/09/05/爬取豆瓣评分Demo/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/05/爬取豆瓣评分Demo/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -527,6 +557,8 @@
           
             <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
           
+            <a href="/tags/go并发简单爬虫Demo/" rel="tag"><i class="fa fa-tag"></i> go并发简单爬虫Demo</a>
+          
         </div>
       
 
@@ -538,8 +570,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/03/go语言切片微讲解/" rel="next" title="go语言切片微讲解">
-                <i class="fa fa-chevron-left"></i> go语言切片微讲解
+              <a href="/2018/09/05/字符二进制转换/" rel="next" title="字符二进制转换">
+                <i class="fa fa-chevron-left"></i> 字符二进制转换
               </a>
             
           </div>
@@ -547,10 +579,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/04/go语言错误捕获和panic异常/" rel="prev" title="go语言错误捕获和panic异常">
-                go语言错误捕获和panic异常 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -595,8 +623,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -742,6 +779,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#爬虫"><span class="nav-number">1.</span> <span class="nav-text">爬虫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现："><span class="nav-number">1.1.</span> <span class="nav-text">代码实现：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完整代码如下"><span class="nav-number">2.</span> <span class="nav-text">完整代码如下</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
