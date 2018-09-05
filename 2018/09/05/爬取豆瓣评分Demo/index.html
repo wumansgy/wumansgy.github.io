@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="Wuman&#39;s Blog">
 <meta property="og:description" content="爬虫爬虫简介：    是一个程序，用来获取指定网站数据信息。  明确 url 。确定爬取对象 发送请求。获取服务器响应数据。 解析数据，提取有用数据内容。 保存、分析数据结果。  今天我们用go并发来简单写一个小Demo来爬取一下豆瓣评分网站的数据 首先来思路分析一下该怎么做：  明确 url。找出url之间的一些小规律，比如豆瓣的url规律如下  1234567https://movie.dou">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-05T11:17:33.408Z">
+<meta property="og:updated_time" content="2018-09-05T11:23:18.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="爬取豆瓣评分Demo">
 <meta name="twitter:description" content="爬虫爬虫简介：    是一个程序，用来获取指定网站数据信息。  明确 url 。确定爬取对象 发送请求。获取服务器响应数据。 解析数据，提取有用数据内容。 保存、分析数据结果。  今天我们用go并发来简单写一个小Demo来爬取一下豆瓣评分网站的数据 首先来思路分析一下该怎么做：  明确 url。找出url之间的一些小规律，比如豆瓣的url规律如下  1234567https://movie.dou">
@@ -371,7 +371,7 @@
                 
               
 
-              <time title="创建时间：2018-09-05 18:49:47 / 修改时间：19:17:33" itemprop="dateCreated datePublished" datetime="2018-09-05T18:49:47+08:00">2018-09-05</time>
+              <time title="创建时间：2018-09-05 18:49:47 / 修改时间：19:23:18" itemprop="dateCreated datePublished" datetime="2018-09-05T18:49:47+08:00">2018-09-05</time>
             
 
             
@@ -443,7 +443,6 @@
 <p>之间的规律很好找</p>
 <ol start="2">
 <li><p><strong>待提取字符特性：</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//电影名称： &lt;img width=&quot;100&quot; alt=&quot;（电影名称）&quot; src=&quot;	—— `&lt;img width=&quot;100&quot; alt=&quot;(?s:(.*?))&quot; src=&quot;`  	或 (.*?)</span><br><span class="line">// 评分：&lt;span class=&quot;rating_num&quot; property=&quot;v:average&quot;&gt;（评分）&lt;/span&gt;</span><br><span class="line">//评价人数： &lt;span&gt;（评价人数）人评价&lt;/span&gt;		—— `&lt;span&gt;(\d*?)人评价&lt;/span&gt;`</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>提示用户指定爬取起始、终止页</strong></p>
 </li>
@@ -461,10 +460,7 @@
 <li><p><strong>解析、编译正则表达式 —— 提取 “评价人数”传出的是[][]string ， 下标为【1】是不带匹配参考项。</strong></p>
 </li>
 <li><p><strong>封装函数，将上述内容写入文件。save2File（ [][]string）</strong></p>
-<pre><code>//Create()
-//n = len(fileNames)
-//for 循环 一次写入一条电影信息。 f.writeString()
-</code></pre></li>
+</li>
 <li><p><strong>创建并发go程 提取所有网页数据。</strong></p>
 </li>
 <li><p><strong>创建阻止主go程提取退出的 channel ， SpiderPageDB() 末尾处，写channel</strong></p>
@@ -724,7 +720,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">29.3k</span>
+      <span class="site-state-item-count">29.2k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
