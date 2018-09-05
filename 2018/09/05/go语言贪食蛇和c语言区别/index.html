@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="CSDN博客链接 GO贪食蛇小Demo利用go语言写贪食蛇游戏那么就会利用面向对象的思想来写一下，创造蛇身体对象，然后写出来，go语言写的时候我们需要调用一个c语言写的一个包，go语言可以直接调用调用c语言的函数，很方便简洁，我们先来看一下我自己写的C语言的一个包 1234567891011121314151617181920212223242526272829303132333435363738">
+<meta name="keywords" content="go语言,小Demo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go语言贪食蛇和c语言区别">
+<meta property="og:url" content="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="CSDN博客链接 GO贪食蛇小Demo利用go语言写贪食蛇游戏那么就会利用面向对象的思想来写一下，创造蛇身体对象，然后写出来，go语言写的时候我们需要调用一个c语言写的一个包，go语言可以直接调用调用c语言的函数，很方便简洁，我们先来看一下我自己写的C语言的一个包 1234567891011121314151617181920212223242526272829303132333435363738">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/3.png">
+<meta property="og:updated_time" content="2018-09-05T05:06:40.308Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go语言贪食蛇和c语言区别">
+<meta name="twitter:description" content="CSDN博客链接 GO贪食蛇小Demo利用go语言写贪食蛇游戏那么就会利用面向对象的思想来写一下，创造蛇身体对象，然后写出来，go语言写的时候我们需要调用一个c语言写的一个包，go语言可以直接调用调用c语言的函数，很方便简洁，我们先来看一下我自己写的C语言的一个包 1234567891011121314151617181920212223242526272829303132333435363738">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>go语言贪食蛇和c语言区别 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">go语言贪食蛇和c语言区别
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-05 12:48:42 / 修改时间：13:06:40" itemprop="dateCreated datePublished" datetime="2018-09-05T12:48:42+08:00">2018-09-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://blog.csdn.net/sgsgy5/article/details/81605585" target="_blank" rel="noopener">CSDN博客链接</a></p>
+<h3 id="GO贪食蛇小Demo"><a href="#GO贪食蛇小Demo" class="headerlink" title="GO贪食蛇小Demo"></a>GO贪食蛇小Demo</h3><p>利用go语言写贪食蛇游戏那么就会利用面向对象的思想来写一下，创造蛇身体对象，然后写出来，<em>go语言写的时候我们需要调用一个c语言写的一个包</em>，go语言可以直接调用调用c语言的函数，很方便简洁，我们先来看一下我自己写的C语言的一个包</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">package Clib</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#include &lt;windows.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;conio.h&gt;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">// 使用了WinAPI来移动控制台的光标</span></span><br><span class="line"><span class="comment">void gotoxy(int x,int y)</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    COORD c;</span></span><br><span class="line"><span class="comment">    c.X=x,c.Y=y;</span></span><br><span class="line"><span class="comment">    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),c);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">// 从键盘获取一次按键，但不显示到控制台</span></span><br><span class="line"><span class="comment">int direct()</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    return _getch();</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">//去掉控制台光标</span></span><br><span class="line"><span class="comment">void hideCursor()</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    CONSOLE_CURSOR_INFO  cci;</span></span><br><span class="line"><span class="comment">    cci.bVisible = FALSE;</span></span><br><span class="line"><span class="comment">    cci.dwSize = sizeof(cci);</span></span><br><span class="line"><span class="comment">    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &amp;cci);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"C"</span> <span class="comment">// go中可以嵌入C语言的函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//设置控制台光标位置</span></span><br><span class="line"><span class="function">func <span class="title">GotoPostion</span><span class="params">(X <span class="keyword">int</span>, Y <span class="keyword">int</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//调用C语言函数</span></span><br><span class="line">    C.gotoxy(C.<span class="keyword">int</span>(X), C.<span class="keyword">int</span>(Y))</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//无显获取键盘输入的字符</span></span><br><span class="line"><span class="function">func <span class="title">Direction</span><span class="params">()</span> <span class="params">(key <span class="keyword">int</span>)</span> </span>&#123;</span><br><span class="line">    key = <span class="keyword">int</span>(C.direct())</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//设置控制台光标隐藏</span></span><br><span class="line">func HideCursor() &#123;</span><br><span class="line">    C.hideCursor()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个包把一些需要用到c语言的函数写进来，调用c语言的函数需要用到c语言的环境，别忘记自己电脑上要装c语言的环境奥，我们来看一下这个目录结构 </p>
+<p><img src="/2018/09/05/go语言贪食蛇和c语言区别/1.png" alt=""></p>
+<p>首先我们的代码是放在GoCode里面下面的src目录下面，Clib里面是自己写的C语言的一个包，贪食蛇和Clib是同级别目录，在这里我们用的是goland编译器，编译器这里可以自己选择，我们编译的时候就不能单个文件编译了，因为需要调用自己的包，所以要选择多文件编译如图 </p>
+<p><img src="/2018/09/05/go语言贪食蛇和c语言区别/2.png" alt=""></p>
+<p>我自己用的goland编译的时候需要改一下改成Directory 然后目录选到所在目录的src目录，然后设置好后就可以直接编译运行啦，当然也可以直接命令行编译运行 </p>
+<p><img src="/2018/09/05/go语言贪食蛇和c语言区别/3.png" alt=""></p>
+<p>如图，我们可以在所在目录下面直接go build ./这样就是生成可执行文件.exe的，也可以直接使用go run命令直接编译运行，  感兴趣的小伙伴可以自己去试试啦  下面来看一下go语言写的代码，（可以自己去完善一下奥，比如加入等级，加入障碍物，蛇的速度都是自己可以调节的奥）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"Clib"</span></span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">    <span class="string">"math/rand"</span></span><br><span class="line">    <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wide <span class="keyword">int</span> = <span class="number">20</span></span><br><span class="line"><span class="keyword">const</span> high <span class="keyword">int</span> = <span class="number">20</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> key <span class="keyword">int64</span> = <span class="number">1</span> <span class="comment">//关卡</span></span><br><span class="line"><span class="keyword">var</span> food1 food    <span class="comment">//定义一个全局食物结构体</span></span><br><span class="line"><span class="comment">//var size int = 2  //定义一个全局蛇的长度</span></span><br><span class="line"><span class="keyword">var</span> score <span class="keyword">int</span> = <span class="number">0</span> <span class="comment">//定义一个全局分数</span></span><br><span class="line"><span class="keyword">var</span> dx <span class="keyword">int</span> = <span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> dy <span class="keyword">int</span> = <span class="number">0</span> <span class="comment">//蛇的偏移量</span></span><br><span class="line"><span class="keyword">var</span> barr1 barrier <span class="comment">//障碍物结构体</span></span><br><span class="line"><span class="keyword">var</span> c cake <span class="comment">//定义一个蛋糕</span></span><br><span class="line"><span class="keyword">var</span> FLAG <span class="keyword">bool</span>=<span class="literal">true</span></span><br><span class="line"><span class="keyword">type</span> postion <span class="keyword">struct</span> &#123;</span><br><span class="line">    x <span class="keyword">int</span></span><br><span class="line">    y <span class="keyword">int</span> <span class="comment">//父类坐标</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> cake <span class="keyword">struct</span>&#123;</span><br><span class="line">      ca [<span class="number">5</span>]postion</span><br><span class="line">&#125;                    <span class="comment">//定义一个蛋糕</span></span><br><span class="line"><span class="keyword">type</span> snake <span class="keyword">struct</span> &#123;</span><br><span class="line">    p    [wide * high]postion</span><br><span class="line">    size <span class="keyword">int</span></span><br><span class="line">    dir  <span class="keyword">byte</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> barrier <span class="keyword">struct</span> &#123;</span><br><span class="line">    barr [<span class="number">6</span>]postion</span><br><span class="line">&#125; <span class="comment">//障碍物结构体</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *cake)</span><span class="title">setcake</span><span class="params">()</span></span>&#123;</span><br><span class="line">    x:=rand.Intn(wide<span class="number">-6</span>)+<span class="number">3</span></span><br><span class="line">    y:=rand.Intn(high<span class="number">-6</span>)+<span class="number">3</span></span><br><span class="line">    c.ca[<span class="number">0</span>].x,c.ca[<span class="number">0</span>].y=x,y</span><br><span class="line">        c.ca[<span class="number">1</span>].x,c.ca[<span class="number">1</span>].y=x<span class="number">-1</span>,y</span><br><span class="line">    c.ca[<span class="number">2</span>].x,c.ca[<span class="number">2</span>].y= x<span class="number">-2</span>,y</span><br><span class="line">        c.ca[<span class="number">3</span>].x,c.ca[<span class="number">3</span>].y=x<span class="number">-1</span>,y<span class="number">-1</span></span><br><span class="line">    c.ca[<span class="number">4</span>].x,c.ca[<span class="number">4</span>].y=x<span class="number">-1</span>,y+<span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *barrier)</span><span class="title">setbarrier</span><span class="params">()</span></span>&#123;   <span class="comment">//定义一些随机障碍物</span></span><br><span class="line">    b.barr[<span class="number">0</span>].x,b.barr[<span class="number">0</span>].y=rand.Intn(wide<span class="number">-1</span>)+<span class="number">1</span>,rand.Intn(high<span class="number">-3</span>)+<span class="number">1</span></span><br><span class="line">    b.barr[<span class="number">1</span>].x,b.barr[<span class="number">1</span>].y=rand.Intn(wide<span class="number">-1</span>)+<span class="number">1</span>,rand.Intn(high<span class="number">-3</span>)+<span class="number">1</span></span><br><span class="line">    b.barr[<span class="number">2</span>].x,b.barr[<span class="number">2</span>].y=rand.Intn(wide<span class="number">-1</span>)+<span class="number">1</span>,rand.Intn(high<span class="number">-3</span>)+<span class="number">1</span></span><br><span class="line">    <span class="comment">//b.barr[3].x,b.barr[3].y=rand.Intn(wide-1)+1,rand.Intn(high-3)+1</span></span><br><span class="line">    <span class="comment">//b.barr[4].x,b.barr[4].y=rand.Intn(wide-1)+1,rand.Intn(high-3)+1</span></span><br><span class="line">    <span class="comment">//b.barr[5].x,b.barr[5].y=rand.Intn(wide-1)+1,rand.Intn(high-3)+1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> food <span class="keyword">struct</span> &#123;</span><br><span class="line">    postion</span><br><span class="line">&#125; <span class="comment">//食物</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">drawui</span><span class="params">(p postion, ch <span class="keyword">byte</span>)</span></span> &#123;</span><br><span class="line">    Clib.GotoPostion(p.x*<span class="number">2</span>+<span class="number">4</span>, p.y+<span class="number">2</span>+<span class="number">2</span>)</span><br><span class="line">    fmt.Fprintf(os.Stderr, <span class="string">"%c"</span>, ch)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *snake)</span> <span class="title">initsnake</span><span class="params">()</span></span> &#123; <span class="comment">//蛇初始化</span></span><br><span class="line">    s.p[<span class="number">0</span>].x = wide / <span class="number">2</span></span><br><span class="line">    s.p[<span class="number">0</span>].y = high / <span class="number">2</span></span><br><span class="line">    s.p[<span class="number">1</span>].x = wide/<span class="number">2</span> - <span class="number">1</span></span><br><span class="line">    s.p[<span class="number">1</span>].y = high / <span class="number">2</span> <span class="comment">//蛇头和第一个蛇结点初始化</span></span><br><span class="line">    s.dir = <span class="string">'R'</span></span><br><span class="line">    s.size=<span class="number">2</span></span><br><span class="line">    fmt.Fprintln(os.Stderr,</span><br><span class="line">        <span class="string">`</span></span><br><span class="line"><span class="string">  #-----------------------------------------#</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  |                                         |</span></span><br><span class="line"><span class="string">  #-----------------------------------------#</span></span><br><span class="line"><span class="string">`</span>)</span><br><span class="line">    food1 = food&#123;postion&#123;rand.Intn(wide), rand.Intn(high) - <span class="number">2</span>&#125;&#125; <span class="comment">//食物初始化</span></span><br><span class="line">    drawui(food1.postion, <span class="string">'o'</span>)                                  <span class="comment">//画出食物</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//go func()&#123;</span></span><br><span class="line">     Clib.GotoPostion(<span class="number">46</span>,<span class="number">19</span>)</span><br><span class="line">     fmt.Printf(<span class="string">"正在进行第%d关，小心障碍物"</span>,key)</span><br><span class="line">    <span class="comment">//&#125;()</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>&#123;</span><br><span class="line">            time.Sleep(time.Second)</span><br><span class="line">            num:=rand.Intn(<span class="number">10</span>)</span><br><span class="line">            <span class="keyword">if</span> num==<span class="number">6</span>&#123;</span><br><span class="line">                c.setcake()</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(c.ca);i++&#123;</span><br><span class="line">            drawui(c.ca[i],<span class="string">'#'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()                  <span class="comment">//吃蛋糕的作用</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(barr1.barr);i++&#123;</span><br><span class="line">            Clib.GotoPostion(barr1.barr[i].x,barr1.barr[i].y)</span><br><span class="line">            drawui(barr1.barr[i],<span class="string">'!'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()             <span class="comment">//打印出障碍物</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            <span class="keyword">switch</span> Clib.Direction() &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">72</span>, <span class="number">87</span>, <span class="number">119</span>:</span><br><span class="line">                <span class="keyword">if</span> s.dir == <span class="string">'D'</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">                s.dir = <span class="string">'U'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">65</span>, <span class="number">97</span>, <span class="number">75</span>:</span><br><span class="line">                <span class="keyword">if</span> s.dir == <span class="string">'R'</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">                s.dir = <span class="string">'L'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">100</span>, <span class="number">68</span>, <span class="number">77</span>:</span><br><span class="line">                <span class="keyword">if</span> s.dir == <span class="string">'L'</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">                s.dir = <span class="string">'R'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">83</span>, <span class="number">115</span>, <span class="number">80</span>:</span><br><span class="line">                <span class="keyword">if</span> s.dir == <span class="string">'U'</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">                s.dir = <span class="string">'D'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">32</span>:</span><br><span class="line">                s.dir = <span class="string">'P'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()   <span class="comment">//获取蛇跑的方向</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *snake)</span> <span class="title">playgame</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">//barr:=barrier&#123;postion&#123;rand.Intn(wide-5)+5,rand.Intn(high-5)+3&#125;</span></span><br><span class="line">        <span class="comment">//drawui(barr.postion,'p')</span></span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> key &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>: time.Sleep(time.Second / <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:time.Sleep(time.Second / <span class="number">5</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>:time.Sleep(time.Second / <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>:time.Sleep(time.Second / <span class="number">7</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>:time.Sleep(time.Second / <span class="number">8</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>:time.Sleep(time.Second / <span class="number">9</span>)    <span class="comment">//用来每增加一关蛇的速度加快</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> s.dir == <span class="string">'P'</span> &#123;</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> s.p[<span class="number">0</span>].x &lt; <span class="number">0</span> || s.p[<span class="number">0</span>].x &gt;= wide || s.p[<span class="number">0</span>].y+<span class="number">2</span> &lt; <span class="number">0</span> || s.p[<span class="number">0</span>].y &gt;= high<span class="number">-2</span> &#123;</span><br><span class="line">            Clib.GotoPostion(wide*<span class="number">3</span>, high<span class="number">-3</span>)</span><br><span class="line">            FLAG=<span class="literal">false</span></span><br><span class="line">            <span class="keyword">return</span> <span class="comment">//如果蛇头碰墙就死亡</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//if s.p[0].x==barr.postion.x&amp;&amp;s.p[0].y==barr.postion.y&#123;</span></span><br><span class="line">        <span class="comment">//  Clib.GotoPostion(wide*3, high-3)</span></span><br><span class="line">        <span class="comment">//  return //如果蛇头碰障碍物就死亡</span></span><br><span class="line">        <span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;s.size; i++ &#123;</span><br><span class="line">            <span class="keyword">if</span> s.p[<span class="number">0</span>].x == s.p[i].x &amp;&amp; s.p[<span class="number">0</span>].y == s.p[i].y &#123;</span><br><span class="line">                Clib.GotoPostion(wide*<span class="number">3</span>, high<span class="number">-3</span>)</span><br><span class="line">                FLAG=<span class="literal">false</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> j:=<span class="number">0</span>;j&lt;<span class="built_in">len</span>(barr1.barr);j++&#123;</span><br><span class="line">            <span class="keyword">if</span> s.p[<span class="number">0</span>].x==barr1.barr[j].x&amp;&amp;s.p[<span class="number">0</span>].y==barr1.barr[j].y&#123;</span><br><span class="line">                Clib.GotoPostion(wide*<span class="number">3</span>, high<span class="number">-3</span>)</span><br><span class="line">                FLAG=<span class="literal">false</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;                <span class="comment">//碰到障碍物死亡</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> m:=<span class="number">0</span>;m&lt;<span class="built_in">len</span>(c.ca);m++&#123;</span><br><span class="line">            <span class="keyword">if</span> s.p[<span class="number">0</span>].x==c.ca[m].x&amp;&amp;s.p[<span class="number">0</span>].y==c.ca[m].y&#123;</span><br><span class="line">                s.size++</span><br><span class="line">                score++</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> score &gt;= <span class="keyword">int</span>(<span class="number">6</span>+key*<span class="number">2</span>) &#123;</span><br><span class="line">                key++</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> s.p[<span class="number">0</span>].x == food1.x &amp;&amp; s.p[<span class="number">0</span>].y == food1.y &#123;</span><br><span class="line">            s.size++</span><br><span class="line">            score++</span><br><span class="line">            <span class="keyword">if</span> score &gt;= <span class="keyword">int</span>(<span class="number">6</span>+key*<span class="number">2</span>) &#123;</span><br><span class="line">                key++</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//画蛇</span></span><br><span class="line">            <span class="comment">//food1 = food&#123;postion&#123;rand.Intn(wide), rand.Intn(high) - 2&#125;&#125;</span></span><br><span class="line">            <span class="keyword">for</span> &#123;</span><br><span class="line">                flag := <span class="literal">true</span></span><br><span class="line">                temp := food&#123;postion&#123;rand.Intn(wide), rand.Intn(high) - <span class="number">2</span>&#125;&#125;</span><br><span class="line">                <span class="keyword">for</span> i := <span class="number">1</span>; i &lt; s.size; i++ &#123;</span><br><span class="line">                    <span class="keyword">if</span> (temp.postion.x == s.p[i].x &amp;&amp; temp.postion.y == s.p[i].y)  &#123;</span><br><span class="line">                        flag = <span class="literal">false</span></span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(barr1.barr);i++&#123;</span><br><span class="line">                    <span class="keyword">if</span> temp.postion.x==barr1.barr[i].x&amp;&amp;temp.postion.y==barr1.barr[i].y&#123;</span><br><span class="line">                        flag=<span class="literal">false</span></span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> flag == <span class="literal">true</span> &#123;</span><br><span class="line">                    food1 = temp</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            drawui(food1.postion, <span class="string">'o'</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> s.dir &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'U'</span>:</span><br><span class="line">            dx = <span class="number">0</span></span><br><span class="line">            dy = <span class="number">-1</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">'D'</span>:</span><br><span class="line">            dx = <span class="number">0</span></span><br><span class="line">            dy = <span class="number">1</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">'L'</span>:</span><br><span class="line">            dx = <span class="number">-1</span></span><br><span class="line">            dy = <span class="number">0</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">'R'</span>:</span><br><span class="line">            dx = <span class="number">1</span></span><br><span class="line">            dy = <span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line">        lp := s.p[s.size<span class="number">-1</span>] <span class="comment">//蛇尾位置</span></span><br><span class="line">        <span class="keyword">for</span> i := s.size - <span class="number">1</span>; i &gt; <span class="number">0</span>; i-- &#123;</span><br><span class="line">            s.p[i] = s.p[i<span class="number">-1</span>]</span><br><span class="line">            drawui(s.p[i], <span class="string">'*'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        drawui(lp, <span class="string">' '</span>) <span class="comment">//蛇尾画空格</span></span><br><span class="line"></span><br><span class="line">        s.p[<span class="number">0</span>].x += dx</span><br><span class="line">        s.p[<span class="number">0</span>].y += dy      <span class="comment">//更新蛇头</span></span><br><span class="line">        drawui(s.p[<span class="number">0</span>], <span class="string">'O'</span>) <span class="comment">//画蛇头</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    rand.Seed(time.Now().UnixNano())</span><br><span class="line">    <span class="keyword">var</span> s snake</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> k:=<span class="number">1</span>;k&lt;=<span class="number">6</span>;k++&#123;    <span class="comment">//用来循环6次代表6个关卡，这里可以自己设置多少关卡</span></span><br><span class="line">        s.initsnake()        <span class="comment">//初始化</span></span><br><span class="line">        barr1.setbarrier()  <span class="comment">//障碍物</span></span><br><span class="line">        s.playgame()       <span class="comment">//玩游戏开始</span></span><br><span class="line">        <span class="keyword">if</span> FLAG==<span class="literal">false</span>&#123;        <span class="comment">//这个代表蛇死亡返回的，所以这样就退出了</span></span><br><span class="line">            Clib.GotoPostion(<span class="number">46</span>,<span class="number">21</span>)</span><br><span class="line">            fmt.Printf(<span class="string">"你已死亡，第%d关总分：%d分"</span>,k, score)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        Clib.GotoPostion(<span class="number">46</span>,<span class="number">21</span>)</span><br><span class="line">        fmt.Printf(<span class="string">"第%d关总分：%d分,稍等进入下一关"</span>,k, score)</span><br><span class="line">        <span class="comment">//key++</span></span><br><span class="line">        time.Sleep(time.Second * <span class="number">5</span>)  <span class="comment">//延时5秒</span></span><br><span class="line">        Clib.Cls()                  <span class="comment">//每一关清屏一下</span></span><br><span class="line">        <span class="comment">//size=2</span></span><br><span class="line">        score=<span class="number">0</span>                   <span class="comment">//每一关分数置为0</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    time.Sleep(time.Second * <span class="number">5</span>)   <span class="comment">//延时5秒</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/09/05/go语言贪食蛇和c语言区别/">go语言贪食蛇和c语言区别</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年09月05日 - 12:09</p>
+  <p><span>最后更新:</span>2018年09月05日 - 13:09</p>
+  <p><span>原始链接:</span><a href="/2018/09/05/go语言贪食蛇和c语言区别/" title="go语言贪食蛇和c语言区别">http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/05/go语言贪食蛇和c语言区别/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
+          
+            <a href="/tags/小Demo/" rel="tag"><i class="fa fa-tag"></i> 小Demo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/05/C语言贪食蛇实现/" rel="next" title="C语言贪食蛇实现">
+                <i class="fa fa-chevron-left"></i> C语言贪食蛇实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/05/字符二进制转换/" rel="prev" title="字符二进制转换">
+                字符二进制转换 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">27.6k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GO贪食蛇小Demo"><span class="nav-number">1.</span> <span class="nav-text">GO贪食蛇小Demo</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+

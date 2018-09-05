@@ -109,23 +109,25 @@
 
 
 
-  <meta name="description" content="编程语言，区块连，Linux等相关技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Wuman&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/拜占庭将军问题/index.html">
+  <meta name="description" content="转载处：https://colobu.com/2018/08/28/c-and-go-calling-interaction/ C和Go相互调用C可以调用Go，并且Go可以调用C， 如果更进一步呢， C--&amp;gt;Go--&amp;gt;C 或者 Go--&amp;gt;C--&amp;gt;Go的调用如何实现？ 本文通过两个简单的例子帮助你了解这两种复杂的调用关系。本文不涉及两者之间的复杂的数据转换，官方文章C? Go">
+<meta name="keywords" content="C&#x2F;C++,GO语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C和Go相互调用">
+<meta property="og:url" content="http://yoursite.com/2018/09/05/C和Go相互调用/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="编程语言，区块连，Linux等相关技术">
+<meta property="og:description" content="转载处：https://colobu.com/2018/08/28/c-and-go-calling-interaction/ C和Go相互调用C可以调用Go，并且Go可以调用C， 如果更进一步呢， C--&amp;gt;Go--&amp;gt;C 或者 Go--&amp;gt;C--&amp;gt;Go的调用如何实现？ 本文通过两个简单的例子帮助你了解这两种复杂的调用关系。本文不涉及两者之间的复杂的数据转换，官方文章C? Go">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-05T04:59:09.599Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wuman&#39;s Blog">
-<meta name="twitter:description" content="编程语言，区块连，Linux等相关技术">
+<meta name="twitter:title" content="C和Go相互调用">
+<meta name="twitter:description" content="转载处：https://colobu.com/2018/08/28/c-and-go-calling-interaction/ C和Go相互调用C可以调用Go，并且Go可以调用C， 如果更进一步呢， C--&amp;gt;Go--&amp;gt;C 或者 Go--&amp;gt;C--&amp;gt;Go的调用如何实现？ 本文通过两个简单的例子帮助你了解这两种复杂的调用关系。本文不涉及两者之间的复杂的数据转换，官方文章C? Go">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/拜占庭将军问题/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/05/C和Go相互调用/"/>
 
 
 
@@ -135,7 +137,7 @@
   };
 </script>
 
-  <title>标签: 拜占庭将军问题 | Wuman's Blog</title>
+  <title>C和Go相互调用 | Wuman's Blog</title>
   
 
 
@@ -182,7 +184,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 <a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,7 +229,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
@@ -307,81 +309,295 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>拜占庭将军问题<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/05/C和Go相互调用/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/09/04/拜占庭将军问题/" itemprop="url">
-              
-                <span itemprop="name">拜占庭将军问题</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">C和Go相互调用
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-04T13:18:22+08:00"
-              content="2018-09-04" >
-          09-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-05 12:47:03 / 修改时间：12:59:09" itemprop="dateCreated datePublished" datetime="2018-09-05T12:47:03+08:00">2018-09-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://colobu.com/2018/08/28/c-and-go-calling-interaction/" target="_blank" rel="noopener">转载处：https://colobu.com/2018/08/28/c-and-go-calling-interaction/</a></p>
+<h1 id="C和Go相互调用"><a href="#C和Go相互调用" class="headerlink" title="C和Go相互调用"></a>C和Go相互调用</h1><p>C可以调用Go，并且Go可以调用C， 如果更进一步呢， <code>C--&gt;Go--&gt;C</code> 或者 <code>Go--&gt;C--&gt;Go</code>的调用如何实现？</p>
+<p>本文通过两个简单的例子帮助你了解这两种复杂的调用关系。本文不涉及两者之间的复杂的数据转换，官方文章<a href="https://blog.golang.org/c-go-cgo" target="_blank" rel="noopener">C? Go? Cgo!</a>、<a href="https://github.com/golang/go/wiki/cgo" target="_blank" rel="noopener">wiki/cgo</a>和<a href="http://golang.org/cmd/cgo" target="_blank" rel="noopener">cmd/cgo</a>有一些介绍。</p>
+<h2 id="Go–-gt-C–-gt-Go"><a href="#Go–-gt-C–-gt-Go" class="headerlink" title="Go–&gt;C–&gt;Go"></a>Go–&gt;C–&gt;Go</h2><p>Go程序调用C实现的函数，然后C实现的函数又调用Go实现的函数。</p>
+<p>1、首先，我们新建一个<code>hello.go</code>的文件：</p>
+<p>hello.go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`package mainimport "C"import "fmt"//export HelloFromGofunc HelloFromGo() &#123;	fmt.Printf("Hello from Go!\n")&#125;`</span></span><br></pre></td></tr></table></figure>
+<p>它定义了一个<code>HelloFromGo</code>函数，注意这个函数是一个纯的Go函数，我们定义它的输出符号为<code>HelloFromGo</code>。</p>
+<p>2、接着我们新建一个<code>hello.c</code>的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &quot;_cgo_export.h&quot;</span><br><span class="line">int helloFromC() &#123;</span><br><span class="line">    printf(&quot;Hi from C\n&quot;);</span><br><span class="line">    //call Go function</span><br><span class="line">    HelloFromGo();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个c文件定义了一个C函数<code>helloFromC</code>,内部它会调用我们刚才定义的<code>HelloFromGo</code>函数。</p>
+<p>这样，我们实现了<code>C</code>调用<code>Go</code>: <code>C--&gt;Go</code>,下面我们再实现Go调用C。</p>
+<p>3、最后新建一个<code>main.go</code>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">/*</span><br><span class="line">extern int helloFromC();</span><br><span class="line">*/</span><br><span class="line">import &quot;C&quot;</span><br><span class="line">func main() &#123;</span><br><span class="line">	//call c function</span><br><span class="line">	C.helloFromC()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它调用第二步实现的C函数<code>helloFromC</code>。</p>
+<p>运行测试一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ go run .</span><br><span class="line">Hi from C</span><br><span class="line">Hello from Go!</span><br></pre></td></tr></table></figure>
+<p>可以看到，期望的函数调用正常的运行。第一行是C函数的输出，第二行是Go函数的输出。</p>
+<h2 id="C–-gt-Go–-gt-C"><a href="#C–-gt-Go–-gt-C" class="headerlink" title="C–&gt;Go–&gt;C"></a>C–&gt;Go–&gt;C</h2><p>第二个例子演示了C程序调用Go实现的函数，然后Go实现的函数又调用C实现的函数。</p>
+<p>1、首先新建一个<code>hello.c</code>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int helloFromC() &#123;</span><br><span class="line">    printf(&quot;Hi from C\n&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它定义了一个纯C实现的函数。</p>
+<p>2、接着新建一个<code>hello.go</code>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// go build -o hello.so -buildmode=c-shared .</span><br><span class="line">package main</span><br><span class="line">/*</span><br><span class="line">extern int helloFromC();</span><br><span class="line">*/</span><br><span class="line">import &quot;C&quot;</span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line">//export HelloFromGo</span><br><span class="line">func HelloFromGo() &#123;</span><br><span class="line">	fmt.Printf(&quot;Hello from Go!\n&quot;)</span><br><span class="line">	C.helloFromC()</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它实现了一个Go函数<code>HelloFromGo</code>,内部实现调用了C实现的函数<code>helloFromC</code>,这样我们就实现了<code>Go--&gt;C</code>。</p>
+<p>注意包名设置为<code>package main</code>，并且增加一个空的<code>main</code>函数。</p>
+<p>运行<code>go build -o hello.so -buildmode=c-shared .</code>生成一个C可以调用的库，这调命令执行完后会生成<code>hello.so</code>文件和<code>hello.h</code>文件。</p>
+<p>3、最后新建一个文件夹，随便起个名字，比如<code>main</code></p>
+<p>将刚才生成的<code>hello.so</code>文件和<code>hello.h</code>文件复制到<code>main</code>文件夹，并在<code>main</code>文件夹中新建一个文件<code>main.c</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &quot;hello.h&quot;</span><br><span class="line">int main() &#123;</span><br><span class="line">    printf(&quot;use hello lib from C:\n&quot;);</span><br><span class="line">   </span><br><span class="line">    HelloFromGo();</span><br><span class="line">    </span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行<code>gcc -o main main.c hello.so</code>生成可执行文件<code>main</code>, 运行<code>main</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ./main</span><br><span class="line">use hello lib from C:</span><br><span class="line">Hello from Go!</span><br><span class="line">Hi from C</span><br></pre></td></tr></table></figure>
+<p>第一行输出来自<code>main.c</code>,第二行来自Go函数，第三行来自<code>hello.c</code>中的C函数，这样我们就实现了<code>C--&gt;Go--C</code>的复杂调用。</p>
+<h3 id="C-gt-Go-gt-C的状态变量"><a href="#C-gt-Go-gt-C的状态变量" class="headerlink" title="C--&gt;Go--&gt;C的状态变量"></a><code>C--&gt;Go--&gt;C</code>的状态变量</h3><p>我们来分析第二步中的一个特殊的场景， 为了下面我们好区分，我们给程序标记一下， 记为<code>C1--&gt;Go--&gt;C2</code>, C2的程序修改一下，加入一个状态变量<code>a</code>,并且函数<code>helloFromC</code>中会打印<code>a</code>的地址和值，也会将<code>a</code>加一。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int  a = 1;</span><br><span class="line">int helloFromC() &#123;</span><br><span class="line">    printf(&quot;Hi from C: %p, %d\n&quot;, &amp;a, a++);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后修改<code>main.c</code>程序,让它既通过Go嗲用<code>C1.helloFromC</code>,又直接调用<code>C1.helloFromC</code>,看看多次调用的时候<code>a</code>的指针是否一致，并且<code>a</code>的值是否有变化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &quot;hello.h&quot;</span><br><span class="line">int main() &#123;</span><br><span class="line">    printf(&quot;use hello lib from C:\n&quot;);</span><br><span class="line">   </span><br><span class="line">    // 1. 直接调用C函数</span><br><span class="line">    helloFromC();</span><br><span class="line">    // 2. 调用Go函数</span><br><span class="line">    HelloFromGo();</span><br><span class="line">    </span><br><span class="line">    // 3. 直接调用C函数</span><br><span class="line">    helloFromC();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>激动人心的时候到了。我们不同的编译方式会产生不同的结果。</p>
+<p>1、<code>gcc -o main main.c hello.so</code></p>
+<p>和第二步相同的编译方式，编译出<code>main</code>并执行， 因为<code>hello.so</code>中包含<code>C1.helloFromC</code>实现，所以可以正常执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">./main</span><br><span class="line">use hello lib from C:</span><br><span class="line">Hi from C: 0x10092a370, 1</span><br><span class="line">Hello from Go!</span><br><span class="line">Hi from C: 0x10092a370, 2</span><br><span class="line">Hi from C: 0x10092a370, 3</span><br></pre></td></tr></table></figure>
+<p>可以看到<code>a</code>的指针是同一个值，无论通过Go函数改变还是通过C函数改变都是更改的同一个变量。</p>
+<p>nm可以查看生成的<code>main</code>的符号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nm main</span><br><span class="line">                 U _HelloFromGo</span><br><span class="line">0000000100000000 T __mh_execute_header</span><br><span class="line">                 U _helloFromC</span><br><span class="line">0000000100000f10 T _main</span><br><span class="line">                 U _printf</span><br><span class="line">                 U dyld_stub_binder</span><br></pre></td></tr></table></figure>
+<p><code>U</code>代表这个符号是未定义的符号，通过动态库链接进来。</p>
+<p>2、 <code>gcc -o main main.c hello.so ../hello.c</code></p>
+<p>我们编译的时候直接链接<code>hello.c</code>的实现，然后运行<code>main</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">./main</span><br><span class="line">use hello lib from C:</span><br><span class="line">Hi from C: 0x104888020, 1</span><br><span class="line">Hello from Go!</span><br><span class="line">Hi from C: 0x1049f7370, 1</span><br><span class="line">Hi from C: 0x104888020, 2</span><br></pre></td></tr></table></figure>
+<p>可以看到<code>a</code>是不同的两个变量。</p>
+<p>nm可以查看生成的<code>main</code>的符号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">nm main</span><br><span class="line">                 U _HelloFromGo</span><br><span class="line">0000000100000000 T __mh_execute_header</span><br><span class="line">0000000100001020 D _a</span><br><span class="line">0000000100000f10 T _helloFromC</span><br><span class="line">0000000100000ec0 T _main</span><br><span class="line">                 U _printf</span><br><span class="line">                 U dyld_stub_binder</span><br></pre></td></tr></table></figure>
+<p>可以看到<code>_a</code>是初始化的环境变量，<code>_helloFromC</code>的类型是<code>T</code>而不是<code>U</code>,代表它是一个全局的Text符号,这和上一步是不一样的</p>
 
       
     </div>
 
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/09/05/C和Go相互调用/">C和Go相互调用</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年09月05日 - 12:09</p>
+  <p><span>最后更新:</span>2018年09月05日 - 12:09</p>
+  <p><span>原始链接:</span><a href="/2018/09/05/C和Go相互调用/" title="C和Go相互调用">http://yoursite.com/2018/09/05/C和Go相互调用/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/05/C和Go相互调用/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-C/" rel="tag"><i class="fa fa-tag"></i> C/C++</a>
+          
+            <a href="/tags/GO语言/" rel="tag"><i class="fa fa-tag"></i> GO语言</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/04/区块链以太坊相关资料/" rel="next" title="区块链以太坊相关资料">
+                <i class="fa fa-chevron-left"></i> 区块链以太坊相关资料
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/05/C语言贪食蛇实现/" rel="prev" title="C语言贪食蛇实现">
+                C语言贪食蛇实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -402,8 +618,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -548,6 +773,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C和Go相互调用"><span class="nav-number">1.</span> <span class="nav-text">C和Go相互调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go–-gt-C–-gt-Go"><span class="nav-number">1.1.</span> <span class="nav-text">Go–&gt;C–&gt;Go</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C–-gt-Go–-gt-C"><span class="nav-number">1.2.</span> <span class="nav-text">C–&gt;Go–&gt;C</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-gt-Go-gt-C的状态变量"><span class="nav-number">1.2.1.</span> <span class="nav-text">C--&gt;Go--&gt;C的状态变量</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -691,6 +932,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
 
   
 
