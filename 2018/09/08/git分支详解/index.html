@@ -121,6 +121,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/39.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/5.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/6.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/7.png">
@@ -155,7 +156,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/36.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/37.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/08/git分支详解/38.png">
-<meta property="og:updated_time" content="2018-09-08T05:27:37.677Z">
+<meta property="og:updated_time" content="2018-09-08T05:38:38.578Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git分支详解">
 <meta name="twitter:description" content="几乎每一种版本控制系统都以某种形式支持分支。使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。在很多版本控制系统中，这是个昂贵的过程，常常需要创建一个源代码目录的完整副本，对大型项目来说会花费很长时间。 　　有人把 Git 的分支模型称为“必杀技特性”，而正是因为它，将 Git 从版本控制系统家族里区分出来。Git 有何特别之处呢？Git 的分支可谓是难以置信的轻量级，它的">
@@ -410,7 +411,7 @@
                 
               
 
-              <time title="创建时间：2018-09-08 13:03:07 / 修改时间：13:27:37" itemprop="dateCreated datePublished" datetime="2018-09-08T13:03:07+08:00">2018-09-08</time>
+              <time title="创建时间：2018-09-08 13:03:07 / 修改时间：13:38:38" itemprop="dateCreated datePublished" datetime="2018-09-08T13:03:07+08:00">2018-09-08</time>
             
 
             
@@ -484,6 +485,7 @@
 <p>　　这会在当前 commit 对象上新建一个分支指针</p>
 <p><img src="/2018/09/08/git分支详解/4.png" alt=""></p>
 <p>那么，Git 是如何知道你当前在哪个分支上工作的呢？其实答案也很简单，它保存着一个名为 HEAD 的特别指针。请注意它和你熟知的许多其他版本控制系统（比如 Subversion 或 CVS）里的 HEAD 概念大不相同。在 Git 中，它是一个指向你正在工作中的本地分支的指针（译注：将 HEAD 想象为当前分支的别名。）。运行<code>git branch</code> 命令，仅仅是建立了一个新的分支，但不会自动切换到这个分支中去，所以在这个例子中，我们依然还在 master 分支里工作</p>
+<p><img src="/2018/09/08/git分支详解/39.png" alt=""></p>
 <p>　要切换到其他分支，可以执行 <code>git checkout</code> 命令。我们现在转换到新建的 testing 分支：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　　$ git checkout testing</span><br></pre></td></tr></table></figure>
 <p>　　这样 HEAD 就指向了 testing 分支</p>
