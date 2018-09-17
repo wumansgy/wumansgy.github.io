@@ -328,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/09/go的几种死锁情况分析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/15/数据库设计思维与模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -347,8 +347,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/09/go的几种死锁情况分析/" itemprop="url">
-                  go的几种死锁情况分析
+                <a class="post-title-link" href="/2018/09/15/数据库设计思维与模式/" itemprop="url">
+                  数据库设计思维与模式
                 </a>
               
             
@@ -374,7 +374,7 @@
                 
               
 
-              <time title="创建时间：2018-09-09 13:04:07 / 修改时间：13:18:31" itemprop="dateCreated datePublished" datetime="2018-09-09T13:04:07+08:00">2018-09-09</time>
+              <time title="创建时间：2018-09-15 12:49:18 / 修改时间：13:06:04" itemprop="dateCreated datePublished" datetime="2018-09-15T12:49:18+08:00">2018-09-15</time>
             
 
             
@@ -396,7 +396,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -432,12 +432,22 @@
       
         
           
-          在go语言中用channel通信稍不注意就会发生死锁情况，下面我们来看一下几种常见的死锁情况
-第一种：同一个goroutine中，使用同一个 channel 读写。123456package mainfunc main()&#123;    ch:=make(chan int)  //这就是在mai
+          1.1 今日目标
+理解实体之间的关系
+
+理解绘制E-R图
+
+理解三范式
+
+理解范式和性能的关系
+1.2  数据库基本概念1、关系：两个表的公共字段
+2、行：也称记录，也称实体
+3、列：也称字段，也称属性
+123就表结构而言，表分为行和列；就表数据而言，分为记录和字段；就面向对象而言，一个记录就是一个
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/09/go的几种死锁情况分析/#more" rel="contents">
+            <a class="btn" href="/2018/09/15/数据库设计思维与模式/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -501,7 +511,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/09/git详解-git实战/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/14/Linux命令-rm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -520,8 +530,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/09/git详解-git实战/" itemprop="url">
-                  git详解-git实战
+                <a class="post-title-link" href="/2018/09/14/Linux命令-rm/" itemprop="url">
+                  Linux命令-rm
                 </a>
               
             
@@ -547,7 +557,7 @@
                 
               
 
-              <time title="创建时间：2018-09-09 12:47:47 / 修改时间：13:00:27" itemprop="dateCreated datePublished" datetime="2018-09-09T12:47:47+08:00">2018-09-09</time>
+              <time title="创建时间：2018-09-14 13:22:49 / 修改时间：12:26:43" itemprop="dateCreated datePublished" datetime="2018-09-14T13:22:49+08:00">2018-09-14</time>
             
 
             
@@ -569,7 +579,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -605,12 +615,12 @@
       
         
           
-          本章介绍开始使用 Git 前的相关知识。我们会先了解一些版本控制工具的历史背景，然后试着让 Git 在你的系统上跑起来，直到最后配置好，可以正常开始开发工作。读完本章，你就会明白为什么 Git 会如此流行，为什么你应该立即开始使用它。
-关于版本控制什么是版本控制？我真的需要吗？版本控制是一种记录若干
+          rm命令可以删除一个目录中的一个或多个文件或目录，也可以将某个目录及其下属的所有文件及其子目录均删除掉。对于链接文件，只是删除整个链接文件，而原有文件保持不变。
+rm是一个危险的命令，使用的时候要特别当心，尤其对于新手，否则整个系统就会毁在这个命令（比如在/（根目录）下执行rm * -rf）。所以，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/09/git详解-git实战/#more" rel="contents">
+            <a class="btn" href="/2018/09/14/Linux命令-rm/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -674,7 +684,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/git分支详解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/14/Linux命令-mkdir/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -693,8 +703,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/08/git分支详解/" itemprop="url">
-                  git分支详解
+                <a class="post-title-link" href="/2018/09/14/Linux命令-mkdir/" itemprop="url">
+                  Linux命令-mkdir
                 </a>
               
             
@@ -720,7 +730,7 @@
                 
               
 
-              <time title="创建时间：2018-09-08 13:03:07 / 修改时间：13:38:38" itemprop="dateCreated datePublished" datetime="2018-09-08T13:03:07+08:00">2018-09-08</time>
+              <time title="创建时间：2018-09-14 12:23:15 / 修改时间：12:25:45" itemprop="dateCreated datePublished" datetime="2018-09-14T12:23:15+08:00">2018-09-14</time>
             
 
             
@@ -742,7 +752,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -778,12 +788,12 @@
       
         
           
-          几乎每一种版本控制系统都以某种形式支持分支。使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。在很多版本控制系统中，这是个昂贵的过程，常常需要创建一个源代码目录的完整副本，对大型项目来说会花费很长时间。
-　　有人把 Git 的分支模型称为“必杀技特性”，而正是因为它，将 Gi
+          mkdir命令用来创建目录。该命令创建由dirname命名的目录。如果在目录名的前面没有加任何路径名，则在当前目录下创建由dirname指定的目录；如果给出了一个已经存在的路径，将会在该目录下创建一个指定的目录。在创建目录时，应保证新建的目录与它所在目录下的文件没有重名。
+语法cd (选项) (参数
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/08/git分支详解/#more" rel="contents">
+            <a class="btn" href="/2018/09/14/Linux命令-mkdir/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -847,7 +857,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/网络协议-最全的网络协议图/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/13/数据库基本操作9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -866,8 +876,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/08/网络协议-最全的网络协议图/" itemprop="url">
-                  网络协议-最全的网络协议图
+                <a class="post-title-link" href="/2018/09/13/数据库基本操作9/" itemprop="url">
+                  数据库基本操作9
                 </a>
               
             
@@ -893,7 +903,7 @@
                 
               
 
-              <time title="创建时间：2018-09-08 12:59:06 / 修改时间：13:01:32" itemprop="dateCreated datePublished" datetime="2018-09-08T12:59:06+08:00">2018-09-08</time>
+              <time title="创建时间：2018-09-13 11:36:28 / 修改时间：10:17:49" itemprop="dateCreated datePublished" datetime="2018-09-13T11:36:28+08:00">2018-09-13</time>
             
 
             
@@ -915,7 +925,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络编程协议/" itemprop="url" rel="index"><span itemprop="name">网络编程协议</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -951,14 +961,18 @@
       
         
           
-           转载自http://www.52im.net
-图片较大，建议单击放大或者下载后查看
-
-
-          
+          1.15    数据完整性介绍
+1.15.1 保证实体完整性1、     主键约束
+2、     唯一约束
+3、     自动增长列
+1.15.2 保证域完整性1、     数据类型约束
+2、     非空约束
+3、     默认值约束
+1.15.3 保证引用完整性1、外键约束：从表中的公共字段是主
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/08/网络协议-最全的网络协议图/#more" rel="contents">
+            <a class="btn" href="/2018/09/13/数据库基本操作9/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1022,7 +1036,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/go语言并发讲解，虚拟内存讲解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/13/数据库基本操作8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1041,8 +1055,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/08/go语言并发讲解，虚拟内存讲解/" itemprop="url">
-                  go语言并发讲解，虚拟内存讲解
+                <a class="post-title-link" href="/2018/09/13/数据库基本操作8/" itemprop="url">
+                  数据库基本操作8
                 </a>
               
             
@@ -1068,7 +1082,7 @@
                 
               
 
-              <time title="创建时间：2018-09-08 12:47:11 / 修改时间：12:58:10" itemprop="dateCreated datePublished" datetime="2018-09-08T12:47:11+08:00">2018-09-08</time>
+              <time title="创建时间：2018-09-13 10:57:45 / 修改时间：10:12:53" itemprop="dateCreated datePublished" datetime="2018-09-13T10:57:45+08:00">2018-09-13</time>
             
 
             
@@ -1090,7 +1104,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -1126,11 +1140,17 @@
       
         
           
-          并行和并发今天我们来讲一下在计算机编程中并行和并发的意思并行(parallel)：指在同一时刻，有多条指令在多个处理器上同时执行。并发(concurrency)：指在同一时刻只能有一条指令执行，但多个进程指令被快速的轮换执行，使得在宏观上具有多个进程同时执行的效果，但在微观上并不是同时执行的，只是把
+          1.11.2 创建组合键
+1.11.3 查看主键
+1.11.3 删除主键
+1.11.4 选择主键的原则1、     最少性：尽量选择一个字段做主键
+2、     稳定性：尽量选择更新少的列做主键
+3、     尽量选择数字型的列做主键
+1.11.5 主键思考题1、在主键列输入的数值，允许为空吗?  
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/08/go语言并发讲解，虚拟内存讲解/#more" rel="contents">
+            <a class="btn" href="/2018/09/13/数据库基本操作8/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1194,7 +1214,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/网络协议/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/13/数据库基本操作7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1213,8 +1233,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/08/网络协议/" itemprop="url">
-                  网络协议
+                <a class="post-title-link" href="/2018/09/13/数据库基本操作7/" itemprop="url">
+                  数据库基本操作7
                 </a>
               
             
@@ -1240,7 +1260,7 @@
                 
               
 
-              <time title="创建时间：2018-09-08 12:46:12 / 修改时间：12:51:26" itemprop="dateCreated datePublished" datetime="2018-09-08T12:46:12+08:00">2018-09-08</time>
+              <time title="创建时间：2018-09-13 09:57:45 / 修改时间：10:04:09" itemprop="dateCreated datePublished" datetime="2018-09-13T09:57:45+08:00">2018-09-13</time>
             
 
             
@@ -1262,7 +1282,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络编程协议/" itemprop="url" rel="index"><span itemprop="name">网络编程协议</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -1298,15 +1318,12 @@
       
         
           
-          协议从应用的角度出发，协议可理解为“规则”，是数据传输和数据的解释的规则。假设，A、B双方欲传输文件。规定：
-
-第一次，传输文件名，接收方接收到文件名，应答OK给传输方；
-第二次，发送文件的尺寸，接收方接收到该数据再次应答一个OK；
-第三次，传输文件内容。同样，接收方接收数据完成后应答OK表示文件内
+          1.6 数据类型——booleanMySQL不支持boolean类型，true和false在数据库中对应1和0。
+1234567891011121314151617mysql&gt; create table t15(    -&gt; field boolean    -&gt; );Query 
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/08/网络协议/#more" rel="contents">
+            <a class="btn" href="/2018/09/13/数据库基本操作7/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1370,7 +1387,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/git知识点详解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/12/数据库基本操作6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1389,8 +1406,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/07/git知识点详解/" itemprop="url">
-                  git知识点详解
+                <a class="post-title-link" href="/2018/09/12/数据库基本操作6/" itemprop="url">
+                  数据库基本操作6
                 </a>
               
             
@@ -1416,7 +1433,7 @@
                 
               
 
-              <time title="创建时间：2018-09-07 14:17:58 / 修改时间：14:48:20" itemprop="dateCreated datePublished" datetime="2018-09-07T14:17:58+08:00">2018-09-07</time>
+              <time title="创建时间：2018-09-12 14:41:16 / 修改时间：13:19:35" itemprop="dateCreated datePublished" datetime="2018-09-12T14:41:16+08:00">2018-09-12</time>
             
 
             
@@ -1438,7 +1455,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -1474,13 +1491,12 @@
       
         
           
-          Git知识点详解
-文件状态现在我们手上已经有了一个真实项目的 Git 仓库，并从这个仓库中取出了所有文件的工作拷贝。接下来，对这些文件作些修改，在完成了一个阶段的目标之后，提交本次更新到仓库。
-　　请记住，工作目录下面的所有文件都不外乎这两种状态：已跟踪或未跟踪。已跟踪的文件是指本来就被纳入版本控制
+          1.3 数据类型——枚举（enum）1、从集合中选择一个数据（单选）
+123456789101112131415161718192021mysql&gt; create table t8(    -&gt; name varchar(20),    -&gt; sex enum(&apos;男&ap
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/07/git知识点详解/#more" rel="contents">
+            <a class="btn" href="/2018/09/12/数据库基本操作6/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1544,7 +1560,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/git和svn的详细对比表/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/12/数据库基本操作5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1563,8 +1579,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/07/git和svn的详细对比表/" itemprop="url">
-                  git的基础使用
+                <a class="post-title-link" href="/2018/09/12/数据库基本操作5/" itemprop="url">
+                  数据库基本操作5
                 </a>
               
             
@@ -1590,7 +1606,7 @@
                 
               
 
-              <time title="创建时间：2018-09-07 14:17:37 / 修改时间：14:41:08" itemprop="dateCreated datePublished" datetime="2018-09-07T14:17:37+08:00">2018-09-07</time>
+              <time title="创建时间：2018-09-12 14:01:12 / 修改时间：13:15:52" itemprop="dateCreated datePublished" datetime="2018-09-12T14:01:12+08:00">2018-09-12</time>
             
 
             
@@ -1612,7 +1628,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -1648,11 +1664,43 @@
       
         
           
-          Git是一个分布式的版本控制工具，本篇文章从介绍Git开始，重点在于介绍Git的基本命令和使用技巧，让你尝试使用Git的同时，体验到原来一个版 本控制工具可以对开发产生如此之多的影响，文章分为两部分，第一部分介绍Git的一些常用命令，其中穿插介绍Git的基本概念和原理，第二篇重点介绍 Git的使用技
+          1.1 数据类型——值类型1.1.1   整型
+
+
+类型
+字节
+范围
+
+
+
+
+tinyint
+1
+-128~127
+
+
+smallint
+2
+-32768~32767
+
+
+mediumint
+3
+-8388608~8388607
+
+
+int
+4
+-2^31^~2^31^-1
+
+
+bigint
+8
+-
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/07/git和svn的详细对比表/#more" rel="contents">
+            <a class="btn" href="/2018/09/12/数据库基本操作5/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1716,7 +1764,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/git的基础使用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/12/数据库基本操作4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1735,8 +1783,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/07/git的基础使用/" itemprop="url">
-                  git和svn的详细对比表
+                <a class="post-title-link" href="/2018/09/12/数据库基本操作4/" itemprop="url">
+                  数据库基本操作4
                 </a>
               
             
@@ -1762,7 +1810,7 @@
                 
               
 
-              <time title="创建时间：2018-09-07 14:17:09 / 修改时间：14:43:34" itemprop="dateCreated datePublished" datetime="2018-09-07T14:17:09+08:00">2018-09-07</time>
+              <time title="创建时间：2018-09-12 13:01:12 / 修改时间：13:09:36" itemprop="dateCreated datePublished" datetime="2018-09-12T13:01:12+08:00">2018-09-12</time>
             
 
             
@@ -1784,7 +1832,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -1820,23 +1868,11 @@
       
         
           
-          刚开始工作那会，工作做版本控制的选型，几个tl最后选的git，当时不是很懂，只知道git性能多一些，现在回头看了一下这个表格，更加明白他们之间的差异了，git完胜！
-
-
-
-版本工具差异
-svn
-git
-
-
-
-
-系统特点
-1.集中式版本控制系统（文档管理很方便）2.企业内部并行集中开发3.window
+          1.6 SQL分类DDL（data definition language）数据库定义语言create、alter、drop、shopDML（data manipulation language）数据操纵语言select、update、insert、deleteDCL（Data Control La
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/07/git的基础使用/#more" rel="contents">
+            <a class="btn" href="/2018/09/12/数据库基本操作4/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1900,7 +1936,7 @@ git
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/github向导/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/数据库基本操作3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1919,8 +1955,8 @@ git
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/07/github向导/" itemprop="url">
-                  github向导
+                <a class="post-title-link" href="/2018/09/11/数据库基本操作3/" itemprop="url">
+                  数据库基本操作3
                 </a>
               
             
@@ -1946,7 +1982,7 @@ git
                 
               
 
-              <time title="创建时间：2018-09-07 14:15:29 / 修改时间：14:33:13" itemprop="dateCreated datePublished" datetime="2018-09-07T14:15:29+08:00">2018-09-07</time>
+              <time title="创建时间：2018-09-11 18:45:12 / 修改时间：19:04:58" itemprop="dateCreated datePublished" datetime="2018-09-11T18:45:12+08:00">2018-09-11</time>
             
 
             
@@ -1968,7 +2004,7 @@ git
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
 
                 
                 
@@ -2004,17 +2040,12 @@ git
       
         
           
-          Hello World项目是计算机编程的悠久传统。这是一个简单的练习，让你开始学习新的东西。让我们开始使用GitHub！
-你将学到如下内容：
-1: 创建和使用一个仓库。
-2: 开始和管理一个分支。
-3: 更改一个文件，然后推送到仓库，并且附带一些注释。
-4: 打开和合并一个推送请求。
-创建一个仓库仓
+          1.5 数据操作创建测试表
+1234567mysql&gt; create table stu(    -&gt; id int auto_increment primary key comment &apos;主键&apos;,    -&gt; name varchar(20) not null
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/07/github向导/#more" rel="contents">
+            <a class="btn" href="/2018/09/11/数据库基本操作3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2067,7 +2098,7 @@ git
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2110,7 +2141,7 @@ git
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2216,7 +2247,7 @@ git
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">85.9k</span>
+      <span class="site-state-item-count">108.0k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 

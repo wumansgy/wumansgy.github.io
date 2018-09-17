@@ -328,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/区块链中的双花问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/09/git详解-git实战/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -347,8 +347,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/04/区块链中的双花问题/" itemprop="url">
-                  区块链中的双花问题
+                <a class="post-title-link" href="/2018/09/09/git详解-git实战/" itemprop="url">
+                  git详解-git实战
                 </a>
               
             
@@ -374,7 +374,7 @@
                 
               
 
-              <time title="创建时间：2018-09-04 13:26:31 / 修改时间：13:36:43" itemprop="dateCreated datePublished" datetime="2018-09-04T13:26:31+08:00">2018-09-04</time>
+              <time title="创建时间：2018-09-09 12:47:47 / 修改时间：13:00:27" itemprop="dateCreated datePublished" datetime="2018-09-09T12:47:47+08:00">2018-09-09</time>
             
 
             
@@ -396,7 +396,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
 
                 
                 
@@ -432,13 +432,12 @@
       
         
           
-          区块链中的“双花”问题我们举个简单的例子，比如你在商场刷卡买东西。这个行为面临三种危险：
-
-首先，刷卡这个行为，验证的是你的信用卡信息，也就是说只要给刷卡机提供同样的信息，就能从你的账户里把钱刷走。没错，很多朋友都听说过，有犯罪组织专门从事复制卡信息的勾当，然后“盗刷”你的卡。在一些不发达国家的小店
+          本章介绍开始使用 Git 前的相关知识。我们会先了解一些版本控制工具的历史背景，然后试着让 Git 在你的系统上跑起来，直到最后配置好，可以正常开始开发工作。读完本章，你就会明白为什么 Git 会如此流行，为什么你应该立即开始使用它。
+关于版本控制什么是版本控制？我真的需要吗？版本控制是一种记录若干
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/04/区块链中的双花问题/#more" rel="contents">
+            <a class="btn" href="/2018/09/09/git详解-git实战/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -502,7 +501,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/什么是区块链/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/git分支详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -521,8 +520,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/04/什么是区块链/" itemprop="url">
-                  什么是区块链
+                <a class="post-title-link" href="/2018/09/08/git分支详解/" itemprop="url">
+                  git分支详解
                 </a>
               
             
@@ -548,7 +547,7 @@
                 
               
 
-              <time title="创建时间：2018-09-04 13:18:53 / 修改时间：13:23:41" itemprop="dateCreated datePublished" datetime="2018-09-04T13:18:53+08:00">2018-09-04</time>
+              <time title="创建时间：2018-09-08 13:03:07 / 修改时间：13:38:38" itemprop="dateCreated datePublished" datetime="2018-09-08T13:03:07+08:00">2018-09-08</time>
             
 
             
@@ -570,7 +569,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
 
                 
                 
@@ -606,11 +605,12 @@
       
         
           
-          【定义】区块链（Blockchain）是指通过去中心化和去信任的方式集体维护一个可靠数据库的技术方案。该技术方案让参与系统中的任意多个节点，把一段时间系统内全部信息交流的数据，通过密码学算法计算和记录到一个数据块（block），并且生成该数据块的指纹用于链接（chain）下个数据块和校验，系统所有参
+          几乎每一种版本控制系统都以某种形式支持分支。使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。在很多版本控制系统中，这是个昂贵的过程，常常需要创建一个源代码目录的完整副本，对大型项目来说会花费很长时间。
+　　有人把 Git 的分支模型称为“必杀技特性”，而正是因为它，将 Gi
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/04/什么是区块链/#more" rel="contents">
+            <a class="btn" href="/2018/09/08/git分支详解/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -674,7 +674,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/拜占庭将军问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/网络协议-最全的网络协议图/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -693,8 +693,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/04/拜占庭将军问题/" itemprop="url">
-                  拜占庭将军问题
+                <a class="post-title-link" href="/2018/09/08/网络协议-最全的网络协议图/" itemprop="url">
+                  网络协议-最全的网络协议图
                 </a>
               
             
@@ -720,7 +720,7 @@
                 
               
 
-              <time title="创建时间：2018-09-04 13:18:22 / 修改时间：13:36:49" itemprop="dateCreated datePublished" datetime="2018-09-04T13:18:22+08:00">2018-09-04</time>
+              <time title="创建时间：2018-09-08 12:59:06 / 修改时间：13:01:32" itemprop="dateCreated datePublished" datetime="2018-09-08T12:59:06+08:00">2018-09-08</time>
             
 
             
@@ -742,7 +742,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络编程协议/" itemprop="url" rel="index"><span itemprop="name">网络编程协议</span></a></span>
 
                 
                 
@@ -778,11 +778,14 @@
       
         
           
-          拜占庭将军问题（Byzantine failures）是由莱斯利·兰伯特提出的点对点通信中的基本问题。含义是在存在消息丢失的不可靠信道上试图通过消息传递的方式达到一致性是不可能的。因此对一致性的研究一般假设信道是可靠的，或不存在本问题。这个难题也被称为“拜占庭容错”、“拜占庭将军问题”、或者“两军问
-          ...
+           转载自http://www.52im.net
+图片较大，建议单击放大或者下载后查看
+
+
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/04/拜占庭将军问题/#more" rel="contents">
+            <a class="btn" href="/2018/09/08/网络协议-最全的网络协议图/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -846,7 +849,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/队列的链式存储结构/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/go语言并发讲解，虚拟内存讲解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -865,8 +868,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/04/队列的链式存储结构/" itemprop="url">
-                  队列的链式存储结构
+                <a class="post-title-link" href="/2018/09/08/go语言并发讲解，虚拟内存讲解/" itemprop="url">
+                  go语言并发讲解，虚拟内存讲解
                 </a>
               
             
@@ -892,201 +895,12 @@
                 
               
 
-              <time title="创建时间：2018-09-04 12:59:18 / 修改时间：13:37:30" itemprop="dateCreated datePublished" datetime="2018-09-04T12:59:18+08:00">2018-09-04</time>
+              <time title="创建时间：2018-09-08 12:47:11 / 修改时间：12:58:10" itemprop="dateCreated datePublished" datetime="2018-09-08T12:47:11+08:00">2018-09-08</time>
             
 
             
               
 
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构和算法/" itemprop="url" rel="index"><span itemprop="name">数据结构和算法</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          队列的链式存储结构，其实就是线性表的单链表，只不过它只能尾进头出而已，我们把它简称为链队列。
-为了操作上的方便，我们将队头指针指向链队列的头结点，而队尾指针指向终端结点。链队列示意图：
-
-当队列为空时，front和rear都指向头结点
-
-实例代码：12345678910111213141516171
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/04/队列的链式存储结构/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-
-<div>
-      
-</div>
-<div>
-      
-</div>
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/go语言之陷阱for-range/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Wuman">
-      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wuman's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/04/go语言之陷阱for-range/" itemprop="url">
-                  go语言之陷阱for range
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-09-04 12:38:02" itemprop="dateCreated datePublished" datetime="2018-09-04T12:38:02+08:00">2018-09-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-05 12:45:34" itemprop="dateModified" datetime="2018-09-05T12:45:34+08:00">2018-09-05</time>
               
             
           </span>
@@ -1139,12 +953,11 @@
       
         
           
-          在go语言中，遍历有两种方法，一种就是for的普通方法，还有一种就是for range的遍历，但是在使用for range时，如果使用不当，就会出现一些问题比如我们下面先来看一个例题
-123456789101112131415161718192021package mainimport "fmt"t
+          并行和并发今天我们来讲一下在计算机编程中并行和并发的意思并行(parallel)：指在同一时刻，有多条指令在多个处理器上同时执行。并发(concurrency)：指在同一时刻只能有一条指令执行，但多个进程指令被快速的轮换执行，使得在宏观上具有多个进程同时执行的效果，但在微观上并不是同时执行的，只是把
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/04/go语言之陷阱for-range/#more" rel="contents">
+            <a class="btn" href="/2018/09/08/go语言并发讲解，虚拟内存讲解/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1208,7 +1021,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/go语言错误捕获和panic异常/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/网络协议/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1227,8 +1040,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/04/go语言错误捕获和panic异常/" itemprop="url">
-                  go语言错误捕获和panic异常
+                <a class="post-title-link" href="/2018/09/08/网络协议/" itemprop="url">
+                  网络协议
                 </a>
               
             
@@ -1254,24 +1067,12 @@
                 
               
 
-              <time title="创建时间：2018-09-04 12:37:34" itemprop="dateCreated datePublished" datetime="2018-09-04T12:37:34+08:00">2018-09-04</time>
+              <time title="创建时间：2018-09-08 12:46:12 / 修改时间：12:51:26" itemprop="dateCreated datePublished" datetime="2018-09-08T12:46:12+08:00">2018-09-08</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-05 12:45:05" itemprop="dateModified" datetime="2018-09-05T12:45:05+08:00">2018-09-05</time>
               
             
           </span>
@@ -1288,7 +1089,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络编程协议/" itemprop="url" rel="index"><span itemprop="name">网络编程协议</span></a></span>
 
                 
                 
@@ -1324,12 +1125,15 @@
       
         
           
-          在Go语言中我们首先来看一下err错误信息，我们先来看一段代码
-123456789101112131415161718192021222324252627package mainimport (    "fmt"    "errors")func calc(a int, b int) (v int,
+          协议从应用的角度出发，协议可理解为“规则”，是数据传输和数据的解释的规则。假设，A、B双方欲传输文件。规定：
+
+第一次，传输文件名，接收方接收到文件名，应答OK给传输方；
+第二次，发送文件的尺寸，接收方接收到该数据再次应答一个OK；
+第三次，传输文件内容。同样，接收方接收数据完成后应答OK表示文件内
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/04/go语言错误捕获和panic异常/#more" rel="contents">
+            <a class="btn" href="/2018/09/08/网络协议/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1393,7 +1197,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/03/go语言切片深入讲解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/git知识点详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1412,8 +1216,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/03/go语言切片深入讲解/" itemprop="url">
-                  go语言切片深入讲解
+                <a class="post-title-link" href="/2018/09/07/git知识点详解/" itemprop="url">
+                  git知识点详解
                 </a>
               
             
@@ -1439,24 +1243,12 @@
                 
               
 
-              <time title="创建时间：2018-09-03 18:24:55" itemprop="dateCreated datePublished" datetime="2018-09-03T18:24:55+08:00">2018-09-03</time>
+              <time title="创建时间：2018-09-07 14:17:58 / 修改时间：14:48:20" itemprop="dateCreated datePublished" datetime="2018-09-07T14:17:58+08:00">2018-09-07</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-05 12:45:17" itemprop="dateModified" datetime="2018-09-05T12:45:17+08:00">2018-09-05</time>
               
             
           </span>
@@ -1473,7 +1265,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
 
                 
                 
@@ -1509,12 +1301,13 @@
       
         
           
-          我们在上一篇的切片讲解中，我们讲解到在go语言中 map和切片都是传引用（地址），也就是在调用函数的时候都是可以直接修改变量的值，关于切片，在某种程度上表面上来说也是可以这样说的，我们先来看一下一个小小的例题
-1234567891011package mainimport &quot;fmt&quo
+          Git知识点详解
+文件状态现在我们手上已经有了一个真实项目的 Git 仓库，并从这个仓库中取出了所有文件的工作拷贝。接下来，对这些文件作些修改，在完成了一个阶段的目标之后，提交本次更新到仓库。
+　　请记住，工作目录下面的所有文件都不外乎这两种状态：已跟踪或未跟踪。已跟踪的文件是指本来就被纳入版本控制
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/03/go语言切片深入讲解/#more" rel="contents">
+            <a class="btn" href="/2018/09/07/git知识点详解/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1578,7 +1371,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/03/go语言切片微讲解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/git和svn的详细对比表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1597,8 +1390,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/03/go语言切片微讲解/" itemprop="url">
-                  go语言切片微讲解
+                <a class="post-title-link" href="/2018/09/07/git和svn的详细对比表/" itemprop="url">
+                  git的基础使用
                 </a>
               
             
@@ -1624,24 +1417,12 @@
                 
               
 
-              <time title="创建时间：2018-09-03 18:24:29" itemprop="dateCreated datePublished" datetime="2018-09-03T18:24:29+08:00">2018-09-03</time>
+              <time title="创建时间：2018-09-07 14:17:37 / 修改时间：14:41:08" itemprop="dateCreated datePublished" datetime="2018-09-07T14:17:37+08:00">2018-09-07</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-05 12:45:26" itemprop="dateModified" datetime="2018-09-05T12:45:26+08:00">2018-09-05</time>
               
             
           </span>
@@ -1658,7 +1439,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
 
                 
                 
@@ -1694,12 +1475,11 @@
       
         
           
-          传递参数时分为值传递和地址传递，go语言中切片和map是地址传递，但是切片传递要有一个注意事项  例如：
-123456789package mainfunc test(a []int)&#123;    a=append(a,1,2,3)&#125;func main()&#123;    var 
+          Git是一个分布式的版本控制工具，本篇文章从介绍Git开始，重点在于介绍Git的基本命令和使用技巧，让你尝试使用Git的同时，体验到原来一个版 本控制工具可以对开发产生如此之多的影响，文章分为两部分，第一部分介绍Git的一些常用命令，其中穿插介绍Git的基本概念和原理，第二篇重点介绍 Git的使用技
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/03/go语言切片微讲解/#more" rel="contents">
+            <a class="btn" href="/2018/09/07/git和svn的详细对比表/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1763,7 +1543,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/插入排序/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/git的基础使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1782,8 +1562,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/02/插入排序/" itemprop="url">
-                  插入排序
+                <a class="post-title-link" href="/2018/09/07/git的基础使用/" itemprop="url">
+                  git和svn的详细对比表
                 </a>
               
             
@@ -1809,7 +1589,7 @@
                 
               
 
-              <time title="创建时间：2018-09-02 12:36:39 / 修改时间：18:42:42" itemprop="dateCreated datePublished" datetime="2018-09-02T12:36:39+08:00">2018-09-02</time>
+              <time title="创建时间：2018-09-07 14:17:09 / 修改时间：14:43:34" itemprop="dateCreated datePublished" datetime="2018-09-07T14:17:09+08:00">2018-09-07</time>
             
 
             
@@ -1831,7 +1611,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构和算法/" itemprop="url" rel="index"><span itemprop="name">数据结构和算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
 
                 
                 
@@ -1867,14 +1647,23 @@
       
         
           
-          插入排序在上一章中我们讲了算法排序中的最简单的冒泡排序，今天我们来讲解一下插入排序，后续将讲解快速排序，归并排序，希尔排序，二叉排序，这些等等，后续的排序都是在时间复杂度和空间复杂度上面优于这两种的，所以我们今天先来讲解一下插入排序
-我们先来看以下的一张图
+          刚开始工作那会，工作做版本控制的选型，几个tl最后选的git，当时不是很懂，只知道git性能多一些，现在回头看了一下这个表格，更加明白他们之间的差异了，git完胜！
 
-为了方便排序，我们一般将数据的第一个元素
+
+
+版本工具差异
+svn
+git
+
+
+
+
+系统特点
+1.集中式版本控制系统（文档管理很方便）2.企业内部并行集中开发3.window
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/02/插入排序/#more" rel="contents">
+            <a class="btn" href="/2018/09/07/git的基础使用/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1938,7 +1727,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/每日一道编程算法题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/github向导/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -1957,8 +1746,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/02/每日一道编程算法题/" itemprop="url">
-                  LeetCode|无重复字符的最长子串
+                <a class="post-title-link" href="/2018/09/07/github向导/" itemprop="url">
+                  github向导
                 </a>
               
             
@@ -1984,24 +1773,12 @@
                 
               
 
-              <time title="创建时间：2018-09-02 10:14:49" itemprop="dateCreated datePublished" datetime="2018-09-02T10:14:49+08:00">2018-09-02</time>
+              <time title="创建时间：2018-09-07 14:15:29 / 修改时间：14:33:13" itemprop="dateCreated datePublished" datetime="2018-09-07T14:15:29+08:00">2018-09-07</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-07 17:05:54" itemprop="dateModified" datetime="2018-09-07T17:05:54+08:00">2018-09-07</time>
               
             
           </span>
@@ -2018,7 +1795,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构和算法/" itemprop="url" rel="index"><span itemprop="name">数据结构和算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git使用及讲解/" itemprop="url" rel="index"><span itemprop="name">git使用及讲解</span></a></span>
 
                 
                 
@@ -2054,16 +1831,191 @@
       
         
           
-           今天的题目为：
-给定一个字符串，找出不含有重复字符的最长子串的长度。
-示例 1:
-123输入: &quot;abcabcbb&quot;输出: 3 解释: 无重复字符的最长子串是 &quot;abc&quot;，其长度为 3。
-示例 2:
-123输入: &quot;bbbbb&quot;输出: 1
+          Hello World项目是计算机编程的悠久传统。这是一个简单的练习，让你开始学习新的东西。让我们开始使用GitHub！
+你将学到如下内容：
+1: 创建和使用一个仓库。
+2: 开始和管理一个分支。
+3: 更改一个文件，然后推送到仓库，并且附带一些注释。
+4: 打开和合并一个推送请求。
+创建一个仓库仓
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/02/每日一道编程算法题/#more" rel="contents">
+            <a class="btn" href="/2018/09/07/github向导/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+
+<div>
+      
+</div>
+<div>
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/Tcp通信三次握手四次挥手/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/06/Tcp通信三次握手四次挥手/" itemprop="url">
+                  TCP通信三次握手四次挥手
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-06 12:54:08 / 修改时间：13:11:16" itemprop="dateCreated datePublished" datetime="2018-09-06T12:54:08+08:00">2018-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络编程协议/" itemprop="url" rel="index"><span itemprop="name">网络编程协议</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          TCP通信过程下图是一次TCP通讯的时序图。TCP连接建立断开。包含大家熟知的三次握手和四次握手
+
+在这个例子中，首先客户端主动发起连接、发送请求，然后服务器端响应请求，然后客户端主动关闭连接。两条竖线表示通讯的两端，从上到下表示时间的先后顺序。注意，数据从一端传到网络的另一端也需要时间，所以图中的
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/06/Tcp通信三次握手四次挥手/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2116,7 +2068,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2159,7 +2111,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2265,7 +2217,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">85.9k</span>
+      <span class="site-state-item-count">108.0k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
