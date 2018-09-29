@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux命令-df命令]]></title>
+    <url>%2F2018%2F09%2F29%2FLinux%E5%91%BD%E4%BB%A4-df%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[df命令用于显示磁盘分区上的可使用的磁盘空间。默认显示单位为KB。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。 语法df(选项)(参数) 选项12345678910111213141516-a或--all：包含全部的文件系统；--block-size=&lt;区块大小&gt;：以指定的区块大小来显示区块数目；-h或--human-readable：以可读性较高的方式来显示信息；-H或--si：与-h参数相同，但在计算时是以1000 Bytes为换算单位而非1024 Bytes；-i或--inodes：显示inode的信息；-k或--kilobytes：指定区块大小为1024字节；-l或--local：仅显示本地端的文件系统；-m或--megabytes：指定区块大小为1048576字节；--no-sync：在取得磁盘使用信息前，不要执行sync指令，此为预设值；-P或--portability：使用POSIX的输出格式；--sync：在取得磁盘使用信息前，先执行sync指令；-t&lt;文件系统类型&gt;或--type=&lt;文件系统类型&gt;：仅显示指定文件系统类型的磁盘信息；-T或--print-type：显示文件系统的类型；-x&lt;文件系统类型&gt;或--exclude-type=&lt;文件系统类型&gt;：不要显示指定文件系统类型的磁盘信息；--help：显示帮助；--version：显示版本信息。 参数文件： 指定文件系统上的文件 常用实例1）查看系统磁盘设备，默认是KB为单位： 123456# df文件系统 1K-块 已用 可用 已用% 挂载点/dev/sda2 146294492 28244432 110498708 21% //dev/sda1 1019208 62360 904240 7% /boottmpfs 1032204 0 1032204 0% /dev/shm/dev/sdb1 2884284108 218826068 2518944764 8% /data1 2）使用-h选项以KB以上的单位来显示，可读性高： 123456# df -h文件系统 容量 已用 可用 已用% 挂载点/dev/sda2 140G 27G 106G 21% //dev/sda1 996M 61M 884M 7% /boottmpfs 1009M 0 1009M 0% /dev/shm/dev/sdb1 2.7T 209G 2.4T 8% /data1 3）查看全部文件系统： 12345678910# df -a文件系统 1K-块 已用 可用 已用% 挂载点/dev/sda2 146294492 28244432 110498708 21% /proc 0 0 0 - /procsysfs 0 0 0 - /sysdevpts 0 0 0 - /dev/pts/dev/sda1 1019208 62360 904240 7% /boottmpfs 1032204 0 1032204 0% /dev/shm/dev/sdb1 2884284108 218826068 2518944764 8% /data1none 0 0 0 - /proc/sys/fs/binfmt_misc 转载链接： http://man.linuxde.net/df]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux命令-du命令]]></title>
+    <url>%2F2018%2F09%2F29%2FLinux%E5%91%BD%E4%BB%A4-du%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[du命令也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的。 语法du [选项][文件] 选项123456789101112131415-a或-all 显示目录中个别文件的大小。-b或-bytes 显示目录或文件大小时，以byte为单位。-c或--total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。-k或--kilobytes 以KB(1024bytes)为单位输出。-m或--megabytes 以MB为单位输出。-s或--summarize 仅显示总计，只列出最后加总的值。-h或--human-readable 以K，M，G为单位，提高信息的可读性。-x或--one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过。-L&lt;符号链接&gt;或--dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小。-S或--separate-dirs 显示个别目录的大小时，并不含其子目录的大小。-X&lt;文件&gt;或--exclude-from=&lt;文件&gt; 在&lt;文件&gt;指定目录或文件。--exclude=&lt;目录或文件&gt; 略过指定的目录或文件。-D或--dereference-args 显示指定符号链接的源文件大小。-H或--si 与-h参数相同，但是K，M，G是以1000为换算单位。-l或--count-links 重复计算硬件链接的文件。 常用实例1）显示目录或者文件所占空间 12345678910111213# du608 ./test6308 ./test44 ./scf/lib4 ./scf/service/deploy/product4 ./scf/service/deploy/info12 ./scf/service/deploy16 ./scf/service4 ./scf/doc4 ./scf/bin32 ./scf8 ./test31288 . 说明： 只显示当前目录下面的子目录的目录大小和当前目录的总的大小，最下面的1288为当前目录的总大小 2）显示指定文件所占空间 12# du log2012.log 300 log2012.log 3）查看指定目录的所占空间 123456789# du scf4 scf/lib4 scf/service/deploy/product4 scf/service/deploy/info12 scf/service/deploy16 scf/service4 scf/doc4 scf/bin32 scf 4）显示多个文件所占空间 123# du log30.tar.gz log31.tar.gz 4 log30.tar.gz4 log31.tar.gz 5）只显示总和的大小 1234567# du -s1288 .# du -s scf32 scf# cd ..# du -s test1288 test 6）方便阅读的格式显示 123456# du -h test608K test/test6308K test/test44.0K test/scf/lib4.0K test/scf/service/deploy/product4.0K test/scf/service/deploy/info 7）文件和目录都显示 123456789101112# du -ah test4.0K test/log31.tar.gz4.0K test/test13.tar.gz0 test/linklog.log0 test/test6/log2014.log300K test/test6/linklog.log0 test/test6/log2015.log4.0K test/test6/log2013.log300K test/test6/log2012.log0 test/test6/log2017.log0 test/test6/log2016.log608K test/test6 8）显示几个文件或目录各自占用磁盘空间的大小，还统计它们的总和 1234# du -c log30.tar.gz log31.tar.gz 4 log30.tar.gz4 log31.tar.gz8 总计 说明： 加上-c选项后，du不仅显示两个目录各自占用磁盘空间的大小，还在最后一行统计它们的总和。 9）按照空间大小排序 1234567# du|sort -nr|more1288 .608 ./test6308 ./test432 ./scf16 ./scf/service12 ./scf/service/deploy 10）输出当前目录下各个子目录所使用的空间 123456# du -h --max-depth=1608K ./test6308K ./test432K ./scf8.0K ./test31.3M . 参考链接： http://www.cnblogs.com/peida/archive/2012/12/10/2810755.html http://man.linuxde.net/du]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux命令-gzip命令]]></title>
+    <url>%2F2018%2F09%2F29%2FLinux%E5%91%BD%E4%BB%A4-gzip%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[gzip命令用来压缩文件。gzip是个使用广泛的压缩程序，文件经它压缩过后，其名称后面会多处“.gz”扩展名。 gzip是在Linux系统中经常使用的一个对文件进行压缩和解压缩的命令，既方便又好用。gzip不仅可以用来压缩大的、较少使用的文件以节省磁盘空间，还可以和tar命令一起构成Linux操作系统中比较流行的压缩文件格式。据统计，gzip命令对文本文件有60%～70%的压缩率。减少文件大小有两个明显的好处，一是可以减少存储空间，二是通过网络传输文件时，可以减少传输的时间。 语法gzip(选项)(参数) 选项1234567891011121314151617-a或——ascii：使用ASCII文字模式；-d或--decompress或----uncompress：解开压缩文件；-f或——force：强行压缩文件。不理会文件名称或硬连接是否存在以及该文件是否为符号连接；-h或——help：在线帮助；-l或——list：列出压缩文件的相关信息；-L或——license：显示版本与版权信息；-n或--no-name：压缩文件时，不保存原来的文件名称及时间戳记；-N或——name：压缩文件时，保存原来的文件名称及时间戳记；-q或——quiet：不显示警告信息；-r或——recursive：递归处理，将指定目录下的所有文件及子目录一并处理；-S或&lt;压缩字尾字符串&gt;或----suffix&lt;压缩字尾字符串&gt;：更改压缩字尾字符串；-t或——test：测试压缩文件是否正确无误；-v或——verbose：显示指令执行过程；-V或——version：显示版本信息；-&lt;压缩效率&gt;：压缩效率是一个介于1~9的数值，预设值为“6”，指定愈大的数值，压缩效率就会愈高；--best：此参数的效果和指定“-9”参数相同；--fast：此参数的效果和指定“-1”参数相同。 参数文件列表：指定要压缩的文件列表。 常用范例1）把test6目录下的每个文件压缩成.gz文件 1234567891011# ll总计 604---xr--r-- 1 root mail 302108 11-30 08:39 linklog.log---xr--r-- 1 mail users 302108 11-30 08:39 log2012.log-rw-r--r-- 1 mail users 61 11-30 08:39 log2013.log# gzip *# ll总计 28---xr--r-- 1 root mail 1341 11-30 08:39 linklog.log.gz---xr--r-- 1 mail users 1341 11-30 08:39 log2012.log.gz-rw-r--r-- 1 mail users 70 11-30 08:39 log2013.log.gz 2）把例1中每个压缩的文件解压，并列出详细的信息 1234567891011121314# ll总计 28---xr--r-- 1 root mail 1341 11-30 08:39 linklog.log.gz---xr--r-- 1 mail users 1341 11-30 08:39 log2012.log.gz-rw-r--r-- 1 mail users 70 11-30 08:39 log2013.log.gz# gzip -dv *linklog.log.gz: 99.6% -- replaced with linklog.loglog2012.log.gz: 99.6% -- replaced with log2012.loglog2013.log.gz: 47.5% -- replaced with log2013.log# ll总计 604---xr--r-- 1 root mail 302108 11-30 08:39 linklog.log---xr--r-- 1 mail users 302108 11-30 08:39 log2012.log-rw-r--r-- 1 mail users 61 11-30 08:39 log2013.log 3）详细显示例1中每个压缩的文件的信息，并不解压 12345# gzip -l * compressed uncompressed ratio uncompressed_name 1341 302108 99.6% linklog.log 1341 302108 99.6% log2012.log 70 61 47.5% log2013.log 4）压缩一个tar备份文件，此时压缩文件的扩展名为.tar.gz 12345#ls -al log.tar-rw-r--r-- 1 root root 307200 11-29 17:54 log.tar# gzip -r log.tar# ls -al log.tar.gz -rw-r--r-- 1 root root 1421 11-29 17:54 log.tar.gz 5）递归的压缩目录 12345678910111213141516# ll总计 604---xr--r-- 1 root mail 302108 11-30 08:39 linklog.log---xr--r-- 1 mail users 302108 11-30 08:39 log2012.log-rw-r--r-- 1 mail users 61 11-30 08:39 log2013.log# cd ..# gzip -rv test6test6/linklog.log: 99.6% -- replaced with test6/linklog.log.gztest6/log2013.log: 47.5% -- replaced with test6/log2013.log.gztest6/log2012.log: 99.6% -- replaced with test6/log2012.log.gz# cd test6# ll总计 28---xr--r-- 1 root mail 1341 11-30 08:39 linklog.log.gz---xr--r-- 1 mail users 1341 11-30 08:39 log2012.log.gz-rw-r--r-- 1 mail users 70 11-30 08:39 log2013.log.gz 说明： 这样，所有test下面的文件都变成了.gz，目录依然存在只是目录里面的文件相应变成了.gz.这就是压缩，和打包不同。因为是对目录操作，所以需要加上-r选项，这样也可以对子目录进行递归了。 6）递归地解压目录 12345678910111213# ll总计 28---xr--r-- 1 root mail 1341 11-30 08:39 linklog.log.gz---xr--r-- 1 mail users 1341 11-30 08:39 log2012.log.gz-rw-r--r-- 1 mail users 70 11-30 08:39 log2013.log.gz# cd ..# gzip -dr test6# cd test6# ll总计 604---xr--r-- 1 root mail 302108 11-30 08:39 linklog.log---xr--r-- 1 mail users 302108 11-30 08:39 log2012.log-rw-r--r-- 1 mail users 61 11-30 08:39 log2013.log 参考链接： http://www.cnblogs.com/peida/archive/2012/12/06/2804323.html http://man.linuxde.net/gzip]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux命令-/etc/group文件详解]]></title>
     <url>%2F2018%2F09%2F28%2FLinux%E5%91%BD%E4%BB%A4-etc-group%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3%2F</url>
     <content type="text"><![CDATA[Linux /etc/group文件与/etc/passwd和/etc/shadow文件都是有关于系统管理员对用户和用户组管理时相关的文件。linux /etc/group文件是有关于系统管理员对用户和用户组管理的文件,linux用户组的所有信息都存放在/etc/group文件中。具有某种共同特征的用户集合起来就是用户组（Group）。用户组（Group）配置文件主要有 /etc/group和/etc/gshadow，其中/etc/gshadow是/etc/group的加密信息文件。 将用户分组是Linux系统中对用户进行管理及控制访问权限的一种手段。每个用户都属于某个用户组；一个组中可以有多个用户，一个用户也可以属于不同的组。当一个用户同时是多个组中的成员时，在/etc/passwd文件中记录的是用户所属的主组，也就是登录时所属的默认组，而其他组称为附加组。 用户组的所有信息都存放在/etc/group文件中。此文件的格式是由冒号(:)隔开若干个字段，这些字段具体如下： 组名:口令:组标识号:组内用户列表 具体解释 组名：组名是用户组的名称，由字母或数字构成。与/etc/passwd中的登录名一样，组名不应重复。 口令：口令字段存放的是用户组加密后的口令字。一般Linux系统的用户组都没有口令，即这个字段一般为空，或者是*。 组标识号：组标识号与用户标识号类似，也是一个整数，被系统内部用来标识组。别称GID. 组内用户列表：属于这个组的所有用户的列表，不同用户之间用逗号(,)分隔。这个用户组可能是用户的主组，也可能是附加组。 使用实例12345# cat /etc/grouproot:x:0:root,linuxsirbin:x:1:root,bin,daemondaemon:x:2:root,bin,daemonsys:x:3:root,bin 说明： 我们以root:\x:0:root,linuxsir 为例： 用户组root，x是密码段，表示没有设置密码，GID是0,root用户组下包括root、linuxsir以及GID为0的其它用户。 转载链接： http://www.cnblogs.com/peida/archive/2012/12/05/2802419.html]]></content>
@@ -762,8 +795,8 @@
         <category>GO语言</category>
       </categories>
       <tags>
-        <tag>go语言</tag>
         <tag>小Demo</tag>
+        <tag>go语言</tag>
       </tags>
   </entry>
   <entry>
@@ -774,8 +807,8 @@
         <category>C/C++</category>
       </categories>
       <tags>
-        <tag>C/C++</tag>
         <tag>小Demo</tag>
+        <tag>C/C++</tag>
       </tags>
   </entry>
   <entry>
@@ -954,17 +987,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[go语言中的面向对象，接口类型，工厂设计模式解读]]></title>
-    <url>%2F2018%2F09%2F01%2Fgo%E8%AF%AD%E8%A8%80%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%2F</url>
-    <content type="text"><![CDATA[工厂模式： 定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂方法模式 抽象工厂模式针对的是一个产品等级结构 针对的是面向多个产品等级结构一个抽象产品类 多个抽象产品类可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例加减乘除四则运算器工厂模式举例子 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677package mainimport "fmt"type operation struct&#123; //定义一个父类两个数据 num1 float64 num2 float64&#125;type operationAdd struct&#123; //加法子类 operation&#125;func (op *operationAdd)getresult()float64&#123; //加法类的方法 return op.num1+op.num2&#125;type operationSub struct&#123; //减法子类 operation&#125;func (sub *operationSub)getresult()float64&#123; //减法类的方法 return sub.num1-sub.num2&#125;type operationMult struct&#123; //乘法子类 operation&#125;func (mult *operationMult)getresult()float64&#123; return mult.num1*mult.num2&#125;type operationDivi struct&#123; operation&#125; //除法子类func (divi *operationDivi)getresult()float64&#123; return divi.num1/divi.num2&#125;type operationer interface&#123; //定义接口 getresult() float64 //加法的方法&#125;type operationfactor struct &#123; //operation //用于创建对象的类，工厂模式&#125;func (op *operationfactor)creatoperation(ope string,num1 float64,num2 float64)float64&#123; //用于构件对象类 var result float64 switch ope &#123; case "+": add:=&amp;operationAdd&#123;operation&#123;num1,num2&#125;&#125; //按照传过来的符号来创建相应的对象 result=operationwho(add) //传递给多态的函数，直接调用 case "-": sub:=&amp;operationSub&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(sub) case "*": mult:=&amp;operationMult&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(mult) case "/": divi:=&amp;operationDivi&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(divi) &#125; return result&#125;func operationwho(i operationer)float64&#123; return i.getresult() //此处为创建一个多态的函数&#125;func main()&#123; //m:=&amp;operationAdd&#123;operation&#123;3,4&#125;&#125; //var iop operationer //iop=m //sum:=iop.getresult() //fmt.Println(sum) var op1 operationfactor //直接创建工厂类对象 sum:=op1.creatoperation("+",9,6) //直接调用工厂类的方法 fmt.Println(sum) var op2 operationfactor sub:=op2.creatoperation("-",9,8) fmt.Println(sub) var op3 operationfactor mult:=op3.creatoperation("*",3,4) fmt.Println(mult) var op4 operationfactor div:=op4.creatoperation("/",9,10) fmt.Println(div)&#125; 在上面的例子当中，如果对面向对象没有接触的话可能会有一些不好理解，在go语言当中面向对象可能和别的语言有一些不同，go语言是利用匿名字段来实现继承，在上面的例子中多态函数的实现可以让函数调用更加方便，比如每个结构体类都有10几个甚至更多的函数，那么直接都把这些函数封装在多态的函数里面，那么每次调用直接传递一个结构体类给多态函数就直接全部调用了，这样就是很方便的]]></content>
-      <categories>
-        <category>GO语言</category>
-      </categories>
-      <tags>
-        <tag>go语言</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[go语言简单排序之冒泡和插入排序]]></title>
     <url>%2F2018%2F09%2F01%2Fgo%E8%AF%AD%E8%A8%80%E5%86%92%E6%B3%A1%E5%92%8C%E6%8F%92%E5%8F%991%2F</url>
     <content type="text"><![CDATA[编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序 1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码，然后慢慢分析 12345678910111213141516171819package mainimport "fmt"//func main() &#123; arr := [10]int&#123;9, 1, 5, 6, 3, 7, 10, 8, 2, 4&#125; //先定义一个乱序数组 //冒泡排序 for i := 0; i &lt; 10-1; i++ &#123; //外面的循环用来循环次数 for j := 0; j &lt; 10-1-i; j++ &#123; //里面的循环用来循环 每次对比到哪里 if arr[j] &gt; arr[j+1] &#123; //数据交换 arr[j], arr[j+1] = arr[j+1], arr[j] //go语言的多个数据交换格式 //temp := arr[j] //普通数据交换格式 //arr[j] = arr[j+1] //arr[j+1] = temp &#125; &#125; &#125; fmt.Println(arr)&#125; 我们看到这个代码和这张图片，在图片中我们只写了前面几次，先来看第一次，第一个元素和第二个相比4比2大，如果第一个元素比第二个大那么就交换一下，然后第二个元素和第三个相比，如果大就交换，然后第三第四相比，第四第五相比，一直比到最后一个和倒数第一个，有没有发现这样比一次就能确定一个最大的数，而且最大的数是放在最后一个元素里面的，这样一次就是外面的外循环 1for i := 0; i &lt; 10-1; i++ &#123; //这句话就是外面的循环 然后确定第一个最大的放最后一个，那么我们然后怎么办呢 ，然后我们当然继续下一次对比然后再确定一个第二大的放在倒数第二的位置啊，最大的确定下来后，我们继续从第一个开始遍历，但是这次遍历要注意了，不需要遍历到最后一个元素，而只需遍历到倒数第二个就行了，这是为什么呢，因为最后一个元素已经确定下来是最大的了，所以就不需要对比了，我们来看内循环 12for j := 0; j &lt; 10-1-i; j++ &#123; //里面的循环用来循环 每次对比到哪里//这里的判断条件是 小于10-1-i，i是什么呢，就是外循环的次数，所以只需要对比到10-1-i就行 然后内循环每次对比相邻的两个元素，如果前面大于后面的那么就交换， 12345//数据交换 arr[j], arr[j+1] = arr[j+1], arr[j] //go语言的多个数据交换格式 //temp := arr[j] //普通数据交换格式 //arr[j] = arr[j+1] //arr[j+1] = temp 这里面数据交换 有两种格式，第一种就是GO语言里面的简单交换格式，第二种是常见的交换数据格式，需要定义一个临时变量 然后可以打印出来数组，就变成从小到大的升序数组了， 那么如果要变成降序排序怎么改呢？ 来看这句话 1if arr[j] &gt; arr[j+1] &#123; 我们只需要把这里的大于号改成小于号就行啦 不喜勿喷，谢谢哈哈插入排序后续]]></content>
@@ -974,6 +996,17 @@
       <tags>
         <tag>go语言</tag>
         <tag>排序问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[go语言中的面向对象，接口类型，工厂设计模式解读]]></title>
+    <url>%2F2018%2F09%2F01%2Fgo%E8%AF%AD%E8%A8%80%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[工厂模式： 定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂方法模式 抽象工厂模式针对的是一个产品等级结构 针对的是面向多个产品等级结构一个抽象产品类 多个抽象产品类可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例加减乘除四则运算器工厂模式举例子 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677package mainimport "fmt"type operation struct&#123; //定义一个父类两个数据 num1 float64 num2 float64&#125;type operationAdd struct&#123; //加法子类 operation&#125;func (op *operationAdd)getresult()float64&#123; //加法类的方法 return op.num1+op.num2&#125;type operationSub struct&#123; //减法子类 operation&#125;func (sub *operationSub)getresult()float64&#123; //减法类的方法 return sub.num1-sub.num2&#125;type operationMult struct&#123; //乘法子类 operation&#125;func (mult *operationMult)getresult()float64&#123; return mult.num1*mult.num2&#125;type operationDivi struct&#123; operation&#125; //除法子类func (divi *operationDivi)getresult()float64&#123; return divi.num1/divi.num2&#125;type operationer interface&#123; //定义接口 getresult() float64 //加法的方法&#125;type operationfactor struct &#123; //operation //用于创建对象的类，工厂模式&#125;func (op *operationfactor)creatoperation(ope string,num1 float64,num2 float64)float64&#123; //用于构件对象类 var result float64 switch ope &#123; case "+": add:=&amp;operationAdd&#123;operation&#123;num1,num2&#125;&#125; //按照传过来的符号来创建相应的对象 result=operationwho(add) //传递给多态的函数，直接调用 case "-": sub:=&amp;operationSub&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(sub) case "*": mult:=&amp;operationMult&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(mult) case "/": divi:=&amp;operationDivi&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(divi) &#125; return result&#125;func operationwho(i operationer)float64&#123; return i.getresult() //此处为创建一个多态的函数&#125;func main()&#123; //m:=&amp;operationAdd&#123;operation&#123;3,4&#125;&#125; //var iop operationer //iop=m //sum:=iop.getresult() //fmt.Println(sum) var op1 operationfactor //直接创建工厂类对象 sum:=op1.creatoperation("+",9,6) //直接调用工厂类的方法 fmt.Println(sum) var op2 operationfactor sub:=op2.creatoperation("-",9,8) fmt.Println(sub) var op3 operationfactor mult:=op3.creatoperation("*",3,4) fmt.Println(mult) var op4 operationfactor div:=op4.creatoperation("/",9,10) fmt.Println(div)&#125; 在上面的例子当中，如果对面向对象没有接触的话可能会有一些不好理解，在go语言当中面向对象可能和别的语言有一些不同，go语言是利用匿名字段来实现继承，在上面的例子中多态函数的实现可以让函数调用更加方便，比如每个结构体类都有10几个甚至更多的函数，那么直接都把这些函数封装在多态的函数里面，那么每次调用直接传递一个结构体类给多态函数就直接全部调用了，这样就是很方便的]]></content>
+      <categories>
+        <category>GO语言</category>
+      </categories>
+      <tags>
+        <tag>go语言</tag>
       </tags>
   </entry>
 </search>
