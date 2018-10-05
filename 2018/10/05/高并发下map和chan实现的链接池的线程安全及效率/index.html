@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1.背景上一次blog写着写着崩掉了，这次一定写完一节保存一节。  目前从事go语言的后台开发，在集群通信时需要用到thrift的rpc。由于集群间通信非常频繁且并发需求很高，所以只能采用连接池的形式。由于集群规模是有限的，每个节点都需要保存平行节点的连接，所以链接池的实现方式应该是map[host]chan conn。在go语言中，我们知道channel是线程安全的，但map却不是线程安全的。所">
+<meta name="keywords" content="go语言,高并发线程安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高并发下map和chan实现的链接池的线程安全及效率">
+<meta property="og:url" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="1.背景上一次blog写着写着崩掉了，这次一定写完一节保存一节。  目前从事go语言的后台开发，在集群通信时需要用到thrift的rpc。由于集群间通信非常频繁且并发需求很高，所以只能采用连接池的形式。由于集群规模是有限的，每个节点都需要保存平行节点的连接，所以链接池的实现方式应该是map[host]chan conn。在go语言中，我们知道channel是线程安全的，但map却不是线程安全的。所">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/8.png">
+<meta property="og:updated_time" content="2018-10-05T06:46:55.925Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高并发下map和chan实现的链接池的线程安全及效率">
+<meta name="twitter:description" content="1.背景上一次blog写着写着崩掉了，这次一定写完一节保存一节。  目前从事go语言的后台开发，在集群通信时需要用到thrift的rpc。由于集群间通信非常频繁且并发需求很高，所以只能采用连接池的形式。由于集群规模是有限的，每个节点都需要保存平行节点的连接，所以链接池的实现方式应该是map[host]chan conn。在go语言中，我们知道channel是线程安全的，但map却不是线程安全的。所">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>高并发下map和chan实现的链接池的线程安全及效率 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">高并发下map和chan实现的链接池的线程安全及效率
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-05 14:36:25 / 修改时间：14:46:55" itemprop="dateCreated datePublished" datetime="2018-10-05T14:36:25+08:00">2018-10-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h2><p>上一次blog写着写着崩掉了，这次一定写完一节保存一节。  目前从事go语言的后台开发，在集群通信时需要用到thrift的rpc。由于集群间通信非常频繁且并发需求很高，所以只能采用连接池的形式。由于集群规模是有限的，每个节点都需要保存平行节点的连接，所以链接池的实现方式应该是map[host]chan conn。在go语言中，我们知道channel是线程安全的，但map却不是线程安全的。所以我们需要适当的加锁来保证其线程安全同时兼顾效率。 </p>
+<h2 id="2-链接池的一般设计"><a href="#2-链接池的一般设计" class="headerlink" title="2. 链接池的一般设计"></a>2. 链接池的一般设计</h2><ol>
+<li><p>新建链接时，需要给定目标地址</p>
+</li>
+<li><p>获取链接时，需要给定目标地址，若链接池存在链接，则从链接池返回，若不存在链接，则新建链接返回</p>
+</li>
+<li><p>链接池中存放的链接总是空闲链接</p>
+</li>
+<li><p>连接使用完后需放回链接池</p>
+</li>
+<li><p>放回链接池需要给定目标地址</p>
+</li>
+<li><p>放回链接池时若链接池已满，则关闭该链接并将其交给gc</p>
+<h2 id="3-链接池的一般定义"><a href="#3-链接池的一般定义" class="headerlink" title="3.链接池的一般定义"></a>3.链接池的一般定义</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> factory <span class="function"><span class="keyword">func</span><span class="params">(host <span class="keyword">string</span>)</span> <span class="title">conn</span></span></span><br><span class="line"><span class="function"><span class="title">type</span> <span class="title">conn</span> <span class="title">interface</span></span> &#123;</span><br><span class="line">   Close() error</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> pool <span class="keyword">struct</span> &#123;</span><br><span class="line">   m <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">chan</span> conn</span><br><span class="line">   mu sync.RWMutex</span><br><span class="line">   fact factory</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是一个通用链接池的实现，用了channel和读写锁，暂时不考虑链接超时等问题。我们的目的是探索这个链接池在高并发情况下的线程安全和get，put效率问题。所以下来我们给出实验主程序。</p>
+<h2 id="4-测试主程序"><a href="#4-测试主程序" class="headerlink" title="4.测试主程序"></a>4.测试主程序</h2><p>测试主程序如下所示<br> pt是记录的get，put次数，采用原子操作进行累加，其耗时忽略不计。<br> hosts为集群规模，也是map的大小，一般来说不会太大。<br> threadnum为并发的协程数<br> 为了方便，此处直接使用net.dial作为工厂方法实现<br> 每一个协程是一个死循环，不断地进行get，put操作。每次操作会使pts加1。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">   <span class="keyword">var</span> pts <span class="keyword">uint64</span></span><br><span class="line">   p := &amp;pool&#123;</span><br><span class="line">      m :<span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">chan</span> conn),</span><br><span class="line">      mu:sync.RWMutex&#123;&#125;,</span><br><span class="line">      fact:<span class="function"><span class="keyword">func</span><span class="params">(target <span class="keyword">string</span>)</span><span class="title">conn</span></span>&#123;</span><br><span class="line">         c,_ :=net.Dial(<span class="string">""</span>,<span class="string">"8080"</span>)</span><br><span class="line">         <span class="keyword">return</span> c</span><br><span class="line">      &#125;,</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//打印线程，打印get，put效率</span></span><br><span class="line">   be := time.Now()</span><br><span class="line">   <span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">for</span> <span class="literal">true</span>&#123;</span><br><span class="line">         <span class="comment">//此处先休眠一秒是为了避免第一次时差计算为0导致的除法错误</span></span><br><span class="line">         time.Sleep(<span class="number">1</span> *time.Second)</span><br><span class="line">         cost := time.Since(be) / time.Second</span><br><span class="line">         <span class="built_in">println</span>(atomic.LoadUint64(&amp;pts)/<span class="keyword">uint64</span>(cost),<span class="string">"pt/s"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;()</span><br><span class="line">   time.Sleep(<span class="number">1</span>*time.Second)</span><br><span class="line">   <span class="comment">//打印线程完，此处等待一秒是为对应打印线程第一次休眠，尽量减少误差</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="comment">//集群规模</span></span><br><span class="line">   hosts := []<span class="keyword">string</span>&#123;<span class="string">"192.168.0.1"</span>,<span class="string">"192.168.0.2"</span>,<span class="string">"192.168.0.3"</span>,<span class="string">"192.168.0.4"</span>&#125;</span><br><span class="line">   <span class="comment">//并发线程数量</span></span><br><span class="line">   threadnum := <span class="number">1</span></span><br><span class="line">   <span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;threadnum;i++&#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">         <span class="keyword">for</span> <span class="literal">true</span>&#123;</span><br><span class="line">            target := hosts[rand.Int() % <span class="built_in">len</span>(hosts)]</span><br><span class="line">            conn := p.Get(target)</span><br><span class="line">            <span class="comment">//------------------使用连接开始</span></span><br><span class="line">            <span class="comment">//time.Sleep(1*time.Nanosecond)</span></span><br><span class="line">            <span class="comment">//------------------使用连接完毕</span></span><br><span class="line">            p.Put(target,conn)</span><br><span class="line">            atomic.AddUint64(&amp;pts,<span class="number">1</span>)</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;()</span><br><span class="line">   &#125;</span><br><span class="line">   time.Sleep(<span class="number">100</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-单协程情况下的效率"><a href="#5-单协程情况下的效率" class="headerlink" title="5.单协程情况下的效率"></a>5.单协程情况下的效率</h2><h3 id="5-1-单协程get-amp-put实现"><a href="#5-1-单协程get-amp-put实现" class="headerlink" title="5.1 单协程get &amp; put实现"></a>5.1 单协程get &amp; put实现</h3><p>单协程模式下，我们不必考虑线程安全的问题，也就不必加锁。此时的get，put实现如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">func (p *pool)Get(host string) (c conn)&#123;</span><br><span class="line">   if _,ok := p.m[host];!ok&#123;</span><br><span class="line">      p.m[host] = make(chan conn,100)</span><br><span class="line">   &#125;</span><br><span class="line">   select &#123;</span><br><span class="line">   case c  = &lt;- p.m[host]:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c = p.New(host)</span><br><span class="line">   &#125;</span><br><span class="line">   return</span><br><span class="line">&#125;</span><br><span class="line">func (p *pool)Put(host string,c conn)&#123;</span><br><span class="line">   select &#123;</span><br><span class="line">   case p.m[host] &lt;- c:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c.Close()</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">func (p *pool)New(host string)conn&#123;</span><br><span class="line">   return p.fact(host)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-2-测试结果"><a href="#5-2-测试结果" class="headerlink" title="5.2 测试结果"></a>5.2 测试结果</h3><p>我们设置threadnum为1，测试结果如下。其速度大概在5,000,000 次/秒</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/1.png" alt=""></p>
+</li>
+</ol>
+<h2 id="6-并发情况下效率-全写锁"><a href="#6-并发情况下效率-全写锁" class="headerlink" title="6.并发情况下效率-全写锁"></a>6.并发情况下效率-全写锁</h2><h3 id="6-1-全写锁的get-amp-put-实现"><a href="#6-1-全写锁的get-amp-put-实现" class="headerlink" title="6.1 全写锁的get &amp; put 实现"></a>6.1 全写锁的get &amp; put 实现</h3><p>为了保证并发情况下的线程安全，我们需要使用读写锁，那么对get和put操作究竟该如何加锁呢，最安全的形式当然是全写锁的形式，单其效率肯定是最低的，因为这样同一时刻总是只有一个协程在进行写或者读。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func (p *pool)Get1(host string) (c conn)&#123;</span><br><span class="line">   p.mu.Lock()</span><br><span class="line">   defer p.mu.RLock()</span><br><span class="line">   if _,ok := p.m[host];!ok&#123;</span><br><span class="line">      p.m[host] = make(chan conn,100)</span><br><span class="line">   &#125;</span><br><span class="line">   select &#123;</span><br><span class="line">   case c  = &lt;- p.m[host]:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c = p.New(host)</span><br><span class="line">   &#125;</span><br><span class="line">   return</span><br><span class="line">&#125;</span><br><span class="line">func (p *pool)Put1(host string,c conn)&#123;</span><br><span class="line">   p.mu.Lock()</span><br><span class="line">   defer p.mu.Unlock()</span><br><span class="line">   select &#123;</span><br><span class="line">   case p.m[host] &lt;- c:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c.Close()</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-2-测试结果"><a href="#6-2-测试结果" class="headerlink" title="6.2 测试结果"></a>6.2 测试结果</h2><h3 id="6-2-1-全写锁下-的多协程测试结果"><a href="#6-2-1-全写锁下-的多协程测试结果" class="headerlink" title="6.2.1 全写锁下 的多协程测试结果"></a>6.2.1 全写锁下 的多协程测试结果</h3><p>我们设置threadnum为4，测试结果如下，其速度大概在1,000,000次/秒</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/2.png" alt=""></p>
+<h3 id="6-2-2-全写锁下单协程测试结果"><a href="#6-2-2-全写锁下单协程测试结果" class="headerlink" title="6.2.2 全写锁下单协程测试结果"></a>6.2.2 全写锁下单协程测试结果</h3><p>如果我们将threadnum设置为1，再次测试，其速度为2,800,00次/秒。可以看到，多协程会降低效率，因为协程间切换也会有时间消耗。但我们经常听说多协程会提高运行速度，这也是对的，那么什么时候多协程会提高运速度呢，这就是我说的链接使用时间的问题，当连接使用时间大于锁竞争和协程切换时间的时候，我们用多协程会提高效率。而实际使用中，连接的使用时间总是存在的且一般都大于锁竞争时间和协程切换时间。</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/3.png" alt=""></p>
+<h3 id="6-2-3-单协程下存在链接使用时间的的测试结果"><a href="#6-2-3-单协程下存在链接使用时间的的测试结果" class="headerlink" title="6.2.3 单协程下存在链接使用时间的的测试结果"></a>6.2.3 单协程下存在链接使用时间的的测试结果</h3><p>在主程序中，我们在get和put间加上休眠时间，此处设置休眠时间为1毫秒即链接使用1毫秒后放链接池。同时协程数设置为1。单协程情况下，其速度大概如下500次/秒。可以看到实际的效率大幅度降低。</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/4.png" alt=""></p>
+<h3 id="6-2-4-多协程下存在链接使用时间的测试结果"><a href="#6-2-4-多协程下存在链接使用时间的测试结果" class="headerlink" title="6.2.4 多协程下存在链接使用时间的测试结果"></a>6.2.4 多协程下存在链接使用时间的测试结果</h3><p>同样保持链接使用时间为1毫秒，协程数量设置为4，测试结果如下。其速度大概为2,000次/秒，刚好是单协程的4倍。所以实际情况下多协程的使用需要慎重考虑，并不是多协程一定能提高程序的处理速度，相反在某些情况下会降低程序的执行速度。由于本次测试的是链接池的性能和安全，接下来的测试不再添加链接使用时间，只单纯的测试读写锁和效率的问题。本小节算是一个附加测试。</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/5.png" alt=""></p>
+<h2 id="7-并发情况下效率-读写锁1"><a href="#7-并发情况下效率-读写锁1" class="headerlink" title="7.并发情况下效率-读写锁1"></a>7.并发情况下效率-读写锁1</h2><p>由于全写锁没有实际的使用意义，所以我们需要使用读写锁来提高效率，那么如何保证线程安全添加读写锁呢。首先对于我们的map结构来说，当有写操作的时候，我们的读操作应该是不可靠的，所以不能进行，当读操作时，我们不希望有写操作但其他协程也能同时读取，这桥恰符合读写锁的作用原理。<br> 当加写锁时，所有的读写均不可用<br> 当加读锁时，所有的写操作不可用，读操作可用</p>
+<h3 id="7-1-读写锁1-get-amp-put实现"><a href="#7-1-读写锁1-get-amp-put实现" class="headerlink" title="7.1 读写锁1 get &amp; put实现"></a>7.1 读写锁1 get &amp; put实现</h3><p>考察我们的put程序，只有对map的读，所以只需要加读锁，而在get中，包含了两部分，第一次写操作和第二次的读操作，所以我们很简单的我们想到，需要使用两次锁，第一次写锁，第二次读锁。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *pool)</span><span class="title">Get2</span><span class="params">(host <span class="keyword">string</span>)</span> <span class="params">(c conn)</span></span>&#123;</span><br><span class="line">   p.mu.Lock()</span><br><span class="line">   <span class="keyword">if</span> _,ok := p.m[host];!ok&#123;</span><br><span class="line">      p.m[host] = <span class="built_in">make</span>(<span class="keyword">chan</span> conn,<span class="number">100</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   p.mu.Unlock()</span><br><span class="line">   </span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   <span class="keyword">defer</span> p.mu.RUnlock()</span><br><span class="line">   <span class="keyword">select</span> &#123;</span><br><span class="line">   <span class="keyword">case</span> c  = &lt;- p.m[host]:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   <span class="keyword">default</span>:</span><br><span class="line">      c = p.New(host)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *pool)</span><span class="title">Put1</span><span class="params">(host <span class="keyword">string</span>,c conn)</span></span>&#123;</span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   <span class="keyword">defer</span> p.mu.RUnlock()</span><br><span class="line">   <span class="keyword">select</span> &#123;</span><br><span class="line">   <span class="keyword">case</span> p.m[host] &lt;- c:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   <span class="keyword">default</span>:</span><br><span class="line">      c.Close()</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="7-2-测试结果"><a href="#7-2-测试结果" class="headerlink" title="7.2 测试结果"></a>7.2 测试结果</h3><p>我们本来期望的是效率应该比全写锁要高一些，但实际情况是低一些，只有800,000次/秒。那问题出在哪里呢。从程序上来看，get多了一次加锁，所以导致锁竞争次数比全写锁要高一些，但我们并不能减少锁次数直接使用读锁，这样是不安全的，程序也会报错。所以我们给出另一种安全的读写锁形式。</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/6.png" alt=""></p>
+<h2 id="8-并发情况下效率-读写锁"><a href="#8-并发情况下效率-读写锁" class="headerlink" title="8.并发情况下效率-读写锁"></a>8.并发情况下效率-读写锁</h2><h2 id="8-1-读写锁2-get-amp-put实我们从实际的使用来看一下get程序，由于我们给定了hosts，所以其实对map的写入操作只会进行四次，但后来每次进行get时都会加一次写锁，这是没有必要的。仔细看一下第一次写锁，我们加的有些草率，因为首先会读取一次map来判断是否应该进行写入操作，所以我们可以通过增加一次读锁，来减少后来的加写锁。当然有人会说为什么不直接初始化map，这样就没有写操作，这我也考虑过，但是集群规模有可能会扩张并且会动态变化，直接初始化map会显得有些刻意，并且通用性也不强，与其他模块会产生耦合。所以这种做法并没有多少设计上的美感，相反会显得比较low。我们给出第二种读写锁如下。"><a href="#8-1-读写锁2-get-amp-put实我们从实际的使用来看一下get程序，由于我们给定了hosts，所以其实对map的写入操作只会进行四次，但后来每次进行get时都会加一次写锁，这是没有必要的。仔细看一下第一次写锁，我们加的有些草率，因为首先会读取一次map来判断是否应该进行写入操作，所以我们可以通过增加一次读锁，来减少后来的加写锁。当然有人会说为什么不直接初始化map，这样就没有写操作，这我也考虑过，但是集群规模有可能会扩张并且会动态变化，直接初始化map会显得有些刻意，并且通用性也不强，与其他模块会产生耦合。所以这种做法并没有多少设计上的美感，相反会显得比较low。我们给出第二种读写锁如下。" class="headerlink" title="8.1 读写锁2 get &amp; put实我们从实际的使用来看一下get程序，由于我们给定了hosts，所以其实对map的写入操作只会进行四次，但后来每次进行get时都会加一次写锁，这是没有必要的。仔细看一下第一次写锁，我们加的有些草率，因为首先会读取一次map来判断是否应该进行写入操作，所以我们可以通过增加一次读锁，来减少后来的加写锁。当然有人会说为什么不直接初始化map，这样就没有写操作，这我也考虑过，但是集群规模有可能会扩张并且会动态变化，直接初始化map会显得有些刻意，并且通用性也不强，与其他模块会产生耦合。所以这种做法并没有多少设计上的美感，相反会显得比较low。我们给出第二种读写锁如下。"></a>8.1 读写锁2 get &amp; put实我们从实际的使用来看一下get程序，由于我们给定了hosts，所以其实对map的写入操作只会进行四次，但后来每次进行get时都会加一次写锁，这是没有必要的。仔细看一下第一次写锁，我们加的有些草率，因为首先会读取一次map来判断是否应该进行写入操作，所以我们可以通过增加一次读锁，来减少后来的加写锁。当然有人会说为什么不直接初始化map，这样就没有写操作，这我也考虑过，但是集群规模有可能会扩张并且会动态变化，直接初始化map会显得有些刻意，并且通用性也不强，与其他模块会产生耦合。所以这种做法并没有多少设计上的美感，相反会显得比较low。我们给出第二种读写锁如下。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">func (p *pool)Get3(host string) (c conn)&#123;</span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   if _,ok := p.m[host];!ok&#123;</span><br><span class="line">      p.mu.RUnlock()</span><br><span class="line">      p.mu.Lock()</span><br><span class="line">      p.m[host] = make(chan conn,100)</span><br><span class="line">      p.mu.Unlock()</span><br><span class="line">   &#125;else&#123;</span><br><span class="line">      p.mu.RUnlock()</span><br><span class="line">   &#125;</span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   defer p.mu.RUnlock()</span><br><span class="line">   select &#123;</span><br><span class="line">   case c = &lt;- p.m[host]:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c = p.New(host)</span><br><span class="line">   &#125;</span><br><span class="line">   return</span><br><span class="line">&#125;</span><br><span class="line">func Put3(host string,c conn)&#123;</span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   defer p.mu.RUnlock()</span><br><span class="line">   select &#123;</span><br><span class="line">   case p.m[host] &lt;- c:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c.Close()</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="8-2-测试结测试结果如下，其速度大概在3-400-000次-秒。是全写锁性能的4倍左右。"><a href="#8-2-测试结测试结果如下，其速度大概在3-400-000次-秒。是全写锁性能的4倍左右。" class="headerlink" title="8.2 测试结测试结果如下，其速度大概在3,400,000次/秒。是全写锁性能的4倍左右。"></a>8.2 测试结测试结果如下，其速度大概在3,400,000次/秒。是全写锁性能的4倍左右。</h3><p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/7.png" alt=""></p>
+<h2 id="9-defer对锁的性能影响"><a href="#9-defer对锁的性能影响" class="headerlink" title="9.defer对锁的性能影响"></a>9.defer对锁的性能影响</h2><p>我们经常听说defer的执行效率低，其实是因为defer在函数返回时才执行，这对普通的函数并没有影响，但对所来说，如果我们可以提前释放锁，那么肯定能减少很多锁的无效占用。顺便我们测试一下defer函数对锁的性能影响，对8.1的get &amp; put实现，我们将其中的defer全部替换为函数结束之前手动释放锁。其实只在put中有defer</p>
+<h3 id="9-1-无defer的-get-amp-put实现"><a href="#9-1-无defer的-get-amp-put实现" class="headerlink" title="9.1 无defer的 get &amp; put实现"></a>9.1 无defer的 get &amp; put实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">func (p *pool)Get4(host string) (c conn)&#123;</span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   if _,ok := p.m[host];!ok&#123;</span><br><span class="line">      p.mu.RUnlock()</span><br><span class="line">      p.mu.Lock()</span><br><span class="line">      p.m[host] = make(chan conn,100)</span><br><span class="line">      p.mu.Unlock()</span><br><span class="line">   &#125;else&#123;</span><br><span class="line">      p.mu.RUnlock()</span><br><span class="line">   &#125;</span><br><span class="line">   select &#123;</span><br><span class="line">   case c = &lt;- p.m[host]:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c = p.New(host)</span><br><span class="line">   &#125;</span><br><span class="line">   return</span><br><span class="line">&#125;</span><br><span class="line">func (p *pool)Put4(host string,c conn)&#123;</span><br><span class="line">   p.mu.RLock()</span><br><span class="line">   select &#123;</span><br><span class="line">   case p.m[host] &lt;- c:</span><br><span class="line">      &#123;&#125;</span><br><span class="line">   default:</span><br><span class="line">      c.Close()</span><br><span class="line">   &#125;</span><br><span class="line">   p.mu.RUnlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="9-2-测试结果"><a href="#9-2-测试结果" class="headerlink" title="9.2 测试结果"></a>9.2 测试结果</h3><p>测试结果如下，仅仅修改了一处defer，速度达到接近4,000,000次/秒，性能提高了15%。还是非常可观的。</p>
+<p><img src="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/8.png" alt=""></p>
+<h2 id="10-总结"><a href="#10-总结" class="headerlink" title="10.总结"></a>10.总结</h2><ol>
+<li><p>这篇bolg真不容易，写了我好久</p>
+</li>
+<li><p>多协程提高程序执行速度是有前提的，并不能无脑提高程序速度</p>
+</li>
+<li>map是非线程安全的，需要谨慎使用</li>
+<li>读写锁性能比单纯的写锁(互斥锁)要高很多，尽量使用读写锁</li>
+<li>读写锁的使用可以针对具体情况进行优化，还可以使用go race detector来检测是否安全</li>
+<li>锁尽量手动释放，当然defer是一种非常优雅的写法，对效率要求不高的程序中我还是喜欢用defer</li>
+</ol>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/">高并发下map和chan实现的链接池的线程安全及效率</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年10月05日 - 14:10</p>
+  <p><span>最后更新:</span>2018年10月05日 - 14:10</p>
+  <p><span>原始链接:</span><a href="/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/" title="高并发下map和chan实现的链接池的线程安全及效率">http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/10/05/高并发下map和chan实现的链接池的线程安全及效率/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
+          
+            <a href="/tags/高并发线程安全/" rel="tag"><i class="fa fa-tag"></i> 高并发线程安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/04/Linux命令-wc命令/" rel="next" title="Linux命令-wc命令">
+                <i class="fa fa-chevron-left"></i> Linux命令-wc命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">100</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">154.5k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-背景"><span class="nav-number">1.</span> <span class="nav-text">1.背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-链接池的一般设计"><span class="nav-number">2.</span> <span class="nav-text">2. 链接池的一般设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-链接池的一般定义"><span class="nav-number">3.</span> <span class="nav-text">3.链接池的一般定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-测试主程序"><span class="nav-number">4.</span> <span class="nav-text">4.测试主程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-单协程情况下的效率"><span class="nav-number">5.</span> <span class="nav-text">5.单协程情况下的效率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-单协程get-amp-put实现"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 单协程get &amp; put实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-测试结果"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 测试结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-并发情况下效率-全写锁"><span class="nav-number">6.</span> <span class="nav-text">6.并发情况下效率-全写锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-全写锁的get-amp-put-实现"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 全写锁的get &amp; put 实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-测试结果"><span class="nav-number">7.</span> <span class="nav-text">6.2 测试结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-1-全写锁下-的多协程测试结果"><span class="nav-number">7.1.</span> <span class="nav-text">6.2.1 全写锁下 的多协程测试结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-2-全写锁下单协程测试结果"><span class="nav-number">7.2.</span> <span class="nav-text">6.2.2 全写锁下单协程测试结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-3-单协程下存在链接使用时间的的测试结果"><span class="nav-number">7.3.</span> <span class="nav-text">6.2.3 单协程下存在链接使用时间的的测试结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-4-多协程下存在链接使用时间的测试结果"><span class="nav-number">7.4.</span> <span class="nav-text">6.2.4 多协程下存在链接使用时间的测试结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-并发情况下效率-读写锁1"><span class="nav-number">8.</span> <span class="nav-text">7.并发情况下效率-读写锁1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-读写锁1-get-amp-put实现"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 读写锁1 get &amp; put实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-测试结果"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 测试结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-并发情况下效率-读写锁"><span class="nav-number">9.</span> <span class="nav-text">8.并发情况下效率-读写锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-读写锁2-get-amp-put实我们从实际的使用来看一下get程序，由于我们给定了hosts，所以其实对map的写入操作只会进行四次，但后来每次进行get时都会加一次写锁，这是没有必要的。仔细看一下第一次写锁，我们加的有些草率，因为首先会读取一次map来判断是否应该进行写入操作，所以我们可以通过增加一次读锁，来减少后来的加写锁。当然有人会说为什么不直接初始化map，这样就没有写操作，这我也考虑过，但是集群规模有可能会扩张并且会动态变化，直接初始化map会显得有些刻意，并且通用性也不强，与其他模块会产生耦合。所以这种做法并没有多少设计上的美感，相反会显得比较low。我们给出第二种读写锁如下。"><span class="nav-number">10.</span> <span class="nav-text">8.1 读写锁2 get &amp; put实我们从实际的使用来看一下get程序，由于我们给定了hosts，所以其实对map的写入操作只会进行四次，但后来每次进行get时都会加一次写锁，这是没有必要的。仔细看一下第一次写锁，我们加的有些草率，因为首先会读取一次map来判断是否应该进行写入操作，所以我们可以通过增加一次读锁，来减少后来的加写锁。当然有人会说为什么不直接初始化map，这样就没有写操作，这我也考虑过，但是集群规模有可能会扩张并且会动态变化，直接初始化map会显得有些刻意，并且通用性也不强，与其他模块会产生耦合。所以这种做法并没有多少设计上的美感，相反会显得比较low。我们给出第二种读写锁如下。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-测试结测试结果如下，其速度大概在3-400-000次-秒。是全写锁性能的4倍左右。"><span class="nav-number">10.1.</span> <span class="nav-text">8.2 测试结测试结果如下，其速度大概在3,400,000次/秒。是全写锁性能的4倍左右。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-defer对锁的性能影响"><span class="nav-number">11.</span> <span class="nav-text">9.defer对锁的性能影响</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-无defer的-get-amp-put实现"><span class="nav-number">11.1.</span> <span class="nav-text">9.1 无defer的 get &amp; put实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-测试结果"><span class="nav-number">11.2.</span> <span class="nav-text">9.2 测试结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-总结"><span class="nav-number">12.</span> <span class="nav-text">10.总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
