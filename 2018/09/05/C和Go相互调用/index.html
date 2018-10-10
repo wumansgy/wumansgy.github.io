@@ -442,7 +442,7 @@
         <p><a href="https://colobu.com/2018/08/28/c-and-go-calling-interaction/" target="_blank" rel="noopener">转载处：https://colobu.com/2018/08/28/c-and-go-calling-interaction/</a></p>
 <h1 id="C和Go相互调用"><a href="#C和Go相互调用" class="headerlink" title="C和Go相互调用"></a>C和Go相互调用</h1><p>C可以调用Go，并且Go可以调用C， 如果更进一步呢， <code>C--&gt;Go--&gt;C</code> 或者 <code>Go--&gt;C--&gt;Go</code>的调用如何实现？</p>
 <p>本文通过两个简单的例子帮助你了解这两种复杂的调用关系。本文不涉及两者之间的复杂的数据转换，官方文章<a href="https://blog.golang.org/c-go-cgo" target="_blank" rel="noopener">C? Go? Cgo!</a>、<a href="https://github.com/golang/go/wiki/cgo" target="_blank" rel="noopener">wiki/cgo</a>和<a href="http://golang.org/cmd/cgo" target="_blank" rel="noopener">cmd/cgo</a>有一些介绍。</p>
-<h2 id="Go–-gt-C–-gt-Go"><a href="#Go–-gt-C–-gt-Go" class="headerlink" title="Go–&gt;C–&gt;Go"></a>Go–&gt;C–&gt;Go</h2><p>Go程序调用C实现的函数，然后C实现的函数又调用Go实现的函数。</p>
+<h2 id="Go—-gt-C—-gt-Go"><a href="#Go—-gt-C—-gt-Go" class="headerlink" title="Go—&gt;C—&gt;Go"></a>Go—&gt;C—&gt;Go</h2><p>Go程序调用C实现的函数，然后C实现的函数又调用Go实现的函数。</p>
 <p>1、首先，我们新建一个<code>hello.go</code>的文件：</p>
 <p>hello.go</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`package mainimport "C"import "fmt"//export HelloFromGofunc HelloFromGo() &#123;	fmt.Printf("Hello from Go!\n")&#125;`</span></span><br></pre></td></tr></table></figure>
@@ -457,7 +457,7 @@
 <p>运行测试一下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ go run .</span><br><span class="line">Hi from C</span><br><span class="line">Hello from Go!</span><br></pre></td></tr></table></figure>
 <p>可以看到，期望的函数调用正常的运行。第一行是C函数的输出，第二行是Go函数的输出。</p>
-<h2 id="C–-gt-Go–-gt-C"><a href="#C–-gt-Go–-gt-C" class="headerlink" title="C–&gt;Go–&gt;C"></a>C–&gt;Go–&gt;C</h2><p>第二个例子演示了C程序调用Go实现的函数，然后Go实现的函数又调用C实现的函数。</p>
+<h2 id="C—-gt-Go—-gt-C"><a href="#C—-gt-Go—-gt-C" class="headerlink" title="C—&gt;Go—&gt;C"></a>C—&gt;Go—&gt;C</h2><p>第二个例子演示了C程序调用Go实现的函数，然后Go实现的函数又调用C实现的函数。</p>
 <p>1、首先新建一个<code>hello.c</code>文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int helloFromC() &#123;</span><br><span class="line">    printf(&quot;Hi from C\n&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>它定义了一个纯C实现的函数。</p>
@@ -655,7 +655,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-count">111</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -747,7 +747,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -763,7 +765,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">174.3k</span>
+      <span class="site-state-item-count">175.5k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
@@ -822,7 +824,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C和Go相互调用"><span class="nav-number">1.</span> <span class="nav-text">C和Go相互调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go–-gt-C–-gt-Go"><span class="nav-number">1.1.</span> <span class="nav-text">Go–&gt;C–&gt;Go</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C–-gt-Go–-gt-C"><span class="nav-number">1.2.</span> <span class="nav-text">C–&gt;Go–&gt;C</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-gt-Go-gt-C的状态变量"><span class="nav-number">1.2.1.</span> <span class="nav-text">C--&gt;Go--&gt;C的状态变量</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C和Go相互调用"><span class="nav-number">1.</span> <span class="nav-text">C和Go相互调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go—-gt-C—-gt-Go"><span class="nav-number">1.1.</span> <span class="nav-text">Go—&gt;C—&gt;Go</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C—-gt-Go—-gt-C"><span class="nav-number">1.2.</span> <span class="nav-text">C—&gt;Go—&gt;C</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-gt-Go-gt-C的状态变量"><span class="nav-number">1.2.1.</span> <span class="nav-text">C--&gt;Go--&gt;C的状态变量</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

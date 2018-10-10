@@ -432,14 +432,14 @@
 <h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">-a 不要忽略二进制数据。</span><br><span class="line">-A&lt;显示列数&gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。</span><br><span class="line">-b 在显示符合范本样式的那一行之外，并显示该行之前的内容。</span><br><span class="line">-c 计算符合范本样式的列数。</span><br><span class="line">-C&lt;显示列数&gt;或-&lt;显示列数&gt;  除了显示符合范本样式的那一列之外，并显示该列之前后的内容。</span><br><span class="line">-d&lt;进行动作&gt; 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep命令将回报信息并停止动作。</span><br><span class="line">-e&lt;范本样式&gt; 指定字符串作为查找文件内容的范本样式。</span><br><span class="line">-E 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。</span><br><span class="line">-f&lt;范本文件&gt; 指定范本文件，其内容有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每一列的范本样式。</span><br><span class="line">-F 将范本样式视为固定字符串的列表。</span><br><span class="line">-G 将范本样式视为普通的表示法来使用。</span><br><span class="line">-h 在显示符合范本样式的那一列之前，不标示该列所属的文件名称。</span><br><span class="line">-H 在显示符合范本样式的那一列之前，标示该列的文件名称。</span><br><span class="line">-i 忽略字符大小写的差别。</span><br><span class="line">-l 列出文件内容符合指定的范本样式的文件名称。</span><br><span class="line">-L 列出文件内容不符合指定的范本样式的文件名称。</span><br><span class="line">-n 在显示符合范本样式的那一列之前，标示出该列的编号。</span><br><span class="line">-q 不显示任何信息。</span><br><span class="line">-R/-r 此参数的效果和指定“-d recurse”参数相同。</span><br><span class="line">-s 不显示错误信息。</span><br><span class="line">-v 反转查找。</span><br><span class="line">-w 只显示全字符合的列。</span><br><span class="line">-x 只显示全列符合的列。</span><br><span class="line">-y 此参数效果跟“-i”相同。</span><br><span class="line">-o 只输出文件中匹配到的部分。</span><br></pre></td></tr></table></figure>
 <h2 id="规则表达式"><a href="#规则表达式" class="headerlink" title="规则表达式"></a>规则表达式</h2><p>grep的规则表达式:</p>
 <p>^ #锚定行的开始 如：’^grep’匹配所有以grep开头的行。</p>
-<p>\$ #锚定行的结束 如：’grep$’匹配所有以grep结尾的行。</p>
+<p>$ #锚定行的结束 如：’grep$’匹配所有以grep结尾的行。</p>
 <p>. #匹配一个非换行符的字符 如：’gr.p’匹配gr后接一个任意字符，然后是p。</p>
 <ul>
 <li>#匹配零个或多个先前字符 如：’*grep’匹配所有一个或多个空格后紧跟grep的行。</li>
 </ul>
 <p>.* #一起用代表任意字符。</p>
 <p>[] #匹配一个指定范围内的字符，如’[Gg]rep’匹配Grep和grep。</p>
-<p>[^] #匹配一个不在指定范围内的字符，如：’[^A-FH-Z]rep’匹配不包含A-F和H-Z的一个字母开头，紧跟rep的行。</p>
+<p><sup><a href="#fn_" id="reffn_"></a></sup> #匹配一个不在指定范围内的字符，如：’<sup><a href="#fn_A-FH-Z" id="reffn_A-FH-Z">A-FH-Z</a></sup>rep’匹配不包含A-F和H-Z的一个字母开头，紧跟rep的行。</p>
 <p>(..) #标记匹配字符，如’(love)‘，love被标记为1。</p>
 <p>\&lt; #锚定单词的开始，如:’\&lt;grep’匹配包含以grep开头的单词的行。</p>
 <p>> #锚定单词的结束，如’grep&gt;‘匹配包含以grep结尾的单词的行。</p>
@@ -663,7 +663,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-count">111</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -755,7 +755,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -771,7 +773,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">174.3k</span>
+      <span class="site-state-item-count">175.5k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 

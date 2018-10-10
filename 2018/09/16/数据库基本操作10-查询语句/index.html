@@ -499,8 +499,7 @@
 <p>4、满足“%诺基亚%”的是（A、B、C、D）</p>
 <p>A：诺基亚2100   B：2100诺基亚   C：把我的诺基亚拿过来   D：诺基亚</p>
 <h4 id="1-6-10-模糊查询（like）"><a href="#1-6-10-模糊查询（like）" class="headerlink" title="1.6.10 模糊查询（like）"></a>1.6.10 模糊查询（like）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 查找姓张的同学</span><br><span class="line">mysql&gt; select * from stu where stuname like &apos;张%&apos;;</span><br><span class="line">+--------+---------+--------+--------+---------+------------+------+------+</span><br><span class="line">| stuNo  | stuName | stuSex | stuAge | stuSeat | stuAddress | ch   | math |</span><br><span class="line">+--------+---------+--------+--------+---------+------------+------+------+</span><br><span class="line">| s25301 | 张秋丽        | 男       |     18 |       1 | 北京           |   80 | NULL |</span><br><span class="line">+--------+---------+--------+--------+---------+------------+------+------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line">#例题</span><br><span class="line">mysql&gt; select * from stu where stuname like &apos;T_m&apos;;</span><br><span class="line">+--------+---------+--------+--------+---------+------------+------+------+</span><br><span class="line">| stuNo  | stuName | stuSex | stuAge | stuSeat | stuAddress | ch   | math |</span><br><span class="line">+--------+---------+--------+--------+---------+------------+------+------+</span><br><span class="line">| s25320 | Tom     | 男       |     24 |       8 | 北京           |   65 |   67 |</span><br><span class="line">+--------+---------+--------+--------+---------+------------+------+------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>#### </p>
-
+<h4 id=""><a href="#" class="headerlink" title=" "></a> </h4>
       
     </div>
 
@@ -662,7 +661,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-count">111</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -754,7 +753,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -770,7 +771,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">174.3k</span>
+      <span class="site-state-item-count">175.5k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
@@ -829,7 +830,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-查询语句"><span class="nav-number">1.</span> <span class="nav-text">1.6 查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-1-字段表达式"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.6.1   字段表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-2-from子句"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.6.2   from子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-3-dual表"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.6.3   dual表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-4-where子句"><span class="nav-number">1.0.4.</span> <span class="nav-text">1.6.4   where子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-5-in-not-in"><span class="nav-number">1.0.5.</span> <span class="nav-text">1.6.5   in | not in</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-6-between…and-not-between…and"><span class="nav-number">1.0.6.</span> <span class="nav-text">1.6.6   between…and|not between…and</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-7-is-null-is-not-null"><span class="nav-number">1.0.7.</span> <span class="nav-text">1.6.7   is null | is not null</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-8-聚合函数"><span class="nav-number">1.0.8.</span> <span class="nav-text">1.6.8   聚合函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-9-通配符"><span class="nav-number">1.0.9.</span> <span class="nav-text">1.6.9   通配符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-10-模糊查询（like）"><span class="nav-number">1.0.10.</span> <span class="nav-text">1.6.10 模糊查询（like）</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-查询语句"><span class="nav-number">1.</span> <span class="nav-text">1.6 查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-1-字段表达式"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.6.1   字段表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-2-from子句"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.6.2   from子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-3-dual表"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.6.3   dual表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-4-where子句"><span class="nav-number">1.0.4.</span> <span class="nav-text">1.6.4   where子句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-5-in-not-in"><span class="nav-number">1.0.5.</span> <span class="nav-text">1.6.5   in | not in</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-6-between…and-not-between…and"><span class="nav-number">1.0.6.</span> <span class="nav-text">1.6.6   between…and|not between…and</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-7-is-null-is-not-null"><span class="nav-number">1.0.7.</span> <span class="nav-text">1.6.7   is null | is not null</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-8-聚合函数"><span class="nav-number">1.0.8.</span> <span class="nav-text">1.6.8   聚合函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-9-通配符"><span class="nav-number">1.0.9.</span> <span class="nav-text">1.6.9   通配符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-10-模糊查询（like）"><span class="nav-number">1.0.10.</span> <span class="nav-text">1.6.10 模糊查询（like）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#"><span class="nav-number">1.0.11.</span> <span class="nav-text"> </span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

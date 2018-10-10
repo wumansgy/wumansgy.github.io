@@ -495,7 +495,7 @@
 <h3 id="移除文件"><a href="#移除文件" class="headerlink" title="移除文件"></a>移除文件</h3><p>要从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除（确切地说，是从暂存区域移除），然后提交。可以用 <code>git rm</code> 命令完成此项工作，并连带从工作目录中删除指定的文件，这样以后就不会出现在未跟踪文件清单中了。</p>
 <p>如果只是简单地从工作目录中手工删除文件，运行 <code>git status</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"># On branch master</span><br><span class="line">#</span><br><span class="line"># Changed but not updated:</span><br><span class="line">#</span><br><span class="line">#    modified:   benchmarks.rb</span><br><span class="line">#</span><br><span class="line">$ git commit -a -m &apos;added new benchmarks&apos;</span><br><span class="line">[master 83e38c7] added new benchmarks</span><br><span class="line"> 1 files changed, 5 insertions(+), 0 deletions(-)</span><br></pre></td></tr></table></figure>
-<p>　　时就会在 “Changed but not updated” 部分（也就是<em>未暂存</em>清单）看到：</p>
+<p>　　时就会在 “Changed but not updated” 部分（也就是_未暂存_清单）看到：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ rm grit.gemspec</span><br><span class="line">$ git status</span><br><span class="line"># On branch master</span><br><span class="line">#</span><br><span class="line"># Changed but not updated:</span><br><span class="line">#   (use &quot;git add/rm ...&quot; to update what will be committed)</span><br><span class="line">#</span><br><span class="line">#       deleted:    grit.gemspec</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
 <p>　然后再运行 <code>git rm</code> 记录此次移除文件的操作：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git rm grit.gemspec</span><br><span class="line">rm &apos;grit.gemspec&apos;</span><br><span class="line">$ git status</span><br><span class="line"># On branch master</span><br><span class="line">#</span><br><span class="line"># Changes to be committed:</span><br><span class="line">#   (use &quot;git reset HEAD ...&quot; to unstage)</span><br><span class="line">#</span><br><span class="line">#       deleted:    grit.gemspec</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
@@ -810,7 +810,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-count">111</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -902,7 +902,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -918,7 +920,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">174.3k</span>
+      <span class="site-state-item-count">175.5k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
