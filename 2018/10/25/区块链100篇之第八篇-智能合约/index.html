@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="此区块链100篇文章为在博客上看到较好的区块链解释，所以搜集而来，转载博客原地址https://blog.csdn.net/weixin_37504041  一、比特币的转账过程   我在第五篇讲UTXO的时候，有提到比特币的转账过程，现在来回顾一下这个过程。  Bob想要转给Jack一百个比特币，Bob需要先创建一笔交易，因为这笔交易只有被矿工验证并打包进区块的时候才算完成交易，Bob在填写交易">
+<meta name="keywords" content="区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链100篇之第八篇--智能合约">
+<meta property="og:url" content="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="此区块链100篇文章为在博客上看到较好的区块链解释，所以搜集而来，转载博客原地址https://blog.csdn.net/weixin_37504041  一、比特币的转账过程   我在第五篇讲UTXO的时候，有提到比特币的转账过程，现在来回顾一下这个过程。  Bob想要转给Jack一百个比特币，Bob需要先创建一笔交易，因为这笔交易只有被矿工验证并打包进区块的时候才算完成交易，Bob在填写交易">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/2.png">
+<meta property="og:updated_time" content="2018-10-25T05:04:22.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="区块链100篇之第八篇--智能合约">
+<meta name="twitter:description" content="此区块链100篇文章为在博客上看到较好的区块链解释，所以搜集而来，转载博客原地址https://blog.csdn.net/weixin_37504041  一、比特币的转账过程   我在第五篇讲UTXO的时候，有提到比特币的转账过程，现在来回顾一下这个过程。  Bob想要转给Jack一百个比特币，Bob需要先创建一笔交易，因为这笔交易只有被矿工验证并打包进区块的时候才算完成交易，Bob在填写交易">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>区块链100篇之第八篇--智能合约 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">区块链100篇之第八篇--智能合约
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-25 12:53:37 / 修改时间：13:04:22" itemprop="dateCreated datePublished" datetime="2018-10-25T12:53:37+08:00">2018-10-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>此区块链100篇文章为在博客上看到较好的区块链解释，所以搜集而来，转载博客原地址<a href="https://blog.csdn.net/weixin_37504041" target="_blank" rel="noopener">https://blog.csdn.net/weixin_37504041</a></strong></p>
+<blockquote>
+<p>一、比特币的转账过程 </p>
+</blockquote>
+<p>我在第五篇讲UTXO的时候，有提到比特币的转账过程，现在来回顾一下这个过程。</p>
+<blockquote>
+<p>Bob想要转给Jack一百个比特币，Bob需要先创建一笔交易，因为这笔交易只有被矿工验证并打包进区块的时候才算完成交易，Bob在填写交易信息的时候除了需要提供支付比特币的数额以及双方的地址外，还需要提供自己的公钥以及用私钥生成的数字签名，还有就是上一笔交易的Hash（也就是Bob从哪里得到这些比特币）；信息填完后（其实在现实中没这么复杂，只需要在钱包中填写转入转出地址以及交易金额即可，其他的都是自动的）便可以点击确认，当这笔交易广播到全网中时，矿工开始对这笔交易进行验证，第一步会去找到上一笔交易，确认支付方的比特币来源；接着第二步算出支付方公钥的指纹，确认与支付方的地址一致，从而保证公钥属实；然后第三步是使用公钥去解开数字签名，保证私钥属实。验证通过后矿工便会将这笔交易打包进区块中，如果得到六次以上的确认，则可以认为这笔交易不会再被改变。</p>
+</blockquote>
+<p>讲这个过程就是为了引出今天的知识点–智能合约。</p>
+<blockquote>
+<p>二、比特币与智能合约</p>
+</blockquote>
+<p>在上面我有讲到Bob需要提供的交易信息有一个是上一笔的交易Hash，我们可以来看一下区块链中时如何记录这笔交易的（这其实就是一个UTXO），如下图所示：</p>
+<p><img src="/2018/10/25/区块链100篇之第八篇-智能合约/1.jpg" alt=""></p>
+<p>可以看出Bob转给Jack的100个比特币是从Alice那得到的，图中还可以看到一个解锁信息，这个解锁信息时候用来证明这100个比特币的归属，因为只有Bob的私钥才能进行解锁，其他人进行解锁是无效的。<br>到这里我们可以将这个UTXO看做是一个简单的智能合约，因为它是一个可自动执行并且自我验证协议，Bob只要输入自己的私钥，解锁脚本就会自动运行校验，解锁成功便说明Bob是这100个比特币的拥有者，反之则说明不是。</p>
+<p>因为比特币所支持的脚本语言只跟交易有关，并且不是图灵完备的语言，所能做的事很有限，但是比特币的出现极大地促进了智能合约的发展，现在支持编写智能合约的平台中最有名的当属以太坊。</p>
+<blockquote>
+<p>三、智能合约 </p>
+</blockquote>
+<p>上世纪90年代，密码学家尼克萨博从自动贩卖机得到灵感首次提出“智能合约”的概念，看一下智能合约的定义： </p>
+<ul>
+<li><blockquote>
+<p>智能合约是指一种计算机协议，这类协议一旦制定和部署成功就能实现自我执行（self-executing）和自我验证（self-verifying），而且不再需要人为的干预。</p>
+</blockquote>
+</li>
+</ul>
+<p>智能合约会对接收到的信息进行回应，它可以接收和储存价值，也可以向外发送信息和价值。看一张图： </p>
+<p><img src="/2018/10/25/区块链100篇之第八篇-智能合约/2.png" alt=""></p>
+<p>从图中可以看出一段代码（智能合约），被部署在分享的、复制的账本上，它可以维持自己的状态，控制自己的资产和对接收到的外界信息或者资产进行回应。<br>举个例子，现在我们对银行账户内存款的操作都需要中心化的银行进行授权，一旦离开了银行的监管，用户就连最基本的存取款操作都无法进行，但是如果是使用智能合约来处理的话情况就不一样了，只要事先正确的通过严谨的逻辑写好代码，便可以不需要人工参与，一切都将按事先写好的逻辑运行，并且结果是公平公正的，因此也有人宣称“代码即法律”，这个观点保留意见，至少以目前的情况来看事情没那么简单。</p>
+<p>智能合约的概念虽然很早就被提出来了，但是因为很多技术的不成熟，所以发展很缓慢，但是因为比特币的出现或者说因为区块链技术的出现，智能合约开始成为研究人员与业内人士重点研究的对象，这都极大促进了智能合约的发展。</p>
+<blockquote>
+<p>四、智能合约的优缺点 </p>
+</blockquote>
+<p>参考《区块链技术指南》简单列出智能合约的优点。 </p>
+<blockquote>
+<p>首先是<strong><em>高效的实时更新</em></strong>，因为智能合约的执行是去中心化的，也就是不需要认为的干预，所以它的执行效率是很高的，你不再需要亲自去相关部门提交排队提交申请资料，然后还需要等几个工作日才能得到结果，现在只需要在网上填好资料点击提交，如果网络通畅，几分钟内便能办完手续，方便快捷。<br>第二便是<strong><em>较低的人为干预风险</em></strong>，因为智能合约是一开始就制定好的，并且是无法更改的，所以一旦出现毁约的情况，那么时间的责任人就会得到相应的惩罚，这保证了公平公正性，也就是说在智能合约面前，人人平等，没有谁有特权。<br>第三就是<strong><em>准确运行</em></strong>， 智能合约是一段执行在计算机上的代码，所以只要运行的计算机没错县错误，那么这个合约的执行结果都是准确无误的，不会出现不可预料的情况，之所以能做到这一点也是得益于密码学的发展和区块链技术的发明。<br>第四是<strong><em>去中心化权威</em></strong>，在区块链网络中一般不存在一个绝对的权威来监督合约的执行，而是由绝大部分的用户来判断合约是否正常执行，这种绝大多数人监督的方式是由POW或POS等共识机制来实现的。</p>
+<p>第五便是<strong><em>较低的运行成本</em></strong>，正因为智能合约具有去人为干预的特点，其能够大大减少合约履行、裁决和强制执行所产生的人力成本。</p>
+</blockquote>
+<p>关于智能合约的缺点，我讲一下我的理解，因为智能合约的一段可执行的代码，是代码便不可避免的会存在bug，一旦出现bug或者不可预料的情况，这对于采用智能合约的应用都是极大的挑战（可以参考The DAO事件），这是因为智能合约是去人工干预的。智能合约的优点目前也是它的缺点，但是随着技术的发展，它的这个缺点或许可以被忽略。</p>
+<blockquote>
+<p>五、以太坊与智能合约 </p>
+</blockquote>
+<p>说到智能合约就不能不讲到以太坊，与比特币相比，以太坊最大的不同点是它可以支持更加强大的脚本语言（图灵完备的脚本语言），允许开发者在上面开发任意应用，实现任意智能合约，这也是以太坊的最强大之处。作为平台，以太坊可以类比于苹果的应用商店，任何开发者都可以在上面开发应用，并出售给用户。以太坊也是目前支持智能合约的区块链平台中比较成熟的平台。</p>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/10/25/区块链100篇之第八篇-智能合约/">区块链100篇之第八篇--智能合约</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年10月25日 - 12:10</p>
+  <p><span>最后更新:</span>2018年10月25日 - 13:10</p>
+  <p><span>原始链接:</span><a href="/2018/10/25/区块链100篇之第八篇-智能合约/" title="区块链100篇之第八篇--智能合约">http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/10/25/区块链100篇之第八篇-智能合约/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/区块链/" rel="tag"><i class="fa fa-tag"></i> 区块链</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/25/区块链100篇之第七篇-比特币的分叉/" rel="next" title="区块链100篇之第七篇--比特币的分叉">
+                <i class="fa fa-chevron-left"></i> 区块链100篇之第七篇--比特币的分叉
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/25/区块链100篇之第九篇-默克尔树/" rel="prev" title="区块链100篇之第九篇--默克尔树">
+                区块链100篇之第九篇--默克尔树 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">139</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">220.0k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
