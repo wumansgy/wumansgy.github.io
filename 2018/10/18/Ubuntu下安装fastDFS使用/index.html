@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1.利用fastDFS存储1.1什么是FastDFSFastDFS 是用 c 语言编写的一款开源的分布式文件系统。FastDFS 为互联网量身定制， 充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用 FastDFS 很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。 优点：  FastDFS 架构包括 Tracker server 和 Storage se">
+<meta name="keywords" content="fastDFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu下安装fastDFS使用">
+<meta property="og:url" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="1.利用fastDFS存储1.1什么是FastDFSFastDFS 是用 c 语言编写的一款开源的分布式文件系统。FastDFS 为互联网量身定制， 充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用 FastDFS 很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。 优点：  FastDFS 架构包括 Tracker server 和 Storage se">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/8.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/9.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/10.png">
+<meta property="og:updated_time" content="2018-10-18T05:42:53.806Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu下安装fastDFS使用">
+<meta name="twitter:description" content="1.利用fastDFS存储1.1什么是FastDFSFastDFS 是用 c 语言编写的一款开源的分布式文件系统。FastDFS 为互联网量身定制， 充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用 FastDFS 很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。 优点：  FastDFS 架构包括 Tracker server 和 Storage se">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Ubuntu下安装fastDFS使用 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ubuntu下安装fastDFS使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-18 13:01:34 / 修改时间：13:42:53" itemprop="dateCreated datePublished" datetime="2018-10-18T13:01:34+08:00">2018-10-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/环境搭建/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="1-利用fastDFS存储"><a href="#1-利用fastDFS存储" class="headerlink" title="1.利用fastDFS存储"></a>1.利用fastDFS存储</h4><h5 id="1-1什么是FastDFS"><a href="#1-1什么是FastDFS" class="headerlink" title="1.1什么是FastDFS"></a>1.1什么是FastDFS</h5><p>FastDFS 是用 c 语言编写的一款开源的分布式文件系统。FastDFS 为互联网量身定制， 充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用 FastDFS 很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。</p>
+<p>优点： </p>
+<p>FastDFS 架构包括 Tracker server 和 Storage server。客户端请求 Tracker server 进行文 件上传、下载，通过 Tracker server 调度最终由 Storage server 完成文件上传和下载。 </p>
+<p>Tracker server 作用是负载均衡和调度，通过 Tracker server 在文件上传时可以根据一些 方法找到 Storage server 提供文件上传服务。可以将 tracker 称为追踪服务器或调度服务 器。 </p>
+<p>Storage server 作用是文件存储，客户端上传的文件最终存储在 Storage 服务器上， Storageserver 没有实现自己的文件系统而是利用操作系统 的文件系统来管理文件。可以将 storage 称为存储服务器。 </p>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/1.png" alt=""></p>
+<p>服务端两个角色: </p>
+<p>Tracker:管理集群，tracker 也可以实现集群。每个 tracker 节点地位平等。收集 Storage 集群的状态。 </p>
+<p>Storage:实际保存文件 </p>
+<p>Storage 分为多个组，每个组之间保存的文件是不同的。每 个组内部可以有多个成员，组成员内部保存的内容是一样的，组成员的地位是一致的，没有 主从的概念。</p>
+<h5 id="1-2文件上传流程"><a href="#1-2文件上传流程" class="headerlink" title="1.2文件上传流程"></a>1.2文件上传流程</h5><p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/2.png" alt=""></p>
+<p>客户端上传文件后存储服务器将文件 ID 返回给客户端，此文件 ID 用于以后访问该文 件的索引信息。文件索引信息包括:组名，虚拟磁盘路径，数据两级目录，文件名。</p>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/3.png" alt=""></p>
+<p><strong>组名</strong>: 文件上传后所在的 storage 组名称，在文件上传成功后有 storage 服务器返回， 需要客户端自行保存。 </p>
+<p><strong>虚拟磁盘路径</strong>: storage 配置的虚拟路径，与磁盘选项 store_path*对应。如果配置了 store_path0 则是 M00，如果配置了 store_path1 则是 M01，以此类推。 </p>
+<p><strong>数据两级目录 </strong>:storage 服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据 文件。 </p>
+<p><strong>文件名</strong> :与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含:源存储 服务器 IP 地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。</p>
+<h5 id="1-3文件下载流程"><a href="#1-3文件下载流程" class="headerlink" title="1.3文件下载流程"></a>1.3文件下载流程</h5><p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/4.png" alt=""></p>
+<p><strong>1.4简易FastDFS架构</strong></p>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/5.png" alt=""></p>
+<h4 id="1-5FastDFS安装"><a href="#1-5FastDFS安装" class="headerlink" title="1.5FastDFS安装"></a>1.5FastDFS安装</h4><p>先下载这几个安装包备用</p>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/6.png" alt=""></p>
+<h6 id="1-5-1安装FastDFS依赖包"><a href="#1-5-1安装FastDFS依赖包" class="headerlink" title="1.5.1安装FastDFS依赖包"></a>1.5.1安装FastDFS依赖包</h6><ol>
+<li>解压缩libfastcommon-master.zip</li>
+<li>进入到libfastcommon-master的目录中</li>
+<li>执行<strong>./make.sh</strong></li>
+<li>执行<strong>sudo ./make.sh install</strong></li>
+</ol>
+<h6 id="1-5-2安装FastDFS"><a href="#1-5-2安装FastDFS" class="headerlink" title="1.5.2安装FastDFS"></a>1.5.2安装FastDFS</h6><ol>
+<li>解压缩fastdfs-master.zip</li>
+<li>进入到 fastdfs-master目录中</li>
+<li>执行 <strong>./make.sh</strong></li>
+<li>执行 <strong>sudo ./make.sh install</strong></li>
+</ol>
+<h6 id="1-5-3配置跟踪服务器tracker"><a href="#1-5-3配置跟踪服务器tracker" class="headerlink" title="1.5.3配置跟踪服务器tracker"></a>1.5.3配置跟踪服务器tracker</h6><ol>
+<li><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/fdfs/tracker.conf.sample   /etc/fdfs/tracker.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在/home/song/目录中创建目录 fastdfs/tracker      </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir –p /home/song/fastdfs/tracker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑/etc/fdfs/tracker.conf配置文件    sudo vim /etc/fdfs/tracker.conf</p>
+</li>
+</ol>
+<p>​        修改 base_path=/home/song/fastdfs/tracker</p>
+<h6 id="1-5-4配置存储服务器storage"><a href="#1-5-4配置存储服务器storage" class="headerlink" title="1.5.4配置存储服务器storage"></a>1.5.4配置存储服务器storage</h6><ol>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/fdfs/storage.conf.sample   /etc/fdfs/storage.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在/home/song/fastdfs/ 目录中创建目录 storage</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir –p /home/song/fastdfs/storage</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑/etc/fdfs/storage.conf配置文件  sudo vim /etc/fdfs/storage.conf</p>
+<p>修改内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">base_path=/home/song/fastdfs/storage</span><br><span class="line">store_path0=/home/song/fastdfs/storage</span><br><span class="line">tracker_server=自己ubuntu虚拟机的ip地址:22122</span><br></pre></td></tr></table></figure>
+<h6 id="1-5-5启动tracker和storage"><a href="#1-5-5启动tracker和storage" class="headerlink" title="1.5.5启动tracker和storage"></a>1.5.5启动tracker和storage</h6><p>进入到/etc/fdfs/下面执行以下两条指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo  fdfs_trackerd  /etc/fdfs/tracker.conf</span><br><span class="line">sudo fdfs_storaged  /etc/fdfs/storage.conf</span><br></pre></td></tr></table></figure>
+<h6 id="1-5-6测试是否安装成功"><a href="#1-5-6测试是否安装成功" class="headerlink" title="1.5.6测试是否安装成功"></a>1.5.6测试是否安装成功</h6><ol>
+<li><strong>sudo cp /etc/fdfs/client.conf.sample      /etc/fdfs/client.conf </strong></li>
+<li>编辑/etc/fdfs/client.conf配置文件  <strong>sudo vim /etc/fdfs/client.conf</strong></li>
+</ol>
+<p>修改内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">base_path=/home/song/fastdfs/tracker</span><br><span class="line">tracker_server=自己ubuntu虚拟机的ip地址:22122</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>上传文件测试(fastDHT)</p>
+<p>sudo fdfs_upload_file     /etc/fdfs/client.conf 要上传的图片文件 </p>
+<p>如果返回类似<strong>group1/M00/00/00/rBIK6VcaP0aARXXvAAHrUgHEviQ394.jpg </strong>的文件id则说明文件上传成功</p>
+</li>
+</ol>
+<h6 id="1-5-7安装fastdfs-nginx-module"><a href="#1-5-7安装fastdfs-nginx-module" class="headerlink" title="1.5.7安装fastdfs-nginx-module"></a>1.5.7安装fastdfs-nginx-module</h6><ol>
+<li><p>解压缩 nginx-1.8.1.tar.gz</p>
+</li>
+<li><p>解压缩 fastdfs-nginx-module-master.zip</p>
+</li>
+<li><p>进入nginx-1.8.1目录中</p>
+</li>
+<li><p>执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure  --prefix=/usr/local/nginx/ --add-module=fastdfs-nginx-module-master解压后的目录的绝对路径/src</span><br></pre></td></tr></table></figure>
+<p>注意：<strong>这时候会报一个错，说没有PCRE库</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/7.png" alt=""></p>
+<p>下载缺少的库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libpcre3 libpcre3-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>首先你需要去更换源，因为ubuntu自带的源没有这个库</p>
+</li>
+<li><p>更换下载源为阿里的源</p>
+</li>
+<li><p>先把原来的源文件备份</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑源文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<p>把原来的内容全部删掉，粘贴一下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line"> </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line"> </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line"> </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="line"> </span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<p>更换完源之后执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get  update</span><br><span class="line">sudo apt-get install libpcre3 libpcre3-dev</span><br></pre></td></tr></table></figure>
+<p>然后进入nginx-1.8.1目录中，再次执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure  --prefix=/usr/local/nginx/ --add-module=fastdfs-nginx-module-master解压后的目录的绝对路径/src</span><br></pre></td></tr></table></figure>
+<p>这时候还会报一个错（错误还真多），错误原因是因为nginx编译的时候把警告当错误处理，事实上这个警告并不影响（程序员忽略警告）</p>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/8.png" alt=""></p>
+<p>解决方法：</p>
+<p>找到objs目录下的Makefile</p>
+<p>vim Makefile</p>
+<p>删掉里面的-Werror(<strong>如果没有修改权限，修改一下这个文件的权限,<code>chmod 777 Makefile</code></strong>)</p>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/9.png" alt=""></p>
+</li>
+</ul>
+<ol>
+<li><ul>
+<li><p>然后回到nginx-1.8.1目录中，再次执行：</p>
+<p>执行完成后执行<strong>sudo make</strong></p>
+<p>执行<strong>sudo make install</strong> </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure  --prefix=/usr/local/nginx/ --add-module=fastdfs-nginx-module-master解压后的目录的绝对路径/src</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p>sudo cp fastdfs-nginx-module-master解压后的目录中src下mod_fastdfs.conf   /etc/fdfs/mod_fastdfs.conf</p>
+</li>
+<li><p>sudo vim /etc/fdfs/mod_fastdfs.conf</p>
+<p>修改内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">connect_timeout=10</span><br><span class="line">tracker_server=自己ubuntu虚拟机的ip地址:22122</span><br><span class="line">url_have_group_name=true</span><br><span class="line">store_path0=/home/song/fastdfs/storage</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>sudo cp 解压缩的fastdfs-master目录中的conf中的http.conf  /etc/fdfs/http.conf</p>
+</li>
+<li><p>sudo cp 解压缩的fastdfs-master目录中conf中的mime.types /etc/fdfs/mime.types</p>
+</li>
+<li><p>sudo vim /usr/local/nginx/conf/nginx.conf</p>
+<p>在http部分中添加配置信息如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">            listen       8888;</span><br><span class="line">            server_name  localhost;</span><br><span class="line">            location ~/group[0-9]/ &#123;</span><br><span class="line">                ngx_fastdfs_module;</span><br><span class="line">            &#125;</span><br><span class="line">            error_page   500 502 503 504  /50x.html;</span><br><span class="line">            location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动nginx</p>
+<p>sudo  /usr/local/nginx/sbin/nginx</p>
+<h4 id="到这里我们就已经安装完成了"><a href="#到这里我们就已经安装完成了" class="headerlink" title="到这里我们就已经安装完成了"></a>到这里我们就已经安装完成了</h4><p>下面可以用go客户端来测试一下</p>
+<h3 id="1-6使用go客户端上传文件测试"><a href="#1-6使用go客户端上传文件测试" class="headerlink" title="1.6使用go客户端上传文件测试"></a>1.6使用go客户端上传文件测试</h3><ul>
+<li><p>下载包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/weilaihui/fdfs_client</span><br></pre></td></tr></table></figure>
+<p>这时候会报一个错：</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2018/10/18/Ubuntu下安装fastDFS使用/10.png" alt=""></p>
+<ul>
+<li><p>这是因为我们的网络有防火墙，不能直接去google下载相应的包，所以就失败啦</p>
+<p>解决办法：</p>
+<ul>
+<li><p>在<code>~/workspace/go/src</code>目录下面创建一个golang.org/x目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd  ~/workspace/go/src</span><br><span class="line">mkdir -p golang.org/x</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入golang.org/x下载两个包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd golang.org/x</span><br><span class="line">git clone https://github.com/golang/crypto.git</span><br><span class="line">git clone https://github.com/golang/sys.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后再执行最初的下载命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/weilaihui/fdfs_client</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>go操作fastDFS的方法</p>
+<ul>
+<li><p>先导包，把我们下载的包导入</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"github.com/weilaihui/fdfs_client"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>导包之后,我们需要指定配置文件生成客户端对象</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client,_:=fdfs_client.NewFdfsClient(<span class="string">"/etc/fdfs/client.conf"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接着我们就可以通过client对象执行文件上传，上传有两种方法，一种是通过文件名，一种是通过字节流</p>
+<ul>
+<li><p>通过文件名上传<strong>UploadByFilename </strong>,参数是文件名（必须通过文件名能找到要上传的文件），返回值是fastDFS定义的一个结构体，包含组名和文件ID两部分内容</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdfsresponse,err := client.UploadByFilename(<span class="string">"flieName"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过字节流上传<strong>UploadByBuffer</strong>,参数是字节数组和文件后缀，返回值和通过文件名上传一样。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdfsresponse,err := client.UploadByBuffer(fileBuffer,ext)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">//先导包</span><br><span class="line">import &quot;github.com/weilaihui/fdfs_client&quot;</span><br><span class="line"></span><br><span class="line">//通过GetFile获取文件信息</span><br><span class="line">f,h,err := this.GetFile(filePath)</span><br><span class="line">defer f.Close()</span><br><span class="line">//然后对上传的文件进行格式和大小判断</span><br><span class="line">//1.判断文件格式</span><br><span class="line">ext := path.Ext(h.Filename)</span><br><span class="line">if ext != &quot;.jpg&quot; &amp;&amp; ext != &quot;.png&quot;&amp;&amp;ext != &quot;.jpeg&quot;&#123;</span><br><span class="line">	beego.Info(&quot;上传文件格式不正确&quot;)</span><br><span class="line">	return &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//2.文件大小</span><br><span class="line">if h.Size&gt;5000000&#123;</span><br><span class="line">	beego.Info(&quot;文件太大，不允许上传&quot;)</span><br><span class="line">	return &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line">//3.上传文件</span><br><span class="line">//先获取一个[]byte</span><br><span class="line">fileBuffer := make([]byte,h.Size)</span><br><span class="line">//把文件数据读入到fileBuffer中</span><br><span class="line">f.Read(fileBuffer)</span><br><span class="line">//获取client对象</span><br><span class="line">client := fdfs_client.NewFdfsClient(&quot;/etc/fdfs/client.conf&quot;)</span><br><span class="line">//上传</span><br><span class="line">fdfsresponse,_:=client.UploadByBuffer(fileBuffer,ext)</span><br><span class="line">//返回文件ID</span><br><span class="line">return fdfsresponse.RemoteFileId</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/10/18/Ubuntu下安装fastDFS使用/">Ubuntu下安装fastDFS使用</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年10月18日 - 13:10</p>
+  <p><span>最后更新:</span>2018年10月18日 - 13:10</p>
+  <p><span>原始链接:</span><a href="/2018/10/18/Ubuntu下安装fastDFS使用/" title="Ubuntu下安装fastDFS使用">http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/10/18/Ubuntu下安装fastDFS使用/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fastDFS/" rel="tag"><i class="fa fa-tag"></i> fastDFS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/18/GO语言RSA加密解密/" rel="next" title="GO语言RSA加密解密">
+                <i class="fa fa-chevron-left"></i> GO语言RSA加密解密
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/18/redis搭建主从/" rel="prev" title="redis搭建主从">
+                redis搭建主从 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">136</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">214.6k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-利用fastDFS存储"><span class="nav-number">1.</span> <span class="nav-text">1.利用fastDFS存储</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1什么是FastDFS"><span class="nav-number">1.1.</span> <span class="nav-text">1.1什么是FastDFS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2文件上传流程"><span class="nav-number">1.2.</span> <span class="nav-text">1.2文件上传流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3文件下载流程"><span class="nav-number">1.3.</span> <span class="nav-text">1.3文件下载流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5FastDFS安装"><span class="nav-number">2.</span> <span class="nav-text">1.5FastDFS安装</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-1安装FastDFS依赖包"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.5.1安装FastDFS依赖包</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-2安装FastDFS"><span class="nav-number">2.0.2.</span> <span class="nav-text">1.5.2安装FastDFS</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-3配置跟踪服务器tracker"><span class="nav-number">2.0.3.</span> <span class="nav-text">1.5.3配置跟踪服务器tracker</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-4配置存储服务器storage"><span class="nav-number">2.0.4.</span> <span class="nav-text">1.5.4配置存储服务器storage</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-5启动tracker和storage"><span class="nav-number">2.0.5.</span> <span class="nav-text">1.5.5启动tracker和storage</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-6测试是否安装成功"><span class="nav-number">2.0.6.</span> <span class="nav-text">1.5.6测试是否安装成功</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-7安装fastdfs-nginx-module"><span class="nav-number">2.0.7.</span> <span class="nav-text">1.5.7安装fastdfs-nginx-module</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#到这里我们就已经安装完成了"><span class="nav-number">3.</span> <span class="nav-text">到这里我们就已经安装完成了</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6使用go客户端上传文件测试"><span class="nav-number"></span> <span class="nav-text">1.6使用go客户端上传文件测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试代码"><span class="nav-number">1.</span> <span class="nav-text">测试代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
