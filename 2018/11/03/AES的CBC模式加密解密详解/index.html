@@ -119,7 +119,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/AES的CBC模式加密解密详解/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/AES的CBC模式加密解密详解/2.png">
-<meta property="og:updated_time" content="2018-11-03T02:58:49.422Z">
+<meta property="og:updated_time" content="2018-11-03T03:19:57.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AES的CBC模式加密解密详解">
 <meta name="twitter:description" content="1.AES AES（Advanced Encryption Standard）是取代其前任标准（DES）而成为新标准的一种对称密码算法。全世界的企业和密码学家提交了多个对称密码算法作为AES的候选，最终在2000年从这些候选算法中选出了一种名为==Rijndael==的对称密码算法，并将其确定为了AES。 Rijndael是由比利时密码学家Joan Daemen和Vincent Rijmen设汁的">
@@ -374,7 +374,7 @@
                 
               
 
-              <time title="创建时间：2018-11-03 10:49:07 / 修改时间：10:58:49" itemprop="dateCreated datePublished" datetime="2018-11-03T10:49:07+08:00">2018-11-03</time>
+              <time title="创建时间：2018-11-03 10:49:07 / 修改时间：11:19:57" itemprop="dateCreated datePublished" datetime="2018-11-03T10:49:07+08:00">2018-11-03</time>
             
 
             
@@ -450,26 +450,12 @@
 <p>通过上面的结构我们可以发现输入的所有比特在一轮中都会被加密。和每一轮都只加密一半输人的比特的Feistel网络相比，这种方式的优势在于加密所需要的轮数更少。此外，这种方式还有一个优势，即SubBytes，ShiftRows和MixColumns可以分别按字节、行和列为单位进行并行计算。</p>
 </blockquote>
 <p><img src="/2018/11/03/AES的CBC模式加密解密详解/1.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SubBytes		-- 	字节代换</span><br><span class="line"></span><br><span class="line">ShiftRows		--	行移位代换</span><br><span class="line"></span><br><span class="line">MixColumns	--	列混淆	</span><br><span class="line"></span><br><span class="line">AddRoundKey	--	轮密钥加</span><br></pre></td></tr></table></figure>
 <blockquote>
-<font color="red">SubBytes        --     字节代换</font>
-
-<font color="red">ShiftRows        --    行移位代换</font>
-
-<font color="red">MixColumns    --    列混淆    </font>
-
-<font color="red">AddRoundKey    --    轮密钥加</font>
-
 <p>下图展示了AES中一轮的解密过程。从图中我们可以看出，SubBytes、ShiftRows、MixColumns分别存在反向运算InvSubBytes、InvShiftRows、InvMixColumns，这是因为AES不像Feistel网络一样能够用同一种结构实现加密和解密。</p>
 </blockquote>
 <p><img src="/2018/11/03/AES的CBC模式加密解密详解/2.png" alt=""></p>
-<blockquote>
-<font color="red">InvSubBytes        --    逆字节替代</font>
-
-<font color="red">InvShiftRows        --    逆行移位</font>
-
-<font color="red">InvMixColumns    --    逆列混淆</font>
-
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">InvSubBytes		--	逆字节替代</span><br><span class="line"></span><br><span class="line">InvShiftRows		--	逆行移位</span><br><span class="line"></span><br><span class="line">InvMixColumns	--	逆列混淆</span><br></pre></td></tr></table></figure>
 <h4 id="3-Go中对AES的使用"><a href="#3-Go中对AES的使用" class="headerlink" title="3.Go中对AES的使用"></a>3.Go中对AES的使用</h4><h5 id="加解密实现思路"><a href="#加解密实现思路" class="headerlink" title="加解密实现思路"></a>加解密实现思路</h5><ul>
 <li><p><strong>加密 - CBC分组模式</strong></p>
 <blockquote>
@@ -548,7 +534,7 @@
   <p><span>本文标题:</span><a href="/2018/11/03/AES的CBC模式加密解密详解/">AES的CBC模式加密解密详解</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
   <p><span>发布时间:</span>2018年11月03日 - 10:11</p>
-  <p><span>最后更新:</span>2018年11月03日 - 10:11</p>
+  <p><span>最后更新:</span>2018年11月03日 - 11:11</p>
   <p><span>原始链接:</span><a href="/2018/11/03/AES的CBC模式加密解密详解/" title="AES的CBC模式加密解密详解">http://yoursite.com/2018/11/03/AES的CBC模式加密解密详解/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/11/03/AES的CBC模式加密解密详解/"  aria-label="复制成功！"></i></span>
   </p>
@@ -798,7 +784,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">231.9k</span>
+      <span class="site-state-item-count">232.0k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 

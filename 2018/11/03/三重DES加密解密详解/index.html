@@ -109,20 +109,20 @@
 
 
 
-  <meta name="description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。 三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。  2.三重DES的加密 三重DES的加解密机制如图所示： 加-&amp;gt;解-&amp;gt;加 -&amp;gt; 目的是为了兼容des 3des秘">
+  <meta name="description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。 三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。  2.三重DES的加密12345678910111213141516171819三重DES的加解密机制如图所示：加-&amp;gt;解-&amp;">
 <meta name="keywords" content="go语言,加密算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="三重DES加密解密详解">
 <meta property="og:url" content="http://yoursite.com/2018/11/03/三重DES加密解密详解/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。 三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。  2.三重DES的加密 三重DES的加解密机制如图所示： 加-&amp;gt;解-&amp;gt;加 -&amp;gt; 目的是为了兼容des 3des秘">
+<meta property="og:description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。 三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。  2.三重DES的加密12345678910111213141516171819三重DES的加解密机制如图所示：加-&amp;gt;解-&amp;">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/三重DES加密解密详解/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/三重DES加密解密详解/2.png">
-<meta property="og:updated_time" content="2018-11-03T02:55:24.786Z">
+<meta property="og:updated_time" content="2018-11-03T03:21:13.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="三重DES加密解密详解">
-<meta name="twitter:description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。 三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。  2.三重DES的加密 三重DES的加解密机制如图所示： 加-&amp;gt;解-&amp;gt;加 -&amp;gt; 目的是为了兼容des 3des秘">
+<meta name="twitter:description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。 三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。  2.三重DES的加密12345678910111213141516171819三重DES的加解密机制如图所示：加-&amp;gt;解-&amp;">
 <meta name="twitter:image" content="http://yoursite.com/2018/11/03/三重DES加密解密详解/1.png">
 
 
@@ -374,7 +374,7 @@
                 
               
 
-              <time title="创建时间：2018-11-03 10:48:38 / 修改时间：10:55:24" itemprop="dateCreated datePublished" datetime="2018-11-03T10:48:38+08:00">2018-11-03</time>
+              <time title="创建时间：2018-11-03 10:48:38 / 修改时间：11:21:13" itemprop="dateCreated datePublished" datetime="2018-11-03T10:48:38+08:00">2018-11-03</time>
             
 
             
@@ -434,29 +434,16 @@
 <p>现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。</p>
 <p><strong>三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES</strong>。</p>
 </blockquote>
-<h4 id="2-三重DES的加密"><a href="#2-三重DES的加密" class="headerlink" title="2.三重DES的加密"></a>2.三重DES的加密</h4><blockquote>
-<p>三重DES的加解密机制如图所示：</p>
-<p>加-&gt;解-&gt;加 -&gt; 目的是为了兼容des</p>
-<p>3des秘钥长度24字节 = 1234567a 1234567b 1234567a</p>
-<p>明文: 10</p>
-<p>秘钥1: 2</p>
-<p>秘钥2: 3</p>
-<p>秘钥3: 4</p>
-<p>加密算法: 明文+秘钥</p>
-<p>解密算法: 密文-秘钥</p>
-<p>10+2-3+4</p>
-</blockquote>
+<h4 id="2-三重DES的加密"><a href="#2-三重DES的加密" class="headerlink" title="2.三重DES的加密"></a>2.三重DES的加密</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">三重DES的加解密机制如图所示：</span><br><span class="line"></span><br><span class="line">加-&gt;解-&gt;加 -&gt; 目的是为了兼容des</span><br><span class="line"></span><br><span class="line">3des秘钥长度24字节 = 1234567a 1234567b 1234567a</span><br><span class="line"></span><br><span class="line">明文: 10</span><br><span class="line"></span><br><span class="line">秘钥1: 2</span><br><span class="line"></span><br><span class="line">秘钥2: 3</span><br><span class="line"></span><br><span class="line">秘钥3: 4</span><br><span class="line"></span><br><span class="line">加密算法: 明文+秘钥</span><br><span class="line"></span><br><span class="line">解密算法: 密文-秘钥</span><br><span class="line"></span><br><span class="line">10+2-3+4</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/11/03/三重DES加密解密详解/1.png" alt=""></p>
 <p><img src="/2018/11/03/三重DES加密解密详解/2.png" alt=""></p>
 <blockquote>
-<blockquote>
-<p>明文经过三次DES处理才能变成最后的密文，由于<strong>DES密钥的长度实质上是56比特</strong>，因此<font color="red">三重DES的密钥长度就是56×3=168比特, 加上用于错误检测的标志位8x3, 共192bit</font>。</p>
-<p>从上图我们可以发现，三重DES并不是进行三次DES加密（加密—&gt;加密—&gt;加密），而是<font color="red"><strong>加密—&gt;解密—&gt;加密</strong></font>的过程。在加密算法中加人解密操作让人感觉很不可思议，实际上这个方法是IBM公司设计出来的，目的是为了让三重DES能够兼容普通的DES。</p>
-<p><font color="red">当三重DES中所有的密钥都相同时，三重DES也就等同于普通的DES了</font>。这是因为在前两步加密—&gt;解密之后，得到的就是最初的明文。因此，以前用DES加密的密文，就可以通过这种方式用三重DES来进行解密。也就是说，三重DES对DES具备向下兼容性。</p>
+<p>明文经过三次DES处理才能变成最后的密文，由于<strong>DES密钥的长度实质上是56比特</strong>，因此三重DES的密钥长度就是56×3=168比特, 加上用于错误检测的标志位8x3, 共192bit。</p>
+<p>从上图我们可以发现，三重DES并不是进行三次DES加密（加密—&gt;加密—&gt;加密），而是<strong>加密—&gt;解密—&gt;加密</strong>的过程。在加密算法中加人解密操作让人感觉很不可思议，实际上这个方法是IBM公司设计出来的，目的是为了让三重DES能够兼容普通的DES。</p>
+<p>当三重DES中所有的密钥都相同时，三重DES也就等同于普通的DES了。这是因为在前两步加密—&gt;解密之后，得到的就是最初的明文。因此，以前用DES加密的密文，就可以通过这种方式用三重DES来进行解密。也就是说，三重DES对DES具备向下兼容性。</p>
 <p>如果密钥1和密钥3使用相同的密钥，而密钥2使用不同的密钥（也就是只使用两个DES密钥），这种三重DES就称为DES-EDE2。EDE表示的是加密（Encryption) —&gt;解密（Decryption)—&gt;加密（Encryption）这个流程。</p>
 <p>密钥1、密钥2、密钥3全部使用不同的比特序列的三重DES称为DES-EDE3。</p>
 <p>尽管三重DES目前还被银行等机构使用，但其处理速度不高，而且在安全性方面也逐渐显现出了一些问题。</p>
-</blockquote>
 </blockquote>
 <h4 id="3-Go中对3DES的操作"><a href="#3-Go中对3DES的操作" class="headerlink" title="3.Go中对3DES的操作"></a>3.Go中对3DES的操作</h4><h5 id="加解密实现思路"><a href="#加解密实现思路" class="headerlink" title="加解密实现思路"></a>加解密实现思路</h5><ul>
 <li><p><strong>加密 - CBC分组模式</strong></p>
@@ -506,7 +493,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">函数对应的包: <span class="keyword">import</span> <span class="string">"crypto/cipher"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCBCDecrypter</span><span class="params">(b Block, iv []<span class="keyword">byte</span>)</span> <span class="title">BlockMode</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">b</span>: 使用<span class="title">des</span>.<span class="title">NewTripleDESCipher</span> 函数创建出的<span class="title">Block</span>接口对象</span></span><br><span class="line"><span class="function">    - 参数 <span class="title">iv</span>: 事先准备好的一个长度为一个分组长度的比特序列, 每个分组为64<span class="title">bit</span>, 即8<span class="title">byte</span>, </span></span><br><span class="line"><span class="function">               该序列的值需要和<span class="title">NewCBCEncrypter</span>函数的第二个参数<span class="title">iv</span>值相同</span></span><br><span class="line"><span class="function">    - 返回值: 得到的<span class="title">BlockMode</span>接口对象</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>
+
       
     </div>
 
@@ -536,7 +523,7 @@
   <p><span>本文标题:</span><a href="/2018/11/03/三重DES加密解密详解/">三重DES加密解密详解</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
   <p><span>发布时间:</span>2018年11月03日 - 10:11</p>
-  <p><span>最后更新:</span>2018年11月03日 - 10:11</p>
+  <p><span>最后更新:</span>2018年11月03日 - 11:11</p>
   <p><span>原始链接:</span><a href="/2018/11/03/三重DES加密解密详解/" title="三重DES加密解密详解">http://yoursite.com/2018/11/03/三重DES加密解密详解/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/11/03/三重DES加密解密详解/"  aria-label="复制成功！"></i></span>
   </p>
@@ -786,7 +773,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">231.9k</span>
+      <span class="site-state-item-count">232.0k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
@@ -845,7 +832,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-三重DES"><span class="nav-number">1.</span> <span class="nav-text">1.三重DES</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-三重DES的加密"><span class="nav-number">1.1.</span> <span class="nav-text">2.三重DES的加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Go中对3DES的操作"><span class="nav-number">1.2.</span> <span class="nav-text">3.Go中对3DES的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加解密实现思路"><span class="nav-number">1.2.1.</span> <span class="nav-text">加解密实现思路</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#加解密的代码实现"><span class="nav-number">1.2.2.</span> <span class="nav-text">加解密的代码实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">2.</span> <span class="nav-text"> </span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-三重DES"><span class="nav-number">1.</span> <span class="nav-text">1.三重DES</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-三重DES的加密"><span class="nav-number">1.1.</span> <span class="nav-text">2.三重DES的加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Go中对3DES的操作"><span class="nav-number">1.2.</span> <span class="nav-text">3.Go中对3DES的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加解密实现思路"><span class="nav-number">1.2.1.</span> <span class="nav-text">加解密实现思路</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#加解密的代码实现"><span class="nav-number">1.2.2.</span> <span class="nav-text">加解密的代码实现</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
