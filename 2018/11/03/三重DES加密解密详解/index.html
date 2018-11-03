@@ -119,7 +119,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/三重DES加密解密详解/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/三重DES加密解密详解/2.png">
-<meta property="og:updated_time" content="2018-11-03T04:13:07.809Z">
+<meta property="og:updated_time" content="2018-11-03T04:29:36.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="三重DES加密解密详解">
 <meta name="twitter:description" content="1.三重DES 现在DES已经可以在现实的时间内被暴力破解，因此我们需要一种用来替代DES的分组密码，三重DES就是出于这个目的被开发出来的。  1三重DES（triple-DES）是为了增加DES的强度，==将DES重复3次所得到的一种密码算法==，通常缩写为3DES。 2.三重DES的加密12345678910111213141516171819三重DES的加解密机制如图所示：加-&amp;gt;解-">
@@ -374,7 +374,7 @@
                 
               
 
-              <time title="创建时间：2018-11-03 10:48:38 / 修改时间：12:13:07" itemprop="dateCreated datePublished" datetime="2018-11-03T10:48:38+08:00">2018-11-03</time>
+              <time title="创建时间：2018-11-03 10:48:38 / 修改时间：12:29:36" itemprop="dateCreated datePublished" datetime="2018-11-03T10:48:38+08:00">2018-11-03</time>
             
 
             
@@ -454,13 +454,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 3DES解密</span><br><span class="line">func TripleDESDecrypt(src, key []byte) []byte &#123;</span><br><span class="line">	// 1. 创建3DES算法的Block接口对象</span><br><span class="line">	block, err := des.NewTripleDESCipher(key)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		panic(err)</span><br><span class="line">	&#125;</span><br><span class="line">	// 2. 创建密码分组为链接模式, 底层使用3DES解密的BlockMode模型</span><br><span class="line">	blockMode := cipher.NewCBCDecrypter(block, key[:8])</span><br><span class="line">	// 3. 解密</span><br><span class="line">	dst := src</span><br><span class="line">	blockMode.CryptBlocks(dst, src)</span><br><span class="line">	// 4. 去掉尾部填充的数据</span><br><span class="line">	dst = PKCS5UnPadding(dst)</span><br><span class="line">	return dst</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>重要的函数说明</p>
 <ol>
-<li><p>生成一个底层使用3DES加/解密的Block接口对象</p>
+<li><p>生成一个底层使用3DES加解密的Block接口对象</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">函数对应的包: <span class="keyword">import</span> <span class="string">"crypto/des"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewTripleDESCipher</span><span class="params">(key []<span class="keyword">byte</span>)</span> <span class="params">(cipher.Block, error)</span></span></span><br><span class="line"><span class="function">	- 参数 <span class="title">key</span>: 3<span class="title">des</span>对称加密使用的密码, 密码长度为<span class="params">(64*3)</span><span class="title">bit</span>, 即<span class="params">(8*3)</span><span class="title">byte</span></span></span><br><span class="line"><span class="function">	- 返回值 <span class="title">cipher</span>.<span class="title">Block</span>: 创建出的使用<span class="title">DES</span>加/解密的<span class="title">Block</span>接口对象</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>创建一个密码分组为CBC模式, 底层使用b加密的BlockMode接口对象</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">函数对应的包: <span class="keyword">import</span> <span class="string">"crypto/cipher"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCBCEncrypter</span><span class="params">(b Block, iv []<span class="keyword">byte</span>)</span> <span class="title">BlockMode</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">b</span>: 使用<span class="title">des</span>.<span class="title">NewTripleDESCipher</span> 函数创建出的<span class="title">Block</span>接口对象</span></span><br><span class="line"><span class="function">    - 参数 <span class="title">iv</span>: 事先准备好的一个长度为一个分组长度的比特序列, 每个分组为64<span class="title">bit</span>, 即8<span class="title">byte</span></span></span><br><span class="line"><span class="function">    - 返回值: 得到的<span class="title">BlockMode</span>接口对象</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>使用cipher包的BlockMode接口对象对数据进行加/解密</p>
+<li><p>使用cipher包的BlockMode接口对象对数据进行加解密</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">接口对应的包: <span class="keyword">import</span> <span class="string">"crypto/cipher"</span></span><br><span class="line"><span class="keyword">type</span> BlockMode <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="comment">// 返回加密字节块的大小</span></span><br><span class="line">    BlockSize() <span class="keyword">int</span></span><br><span class="line">    <span class="comment">// 加密或解密连续的数据块，src的尺寸必须是块大小的整数倍，src和dst可指向同一内存地址</span></span><br><span class="line">    CryptBlocks(dst, src []<span class="keyword">byte</span>)</span><br><span class="line">&#125;</span><br><span class="line">接口中的 CryptBlocks(dst, src []<span class="keyword">byte</span>) 方法:</span><br><span class="line">    - 参数 dst: 传出参数, 存储加密或解密运算之后的结果 </span><br><span class="line">    - 参数 src: 传入参数, 需要进行加密或解密的数据切片(字符串)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>创建一个密码分组为CBC模式, 底层使用b解密的BlockMode接口对象</p>
