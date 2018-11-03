@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="非对称加密通信流程下面我们来看一看使用公钥密码的通信流程。和以前一样、我们还是假设Alice要给Bob发送一条消息，Alice是发送者，Bob是接收者，而这一次窃听者Eve依然能够窃所到他们之间的通信内容。 在公非对称加密通信中，通信过程是由接收者Bob来启动的。  Bob生成一个包含公钥和私钥的密钥对。  私钥由Bob自行妥善保管。   Bob将自己的公钥发送给Alice  Bob的公钥被窃听者">
+<meta name="keywords" content="go语言,加密算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="非对称加密RSA详解">
+<meta property="og:url" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="非对称加密通信流程下面我们来看一看使用公钥密码的通信流程。和以前一样、我们还是假设Alice要给Bob发送一条消息，Alice是发送者，Bob是接收者，而这一次窃听者Eve依然能够窃所到他们之间的通信内容。 在公非对称加密通信中，通信过程是由接收者Bob来启动的。  Bob生成一个包含公钥和私钥的密钥对。  私钥由Bob自行妥善保管。   Bob将自己的公钥发送给Alice  Bob的公钥被窃听者">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/6.png">
+<meta property="og:updated_time" content="2018-11-03T05:09:37.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="非对称加密RSA详解">
+<meta name="twitter:description" content="非对称加密通信流程下面我们来看一看使用公钥密码的通信流程。和以前一样、我们还是假设Alice要给Bob发送一条消息，Alice是发送者，Bob是接收者，而这一次窃听者Eve依然能够窃所到他们之间的通信内容。 在公非对称加密通信中，通信过程是由接收者Bob来启动的。  Bob生成一个包含公钥和私钥的密钥对。  私钥由Bob自行妥善保管。   Bob将自己的公钥发送给Alice  Bob的公钥被窃听者">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/03/非对称加密RSA详解/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>非对称加密RSA详解 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/非对称加密RSA详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">非对称加密RSA详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-03 12:51:19 / 修改时间：13:09:37" itemprop="dateCreated datePublished" datetime="2018-11-03T12:51:19+08:00">2018-11-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="非对称加密通信流程"><a href="#非对称加密通信流程" class="headerlink" title="非对称加密通信流程"></a>非对称加密通信流程</h3><p>下面我们来看一看使用公钥密码的通信流程。和以前一样、我们还是假设Alice要给Bob发送一条消息，Alice是发送者，Bob是接收者，而这一次窃听者Eve依然能够窃所到他们之间的通信内容。</p>
+<p>在公非对称加密通信中，通信过程是由接收者Bob来启动的。</p>
+<ol>
+<li><p>Bob生成一个包含公钥和私钥的密钥对。</p>
+<blockquote>
+<p>私钥由Bob自行妥善保管。</p>
+</blockquote>
+</li>
+<li><p>Bob将自己的公钥发送给Alice</p>
+<blockquote>
+<p>Bob的公钥被窃听者Eve截获也没关系。</p>
+<p>将公钥发送给Alice，表示Bob请Alice用这个公钥对消息进行加密并发送给他。</p>
+</blockquote>
+</li>
+<li><p>Alice用Bob的公钥对消息进行加密。</p>
+<blockquote>
+<p>加密后的消息只有用Bob的私钥才能够解密。</p>
+<p>虽然Alice拥有Bob的公钥，但用Bob的公钥是无法对密文进行解密的。</p>
+</blockquote>
+</li>
+<li><p>Alice将密文发送给Bobo</p>
+<blockquote>
+<p>密文被窃听者Eve截获也没关系。Eve可能拥有Bob的公钥，但是用Bob的公钥是无法进行解密的。</p>
+</blockquote>
+</li>
+<li><p>Bob用自己的私钥对密文进行解密。</p>
+<blockquote>
+<p>请参考下图, 看一看在Alice和Bob之间到底传输了哪些信息。其实它们之间所传输的信息只有两个：Bob的公钥以及用Bob的公钥加密的密文。由于Bob的私钥没有出现在通信内容中，因此窃听者Eve无法对密文进行解密。</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="/2018/11/03/非对称加密RSA详解/1.png" alt=""></p>
+<blockquote>
+<p>窃听者Eve可能拥有Bob的公钥，但是Bob的公钥只是加密密钥，而不是解密密钥，因此窃听者Eve就无法完成解密操作。</p>
+</blockquote>
+<h4 id="1-RSA"><a href="#1-RSA" class="headerlink" title="1.RSA"></a>1.RSA</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">非对称加密的密钥分为加密密钥和解密密钥，但这到底是怎样做到的呢？本节中我们来讲解现在使用最广泛的公钥密码算法一一RSA。</span><br><span class="line"></span><br><span class="line">RSA是一种非对称加密算法，它的名字是由它的三位开发者，即RonRivest、AdiShamir和LeonardAdleman 的姓氏的首字母组成的（Rivest-Shamir-Adleman ）。</span><br><span class="line"></span><br><span class="line">RSA可以被用于非对称加密和数字签名，关于数字签名我们将在后面章节进行讲解。</span><br><span class="line"></span><br><span class="line">1983年，RSA公司为RSA算法在美国取得了专利，但现在该专利已经过期。</span><br></pre></td></tr></table></figure>
+<h4 id="2-RSA加密"><a href="#2-RSA加密" class="headerlink" title="2.RSA加密"></a>2.RSA加密</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&gt; 下面我们终于可以讲一讲非对称加密的代表—RSA的加密过程了。在RSA中，明文、密钥和密文都是数字。RSA的加密过程可以用下列公式来表达，如下。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">密文=明文 ^ E  mod     N（RSA加密）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 也就是说，RSA的密文是对代表明文的数字的E次方求modN的结果。换句话说，就是将明文自己做E次乘法，然后将其结果除以N求余数，这个余数就是密文。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 咦，就这么简单？</span><br><span class="line">&gt;</span><br><span class="line">&gt; 对，就这么简单。仅仅对明文进行乘方运算并求mod即可，这就是整个加密的过程。在对称密码中，出现了很多复杂的函数和操作，就像做炒鸡蛋一样将比特序列挪来挪去，还要进行XOR(按位异或)等运算才能完成，但RSA却不同，它非常简洁。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 对了，加密公式中出现的两个数一一一E和N，到底都是什么数呢？RSA的加密是求明文的E次方modN，因此只要知道E和N这两个数，任何人都可以完成加密的运算。所以说，E和N是RSA加密的密钥，也就是说，**E和N的组合就是公钥**。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 不过，E和N并不是随便什么数都可以的，它们是经过严密计算得出的。顺便说一句，E是加密（Encryption）的首字母，N是数字（Number)的首字母。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 有一个很容易引起误解的地方需要大家注意一一E和N这两个数并不是密钥对（公钥和私钥的密钥对）。E和N两个数才组成了一个公钥，因此我们一般会写成 “公钥是(E，N)” 或者 “公钥是&#123;E, N&#125;&quot; 这样的形式，将E和N用括号括起来。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 现在大家应该已经知道，==RSA的加密就是 “求E次方的modN&quot;==，接下来我们来看看RSA的解密。</span><br></pre></td></tr></table></figure>
+<h4 id="3-RSA解密"><a href="#3-RSA解密" class="headerlink" title="3.RSA解密"></a>3.RSA解密</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt; RSA的解密和加密一样简单，可以用下面的公式来表达：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">明文=密文^DmodN（RSA解密）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 也就是说，对表示密文的数字的D次方求modN就可以得到明文。换句话说，将密文自己做D次乘法，再对其结果除以N求余数，就可以得到明文。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 这里所使用的数字N和加密时使用的数字N是相同的。数D和数N组合起来就是RSA的解密密钥，因此D和N的组合就是私钥。只有知道D和N两个数的人才能够完成解密的运算。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 大家应该已经注意到，在RSA中，加密和解密的形式是相同的。加密是求 &quot;E次方的mod N”，而解密则是求 &quot;D次方的modN”，这真是太美妙了。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 当然，D也并不是随便什么数都可以的，作为解密密钥的D，和数字E有着相当紧密的联系。否则，用E加密的结果可以用D来解密这样的机制是无法实现的。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 顺便说一句，D是解密〈Decryption）的首字母，N是数字（Number）的首字母。</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我们将上面讲过的内容整理一下，如下表所示。</p>
+</blockquote>
+<p><img src="/2018/11/03/非对称加密RSA详解/2.png" alt=""></p>
+<p>RSA的加密和解密</p>
+<p><img src="/2018/11/03/非对称加密RSA详解/3.png" alt=""></p>
+<h4 id="Go中生成公钥和私钥"><a href="#Go中生成公钥和私钥" class="headerlink" title="Go中生成公钥和私钥"></a>Go中生成公钥和私钥</h4><p>需要引入的包</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"crypto/rsa"</span></span><br><span class="line">	<span class="string">"crypto/rand"</span></span><br><span class="line">	<span class="string">"crypto/x509"</span></span><br><span class="line">	<span class="string">"encoding/pem"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>生成私钥操作流程概述</p>
+<blockquote>
+<ol>
+<li>使用rsa中的GenerateKey方法生成私钥</li>
+<li>通过x509标准将得到的ras私钥序列化为ASN.1 的 DER编码字符串</li>
+<li>将私钥字符串设置到pem格式块中</li>
+<li>通过pem将设置好的数据进行编码, 并写入磁盘文件中</li>
+</ol>
+</blockquote>
+<p>生成公钥操作流程</p>
+<blockquote>
+<ol>
+<li>从得到的私钥对象中将公钥信息取出</li>
+<li>通过x509标准将得到 的rsa公钥序列化为字符串</li>
+<li>将公钥字符串设置到pem格式块中</li>
+<li>通过pem将设置好的数据进行编码, 并写入磁盘文件</li>
+</ol>
+</blockquote>
+<p>生成公钥和私钥的源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">// 参数bits: 指定生成的秘钥的长度, 单位: bit</span><br><span class="line">func RsaGenKey(bits int) error&#123;</span><br><span class="line">	// 1. 生成私钥文件</span><br><span class="line">	// GenerateKey函数使用随机数据生成器random生成一对具有指定字位数的RSA密钥</span><br><span class="line">	// 参数1: Reader是一个全局、共享的密码用强随机数生成器</span><br><span class="line">	// 参数2: 秘钥的位数 - bit</span><br><span class="line">	privateKey, err := rsa.GenerateKey(rand.Reader, bits)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 2. MarshalPKCS1PrivateKey将rsa私钥序列化为ASN.1 PKCS#1 DER编码</span><br><span class="line">	derStream := x509.MarshalPKCS1PrivateKey(privateKey)</span><br><span class="line">	// 3. Block代表PEM编码的结构, 对其进行设置</span><br><span class="line">	block := pem.Block&#123;</span><br><span class="line">		Type: &quot;RSA PRIVATE KEY&quot;,//&quot;RSA PRIVATE KEY&quot;,</span><br><span class="line">		Bytes: derStream,</span><br><span class="line">	&#125;</span><br><span class="line">	// 4. 创建文件</span><br><span class="line">	privFile, err := os.Create(&quot;private.pem&quot;)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 5. 使用pem编码, 并将数据写入文件中</span><br><span class="line">	err = pem.Encode(privFile, &amp;block)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 6. 最后的时候关闭文件</span><br><span class="line">	defer privFile.Close()</span><br><span class="line"></span><br><span class="line">	// 7. 生成公钥文件</span><br><span class="line">	publicKey := privateKey.PublicKey</span><br><span class="line">	derPkix, err := x509.MarshalPKIXPublicKey(&amp;publicKey)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	block = pem.Block&#123;</span><br><span class="line">		Type: &quot;RSA PUBLIC KEY&quot;,//&quot;PUBLIC KEY&quot;,</span><br><span class="line">		Bytes: derPkix,</span><br><span class="line">	&#125;</span><br><span class="line">	pubFile, err := os.Create(&quot;public.pem&quot;)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 8. 编码公钥, 写入文件</span><br><span class="line">	err = pem.Encode(pubFile, &amp;block)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		panic(err)</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	defer pubFile.Close()</span><br><span class="line"></span><br><span class="line">	return nil</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用完会在本地生成两个文件。保存好私钥文件和公钥文件</p>
+<p><img src="/2018/11/03/非对称加密RSA详解/4.png" alt=""></p>
+<p><img src="/2018/11/03/非对称加密RSA详解/5.png" alt=""></p>
+<p><img src="/2018/11/03/非对称加密RSA详解/6.png" alt=""></p>
+<p>重要的函数介绍:</p>
+<ol>
+<li><p>GenerateKey函数使用随机数据生成器random生成一对具有指定字位数的RSA密钥。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"crypto/rsa"</span> 包中的函数</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GenerateKey</span><span class="params">(random io.Reader, bits <span class="keyword">int</span>)</span> <span class="params">(priv *PrivateKey, err error)</span></span></span><br><span class="line"><span class="function">    - 参数1: <span class="title">io</span>.<span class="title">Reader</span>: 赋值为: <span class="title">rand</span>.<span class="title">Reader</span></span></span><br><span class="line"><span class="function">        -- <span class="title">rand</span>包实现了用于加解密的更安全的随机数生成器。</span></span><br><span class="line"><span class="function">        -- <span class="title">var</span> <span class="title">Reader</span> <span class="title">io</span>.<span class="title">Reader</span> <span class="params">(rand包中的变量)</span></span></span><br><span class="line"><span class="function">    - 参数2: <span class="title">bits</span>: 秘钥长度</span></span><br><span class="line"><span class="function">    - 返回值1: 代表一个<span class="title">RSA</span>私钥。</span></span><br><span class="line"><span class="function">    - 返回值2: 错误信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过x509 将rsa私钥序列化为ASN.1 PKCS1 DER编码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"crypto/x509"</span> 包中的函数 (x509包解析X<span class="number">.509</span>编码的证书和密钥)。</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">MarshalPKCS1PrivateKey</span><span class="params">(key *rsa.PrivateKey)</span> []<span class="title">byte</span></span></span><br><span class="line"><span class="function">    - 参数1: 通过<span class="title">rsa</span>.<span class="title">GenerateKey</span>得到的私钥</span></span><br><span class="line"><span class="function">    - 返回值: 将私钥通过<span class="title">ASN</span>.1序列化之后得到的私钥编码数据</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置Pem编码结构</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Block代表PEM编码的结构。</span><br><span class="line"><span class="keyword">type</span> Block <span class="keyword">struct</span> &#123;</span><br><span class="line">    Type    <span class="keyword">string</span>            <span class="comment">// 得自前言的类型（如"RSA PRIVATE KEY"）</span></span><br><span class="line">    Headers <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> <span class="comment">// 可选的头项，Headers是可为空的多行键值对。</span></span><br><span class="line">    Bytes   []<span class="keyword">byte</span>            <span class="comment">// 内容解码后的数据，一般是DER编码的ASN.1结构</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将得到的Pem格式私钥通过文件指针写入磁盘中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"encoding/pem"</span> 包中的函数</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Encode</span><span class="params">(out io.Writer, b *Block)</span> <span class="title">error</span></span></span><br><span class="line"><span class="function">    - 参数1: 可进行写操作的<span class="title">IO</span>对象, 此处需要指定一个文件指针</span></span><br><span class="line"><span class="function">    - 参数2: 初始化完成的<span class="title">Pem</span>块对象, 即<span class="title">Block</span>对象</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过RSA私钥得到公钥</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 私钥</span></span><br><span class="line"><span class="keyword">type</span> PrivateKey <span class="keyword">struct</span> &#123;</span><br><span class="line">    PublicKey            <span class="comment">// 公钥</span></span><br><span class="line">    D         *big.Int   <span class="comment">// 私有的指数</span></span><br><span class="line">    Primes    []*big.Int <span class="comment">// N的素因子，至少有两个</span></span><br><span class="line">    <span class="comment">// 包含预先计算好的值，可在某些情况下加速私钥的操作</span></span><br><span class="line">    Precomputed PrecomputedValues</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 公钥</span></span><br><span class="line"><span class="keyword">type</span> PublicKey <span class="keyword">struct</span> &#123;</span><br><span class="line">    N   *big.Int <span class="comment">// 模</span></span><br><span class="line">    E   <span class="keyword">int</span>      <span class="comment">// 公开的指数</span></span><br><span class="line">&#125;</span><br><span class="line">通过私钥获取公钥</span><br><span class="line">publicKey := privateKey.PublicKey <span class="comment">// privateKey为私钥对象</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过x509将公钥序列化为PKIX格式DER编码。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"crypto/x509"</span> 包中的函数</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">MarshalPKIXPublicKey</span><span class="params">(pub <span class="keyword">interface</span>&#123;&#125;)</span> <span class="params">([]<span class="keyword">byte</span>, error)</span></span></span><br><span class="line"><span class="function">    - 参数1: 通过私钥对象得到的公钥</span></span><br><span class="line"><span class="function">    - 返回值1：将公钥通过<span class="title">ASN</span>.1序列化之后得到的编码数据</span></span><br><span class="line"><span class="function">    - 返回值2: 错误信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将公钥编码之后的数据格式化为Pem结构, 参考私钥的操作</p>
+</li>
+<li><p>将得到的Pem格式公钥通过文件指针写入磁盘中</p>
+</li>
+<li><p>生成的私钥和公钥文件数据</p>
+</li>
+</ol>
+<h2 id="Go中使用RSA"><a href="#Go中使用RSA" class="headerlink" title="Go中使用RSA"></a>Go中使用RSA</h2><ol>
+<li><p>操作步骤</p>
+<ul>
+<li><p>公钥加密</p>
+<blockquote>
+<ol>
+<li>将公钥文件中的公钥读出, 得到使用pem编码的字符串</li>
+<li>将得到的字符串解码</li>
+<li>使用x509将编码之后的公钥解析出来</li>
+<li>使用得到的公钥通过rsa进行数据加密</li>
+</ol>
+</blockquote>
+</li>
+<li><p>私钥解密</p>
+<blockquote>
+<ol>
+<li>将私钥文件中的私钥读出, 得到使用pem编码的字符串</li>
+<li>将得到的字符串解码</li>
+<li>使用x509将编码之后的私钥解析出来</li>
+<li>使用得到的私钥通过rsa进行数据解密</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>代码实现</p>
+<ul>
+<li><p>RSA公钥加密</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RSAEncrypt</span><span class="params">(src, filename []<span class="keyword">byte</span>)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1. 根据文件名将文件内容从文件中读出</span></span><br><span class="line">    file, err := os.Open(<span class="keyword">string</span>(filename))</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2. 读文件</span></span><br><span class="line">    info, _ := file.Stat()</span><br><span class="line">    allText := <span class="built_in">make</span>([]<span class="keyword">byte</span>, info.Size())</span><br><span class="line">    file.Read(allText)</span><br><span class="line">    <span class="comment">// 3. 关闭文件</span></span><br><span class="line">    file.Close()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 从数据中查找到下一个PEM格式的块</span></span><br><span class="line">    block, _ := pem.Decode(allText)</span><br><span class="line">    <span class="keyword">if</span> block == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 5. 解析一个DER编码的公钥</span></span><br><span class="line">    pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    pubKey := pubInterface.(*rsa.PublicKey)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 公钥加密</span></span><br><span class="line">    result, _ := rsa.EncryptPKCS1v15(rand.Reader, pubKey, src)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RSA私钥解密</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RSADecrypt</span><span class="params">(src, filename []<span class="keyword">byte</span>)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">  <span class="comment">// 1. 根据文件名将文件内容从文件中读出</span></span><br><span class="line">  file, err := os.Open(<span class="keyword">string</span>(filename))</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 2. 读文件</span></span><br><span class="line">  info, _ := file.Stat()</span><br><span class="line">  allText := <span class="built_in">make</span>([]<span class="keyword">byte</span>, info.Size())</span><br><span class="line">  file.Read(allText)</span><br><span class="line">  <span class="comment">// 3. 关闭文件</span></span><br><span class="line">  file.Close()</span><br><span class="line">  <span class="comment">// 4. 从数据中查找到下一个PEM格式的块</span></span><br><span class="line">  block, _ := pem.Decode(allText)</span><br><span class="line">  <span class="comment">// 5. 解析一个pem格式的私钥</span></span><br><span class="line">  privateKey , err := x509.ParsePKCS1PrivateKey(block.Bytes)</span><br><span class="line">  <span class="comment">// 6. 私钥解密</span></span><br><span class="line">  result, _ := rsa.DecryptPKCS1v15(rand.Reader, privateKey, src)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>重要的函数介绍</strong></p>
+<ol>
+<li><p>将得到的Pem格式私钥通过文件指针写入磁盘中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"encoding/pem"</span> 包中的函数</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Decode</span><span class="params">(data []<span class="keyword">byte</span>)</span> <span class="params">(p *Block, rest []<span class="keyword">byte</span>)</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">data</span>: 需要解析的数据块</span></span><br><span class="line"><span class="function">    - 返回值1: 从参数中解析出的<span class="title">PEM</span>格式的块</span></span><br><span class="line"><span class="function">    - 返回值2: 参数<span class="title">data</span>剩余的未被解码的数据</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解析一个DER编码的公钥 , pem中的Block结构体中的数据格式为ASN.1编码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">函数所属的包: <span class="string">"crypto/x509"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ParsePKIXPublicKey</span><span class="params">(derBytes []<span class="keyword">byte</span>)</span> <span class="params">(pub <span class="keyword">interface</span>&#123;&#125;, err error)</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">derBytes</span>: 从<span class="title">pem</span>的<span class="title">Block</span>结构体中取的<span class="title">ASN</span>.1编码数据</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">pub</span>: 接口对象, 实际是公钥数据</span></span><br><span class="line"><span class="function">    - 参数 <span class="title">err</span>:   错误信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解析一个DER编码的私钥 , pem中的Block结构体中的数据格式为ASN.1编码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">函数所属的包: <span class="string">"crypto/x509"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ParsePKCS1PrivateKey</span><span class="params">(der []<span class="keyword">byte</span>)</span> <span class="params">(key *rsa.PrivateKey, err error)</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">der</span>: 从<span class="title">pem</span>的<span class="title">Block</span>结构体中取的<span class="title">ASN</span>.1编码数据</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">key</span>: 解析出的私钥</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">err</span>: 错误信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将接口转换为公钥</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pubKey := pubInterface.(*rsa.PublicKey)</span><br><span class="line">    - pubInterface: ParsePKIXPublicKey函数返回的 <span class="keyword">interface</span>&#123;&#125; 对象</span><br><span class="line">    - pubInterface.(*rsa.PublicKey): 将pubInterface转换为公钥类型 rsa.PublicKey</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用公钥加密数据</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">函数所属的包: <span class="string">"crypto/rsa"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">EncryptPKCS1v15</span><span class="params">(rand io.Reader, pub *PublicKey, msg []<span class="keyword">byte</span>)</span> <span class="params">(out []<span class="keyword">byte</span>, err error)</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">rand</span>: 随机数生成器, 赋值为 <span class="title">rand</span>.<span class="title">Reader</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">pub</span>:  非对称加密加密使用的公钥</span></span><br><span class="line"><span class="function">    - 参数 <span class="title">msg</span>:  要使用公钥加密的原始数据</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">out</span>: 加密之后的数据</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">err</span>: 错误信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用私钥解密数据</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">函数所属的包: <span class="string">"crypto/rsa"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DecryptPKCS1v15</span><span class="params">(rand io.Reader, priv *PrivateKey, ciphertext []<span class="keyword">byte</span>)</span> <span class="params">(out []<span class="keyword">byte</span>, err error)</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">rand</span>: 随机数生成器, 赋值为 <span class="title">rand</span>.<span class="title">Reader</span></span></span><br><span class="line"><span class="function">    - 参数 <span class="title">priv</span>: 非对称加密解密使用的私钥</span></span><br><span class="line"><span class="function">    - 参数 <span class="title">ciphertext</span>: 需要使用私钥解密的数据</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">out</span>: 解密之后得到的数据</span></span><br><span class="line"><span class="function">    - 返回值 <span class="title">err</span>: 错误信</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="这就是大概RSA的加密解密。"><a href="#这就是大概RSA的加密解密。" class="headerlink" title="这就是大概RSA的加密解密。"></a>这就是大概RSA的加密解密。</h3>
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/03/非对称加密RSA详解/">非对称加密RSA详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年11月03日 - 12:11</p>
+  <p><span>最后更新:</span>2018年11月03日 - 13:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/03/非对称加密RSA详解/" title="非对称加密RSA详解">http://yoursite.com/2018/11/03/非对称加密RSA详解/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/11/03/非对称加密RSA详解/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
+          
+            <a href="/tags/加密算法/" rel="tag"><i class="fa fa-tag"></i> 加密算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/03/AES的CTR模式加密解密详解/" rel="next" title="AES的CTR模式加密解密详解">
+                <i class="fa fa-chevron-left"></i> AES的CTR模式加密解密详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">235.6k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#非对称加密通信流程"><span class="nav-number">1.</span> <span class="nav-text">非对称加密通信流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-RSA"><span class="nav-number">1.1.</span> <span class="nav-text">1.RSA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-RSA加密"><span class="nav-number">1.2.</span> <span class="nav-text">2.RSA加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-RSA解密"><span class="nav-number">1.3.</span> <span class="nav-text">3.RSA解密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Go中生成公钥和私钥"><span class="nav-number">1.4.</span> <span class="nav-text">Go中生成公钥和私钥</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go中使用RSA"><span class="nav-number"></span> <span class="nav-text">Go中使用RSA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这就是大概RSA的加密解密。"><span class="nav-number">1.</span> <span class="nav-text">这就是大概RSA的加密解密。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
