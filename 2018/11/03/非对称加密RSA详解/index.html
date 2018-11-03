@@ -123,7 +123,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/4.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/5.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/03/非对称加密RSA详解/6.png">
-<meta property="og:updated_time" content="2018-11-03T05:09:37.687Z">
+<meta property="og:updated_time" content="2018-11-03T05:47:05.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="非对称加密RSA详解">
 <meta name="twitter:description" content="非对称加密通信流程下面我们来看一看使用公钥密码的通信流程。和以前一样、我们还是假设Alice要给Bob发送一条消息，Alice是发送者，Bob是接收者，而这一次窃听者Eve依然能够窃所到他们之间的通信内容。 在公非对称加密通信中，通信过程是由接收者Bob来启动的。  Bob生成一个包含公钥和私钥的密钥对。  私钥由Bob自行妥善保管。   Bob将自己的公钥发送给Alice  Bob的公钥被窃听者">
@@ -378,7 +378,7 @@
                 
               
 
-              <time title="创建时间：2018-11-03 12:51:19 / 修改时间：13:09:37" itemprop="dateCreated datePublished" datetime="2018-11-03T12:51:19+08:00">2018-11-03</time>
+              <time title="创建时间：2018-11-03 12:51:19 / 修改时间：13:47:05" itemprop="dateCreated datePublished" datetime="2018-11-03T12:51:19+08:00">2018-11-03</time>
             
 
             
@@ -481,23 +481,9 @@
 <h4 id="Go中生成公钥和私钥"><a href="#Go中生成公钥和私钥" class="headerlink" title="Go中生成公钥和私钥"></a>Go中生成公钥和私钥</h4><p>需要引入的包</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"crypto/rsa"</span></span><br><span class="line">	<span class="string">"crypto/rand"</span></span><br><span class="line">	<span class="string">"crypto/x509"</span></span><br><span class="line">	<span class="string">"encoding/pem"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>生成私钥操作流程概述</p>
-<blockquote>
-<ol>
-<li>使用rsa中的GenerateKey方法生成私钥</li>
-<li>通过x509标准将得到的ras私钥序列化为ASN.1 的 DER编码字符串</li>
-<li>将私钥字符串设置到pem格式块中</li>
-<li>通过pem将设置好的数据进行编码, 并写入磁盘文件中</li>
-</ol>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 使用rsa中的GenerateKey方法生成私钥</span><br><span class="line">2. 通过x509标准将得到的ras私钥序列化为ASN.1 的 DER编码字符串</span><br><span class="line">3. 将私钥字符串设置到pem格式块中</span><br><span class="line">4. 通过pem将设置好的数据进行编码, 并写入磁盘文件中</span><br></pre></td></tr></table></figure>
 <p>生成公钥操作流程</p>
-<blockquote>
-<ol>
-<li>从得到的私钥对象中将公钥信息取出</li>
-<li>通过x509标准将得到 的rsa公钥序列化为字符串</li>
-<li>将公钥字符串设置到pem格式块中</li>
-<li>通过pem将设置好的数据进行编码, 并写入磁盘文件</li>
-</ol>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 从得到的私钥对象中将公钥信息取出</span><br><span class="line">2. 通过x509标准将得到 的rsa公钥序列化为字符串</span><br><span class="line">3. 将公钥字符串设置到pem格式块中</span><br><span class="line">4. 通过pem将设置好的数据进行编码, 并写入磁盘文件</span><br></pre></td></tr></table></figure>
 <p>生成公钥和私钥的源代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">// 参数bits: 指定生成的秘钥的长度, 单位: bit</span><br><span class="line">func RsaGenKey(bits int) error&#123;</span><br><span class="line">	// 1. 生成私钥文件</span><br><span class="line">	// GenerateKey函数使用随机数据生成器random生成一对具有指定字位数的RSA密钥</span><br><span class="line">	// 参数1: Reader是一个全局、共享的密码用强随机数生成器</span><br><span class="line">	// 参数2: 秘钥的位数 - bit</span><br><span class="line">	privateKey, err := rsa.GenerateKey(rand.Reader, bits)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 2. MarshalPKCS1PrivateKey将rsa私钥序列化为ASN.1 PKCS#1 DER编码</span><br><span class="line">	derStream := x509.MarshalPKCS1PrivateKey(privateKey)</span><br><span class="line">	// 3. Block代表PEM编码的结构, 对其进行设置</span><br><span class="line">	block := pem.Block&#123;</span><br><span class="line">		Type: &quot;RSA PRIVATE KEY&quot;,//&quot;RSA PRIVATE KEY&quot;,</span><br><span class="line">		Bytes: derStream,</span><br><span class="line">	&#125;</span><br><span class="line">	// 4. 创建文件</span><br><span class="line">	privFile, err := os.Create(&quot;private.pem&quot;)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 5. 使用pem编码, 并将数据写入文件中</span><br><span class="line">	err = pem.Encode(privFile, &amp;block)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 6. 最后的时候关闭文件</span><br><span class="line">	defer privFile.Close()</span><br><span class="line"></span><br><span class="line">	// 7. 生成公钥文件</span><br><span class="line">	publicKey := privateKey.PublicKey</span><br><span class="line">	derPkix, err := x509.MarshalPKIXPublicKey(&amp;publicKey)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	block = pem.Block&#123;</span><br><span class="line">		Type: &quot;RSA PUBLIC KEY&quot;,//&quot;PUBLIC KEY&quot;,</span><br><span class="line">		Bytes: derPkix,</span><br><span class="line">	&#125;</span><br><span class="line">	pubFile, err := os.Create(&quot;public.pem&quot;)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	// 8. 编码公钥, 写入文件</span><br><span class="line">	err = pem.Encode(pubFile, &amp;block)</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		panic(err)</span><br><span class="line">		return err</span><br><span class="line">	&#125;</span><br><span class="line">	defer pubFile.Close()</span><br><span class="line"></span><br><span class="line">	return nil</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>调用完会在本地生成两个文件。保存好私钥文件和公钥文件</p>
@@ -535,27 +521,17 @@
 <li><p>操作步骤</p>
 <ul>
 <li><p>公钥加密</p>
-<blockquote>
-<ol>
-<li>将公钥文件中的公钥读出, 得到使用pem编码的字符串</li>
-<li>将得到的字符串解码</li>
-<li>使用x509将编码之后的公钥解析出来</li>
-<li>使用得到的公钥通过rsa进行数据加密</li>
-</ol>
-</blockquote>
-</li>
-<li><p>私钥解密</p>
-<blockquote>
-<ol>
-<li>将私钥文件中的私钥读出, 得到使用pem编码的字符串</li>
-<li>将得到的字符串解码</li>
-<li>使用x509将编码之后的私钥解析出来</li>
-<li>使用得到的私钥通过rsa进行数据解密</li>
-</ol>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 将公钥文件中的公钥读出, 得到使用pem编码的字符串</span><br><span class="line">2. 将得到的字符串解码</span><br><span class="line">3. 使用x509将编码之后的公钥解析出来</span><br><span class="line">4. 使用得到的公钥通过rsa进行数据加密</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
+</ol>
+<ul>
+<li><p>私钥解密</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 将私钥文件中的私钥读出, 得到使用pem编码的字符串</span><br><span class="line">2. 将得到的字符串解码</span><br><span class="line">3. 使用x509将编码之后的私钥解析出来</span><br><span class="line">4. 使用得到的私钥通过rsa进行数据解密</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
 <li><p>代码实现</p>
 <ul>
 <li><p>RSA公钥加密</p>
