@@ -109,25 +109,25 @@
 
 
 
-  <meta name="description" content="du命令也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的。 语法du [选项][文件] 选项123456789101112131415-a或-all 显示目录中个别文件的大小。-b或-bytes 显示目录或文件大小时，以byte为单位。-c或--total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。-">
-<meta name="keywords" content="Linux命令">
+  <meta name="description" content="Go1.1.1版本发布(2018-08-24发布)已经过去一段时间，从官方的博客中看到，有两个比较突出的特色，一个就是今天讲的module，模块概念。目前该功能还在试验阶段，有些地方还需要不断的进行完善。不过可以先尝尝鲜，感受下这个功能的魅力。 主要概念介绍module是一个相关Go包的集合，它是源代码更替和版本控制的单元。模块由源文件形成的go.mod文件的根目录定义，包含go.mod文件的目录">
+<meta name="keywords" content="go语言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux命令-du命令">
-<meta property="og:url" content="http://yoursite.com/2018/09/29/Linux命令-du命令/index.html">
+<meta property="og:title" content="Go1-11新功能module的介绍及使用">
+<meta property="og:url" content="http://yoursite.com/2018/11/10/Go1-11新功能module的介绍及使用/index.html">
 <meta property="og:site_name" content="Wuman&#39;s Blog">
-<meta property="og:description" content="du命令也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的。 语法du [选项][文件] 选项123456789101112131415-a或-all 显示目录中个别文件的大小。-b或-bytes 显示目录或文件大小时，以byte为单位。-c或--total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。-">
+<meta property="og:description" content="Go1.1.1版本发布(2018-08-24发布)已经过去一段时间，从官方的博客中看到，有两个比较突出的特色，一个就是今天讲的module，模块概念。目前该功能还在试验阶段，有些地方还需要不断的进行完善。不过可以先尝尝鲜，感受下这个功能的魅力。 主要概念介绍module是一个相关Go包的集合，它是源代码更替和版本控制的单元。模块由源文件形成的go.mod文件的根目录定义，包含go.mod文件的目录">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-29T04:53:34.690Z">
+<meta property="og:updated_time" content="2018-11-10T11:51:47.610Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux命令-du命令">
-<meta name="twitter:description" content="du命令也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的。 语法du [选项][文件] 选项123456789101112131415-a或-all 显示目录中个别文件的大小。-b或-bytes 显示目录或文件大小时，以byte为单位。-c或--total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。-">
+<meta name="twitter:title" content="Go1-11新功能module的介绍及使用">
+<meta name="twitter:description" content="Go1.1.1版本发布(2018-08-24发布)已经过去一段时间，从官方的博客中看到，有两个比较突出的特色，一个就是今天讲的module，模块概念。目前该功能还在试验阶段，有些地方还需要不断的进行完善。不过可以先尝尝鲜，感受下这个功能的魅力。 主要概念介绍module是一个相关Go包的集合，它是源代码更替和版本控制的单元。模块由源文件形成的go.mod文件的根目录定义，包含go.mod文件的目录">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/29/Linux命令-du命令/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/11/10/Go1-11新功能module的介绍及使用/"/>
 
 
 
@@ -137,7 +137,7 @@
   };
 </script>
 
-  <title>Linux命令-du命令 | Wuman's Blog</title>
+  <title>Go1-11新功能module的介绍及使用 | Wuman's Blog</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/29/Linux命令-du命令/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/10/Go1-11新功能module的介绍及使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wuman">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux命令-du命令
+          <h1 class="post-title" itemprop="name headline">Go1-11新功能module的介绍及使用
               
             
           </h1>
@@ -371,7 +371,7 @@
                 
               
 
-              <time title="创建时间：2018-09-29 13:36:53 / 修改时间：12:53:34" itemprop="dateCreated datePublished" datetime="2018-09-29T13:36:53+08:00">2018-09-29</time>
+              <time title="创建时间：2018-11-10 19:40:48 / 修改时间：19:51:47" itemprop="dateCreated datePublished" datetime="2018-11-10T19:40:48+08:00">2018-11-10</time>
             
 
             
@@ -393,7 +393,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GO语言/" itemprop="url" rel="index"><span itemprop="name">GO语言</span></a></span>
 
                 
                 
@@ -427,36 +427,49 @@
       
 
       
-        <p><strong>du命令</strong>也是查看使用空间的，但是与<a href="http://man.linuxde.net/df" target="_blank" rel="noopener">df</a>命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><code>du [选项][文件]</code></p>
-<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">-a或-all 显示目录中个别文件的大小。</span><br><span class="line">-b或-bytes 显示目录或文件大小时，以byte为单位。</span><br><span class="line">-c或--total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。</span><br><span class="line">-k或--kilobytes 以KB(1024bytes)为单位输出。</span><br><span class="line">-m或--megabytes 以MB为单位输出。</span><br><span class="line">-s或--summarize 仅显示总计，只列出最后加总的值。</span><br><span class="line">-h或--human-readable 以K，M，G为单位，提高信息的可读性。</span><br><span class="line">-x或--one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过。</span><br><span class="line">-L&lt;符号链接&gt;或--dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小。</span><br><span class="line">-S或--separate-dirs 显示个别目录的大小时，并不含其子目录的大小。</span><br><span class="line">-X&lt;文件&gt;或--exclude-from=&lt;文件&gt; 在&lt;文件&gt;指定目录或文件。</span><br><span class="line">--exclude=&lt;目录或文件&gt; 略过指定的目录或文件。</span><br><span class="line">-D或--dereference-args 显示指定符号链接的源文件大小。</span><br><span class="line">-H或--si 与-h参数相同，但是K，M，G是以1000为换算单位。</span><br><span class="line">-l或--count-links 重复计算硬件链接的文件。</span><br></pre></td></tr></table></figure>
-<h2 id="常用实例"><a href="#常用实例" class="headerlink" title="常用实例"></a>常用实例</h2><p>1）显示目录或者文件所占空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># du</span><br><span class="line">608     ./test6</span><br><span class="line">308     ./test4</span><br><span class="line">4       ./scf/lib</span><br><span class="line">4       ./scf/service/deploy/product</span><br><span class="line">4       ./scf/service/deploy/info</span><br><span class="line">12      ./scf/service/deploy</span><br><span class="line">16      ./scf/service</span><br><span class="line">4       ./scf/doc</span><br><span class="line">4       ./scf/bin</span><br><span class="line">32      ./scf</span><br><span class="line">8       ./test3</span><br><span class="line">1288    .</span><br></pre></td></tr></table></figure>
-<p>说明：</p>
-<p>只显示当前目录下面的子目录的目录大小和当前目录的总的大小，最下面的1288为当前目录的总大小</p>
-<p>2）显示指定文件所占空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># du log2012.log </span><br><span class="line">300     log2012.log</span><br></pre></td></tr></table></figure>
-<p>3）查看指定目录的所占空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># du scf</span><br><span class="line">4       scf/lib</span><br><span class="line">4       scf/service/deploy/product</span><br><span class="line">4       scf/service/deploy/info</span><br><span class="line">12      scf/service/deploy</span><br><span class="line">16      scf/service</span><br><span class="line">4       scf/doc</span><br><span class="line">4       scf/bin</span><br><span class="line">32      scf</span><br></pre></td></tr></table></figure>
-<p>4）显示多个文件所占空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># du log30.tar.gz log31.tar.gz </span><br><span class="line">4       log30.tar.gz</span><br><span class="line">4       log31.tar.gz</span><br></pre></td></tr></table></figure>
-<p>5）只显示总和的大小</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># du -s</span><br><span class="line">1288    .</span><br><span class="line"># du -s scf</span><br><span class="line">32      scf</span><br><span class="line"># cd ..</span><br><span class="line"># du -s test</span><br><span class="line">1288    test</span><br></pre></td></tr></table></figure>
-<p>6）方便阅读的格式显示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># du -h test</span><br><span class="line">608K    test/test6</span><br><span class="line">308K    test/test4</span><br><span class="line">4.0K    test/scf/lib</span><br><span class="line">4.0K    test/scf/service/deploy/product</span><br><span class="line">4.0K    test/scf/service/deploy/info</span><br></pre></td></tr></table></figure>
-<p>7）文件和目录都显示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># du -ah test</span><br><span class="line">4.0K    test/log31.tar.gz</span><br><span class="line">4.0K    test/test13.tar.gz</span><br><span class="line">0       test/linklog.log</span><br><span class="line">0       test/test6/log2014.log</span><br><span class="line">300K    test/test6/linklog.log</span><br><span class="line">0       test/test6/log2015.log</span><br><span class="line">4.0K    test/test6/log2013.log</span><br><span class="line">300K    test/test6/log2012.log</span><br><span class="line">0       test/test6/log2017.log</span><br><span class="line">0       test/test6/log2016.log</span><br><span class="line">608K    test/test6</span><br></pre></td></tr></table></figure>
-<p>8）显示几个文件或目录各自占用磁盘空间的大小，还统计它们的总和</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># du -c log30.tar.gz log31.tar.gz </span><br><span class="line">4       log30.tar.gz</span><br><span class="line">4       log31.tar.gz</span><br><span class="line">8       总计</span><br></pre></td></tr></table></figure>
-<p>说明：</p>
-<p>加上-c选项后，du不仅显示两个目录各自占用磁盘空间的大小，还在最后一行统计它们的总和。</p>
-<p>9）按照空间大小排序</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># du|sort -nr|more</span><br><span class="line">1288    .</span><br><span class="line">608     ./test6</span><br><span class="line">308     ./test4</span><br><span class="line">32      ./scf</span><br><span class="line">16      ./scf/service</span><br><span class="line">12      ./scf/service/deploy</span><br></pre></td></tr></table></figure>
-<p>10）输出当前目录下各个子目录所使用的空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># du -h  --max-depth=1</span><br><span class="line">608K    ./test6</span><br><span class="line">308K    ./test4</span><br><span class="line">32K     ./scf</span><br><span class="line">8.0K    ./test3</span><br><span class="line">1.3M    .</span><br></pre></td></tr></table></figure>
-<p>参考链接：</p>
-<p><a href="http://www.cnblogs.com/peida/archive/2012/12/10/2810755.html" target="_blank" rel="noopener">http://www.cnblogs.com/peida/archive/2012/12/10/2810755.html</a></p>
-<p><a href="http://man.linuxde.net/du" target="_blank" rel="noopener">http://man.linuxde.net/du</a></p>
+        <p>Go1.1.1版本发布(2018-08-24发布)已经过去一段时间，从官方的博客中看到，有两个比较突出的特色，一个就是今天讲的module，模块概念。目前该功能还在试验阶段，有些地方还需要不断的进行完善。不过可以先尝尝鲜，感受下这个功能的魅力。</p>
+<h3 id="主要概念介绍"><a href="#主要概念介绍" class="headerlink" title="主要概念介绍"></a>主要概念介绍</h3><p>module是一个相关Go包的集合，它是源代码更替和版本控制的单元。模块由源文件形成的go.mod文件的根目录定义，包含go.mod文件的目录也被称为模块根目录。moudles取代旧的的基于GOPATH方法来指定在工程中使用哪些源文件或导入包。模块路径是导入包的路径前缀，go.mod文件定义模块路径，并且列出了在项目构建过程中使用的特定版本。</p>
+<h4 id="go-mod文件"><a href="#go-mod文件" class="headerlink" title="go.mod文件"></a>go.mod文件</h4><p>go.mod文件还可以指定要替换和排除的版本，命令行会自动根据go.mod文件来维护需求声明中的版本。如果想获取更多的有关go.mod文件的介绍，可以使用命令go help go.mod。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go.mod文件用“//”注释，而不用“/**/”。文件的每行都有一条指令，由一个动作加上参数组成。例如：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module my/thing</span><br><span class="line">require other/thing v1.0.2</span><br><span class="line">require new/thing v2.3.4</span><br><span class="line">exclude old/thing v1.2.3</span><br><span class="line">replace bad/thing v1.4.5 =&gt; good/thing v1.4.5</span><br></pre></td></tr></table></figure>
+<p>上面三个动词分别表示：项目需要的依赖包及版本、排除某些包的特别版本、取代当前项目中的某些依赖包。<br>相同动作的命令可以放到一个动词+括号组成的结构中，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">require (</span><br><span class="line">    new/thing v2.3.4</span><br><span class="line">    old/thing v1.2.3</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>其他命令的支持<br>旧的版本，构建编译命令<code>go build</code>中的参数没有<code>-mod</code>参数，最新的版本现在多了这个，用来对<code>go.mod</code>文件进行更新或其他使用控制。形式如：<code>go build -mod [mode]</code>，其中mode有以下几种取值：<code>readonly</code>，<code>release</code>，<code>vendor</code>。当执行<code>go build -mod=vendor</code>的时候，会在生成可执行文件的同时将项目的依赖包放到主模块的<code>vendor</code>目录下。<br><code>go get -m [packages]</code>会将下载的依赖包放到<code>GOPATH/pkg/mod</code>目录下，并且将依赖写入到<code>go.mod</code>文件。<code>go get -u=patch</code>会更新主模块下的所有依赖包。</p>
+<p>Go mod工具<br>在最新的版本，为了支持在命令行直接控制module的操作，Go提供了mod工具。格式如下：<code>go mod &lt;command&gt; [arguments]</code>。其中命令有以下几种取值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">download                //下载模块到本地缓存，具体可以通过命令go env查看，其中环境变量GOCACHE就是缓存的地址，如果该文件夹的内容太大，可以通过命令go clean -cache</span><br><span class="line">edit                    //从工具或脚本中编辑go.mod文件</span><br><span class="line">graph                   //打印模块需求图</span><br><span class="line">init                    //在当前目录下初始化新的模块</span><br><span class="line">tidy                    //添加缺失的模块以及移除无用的模块</span><br><span class="line">verify                  //验证依赖项是否达到预期的目的</span><br><span class="line">why                     //解释为什么需要包或模块</span><br></pre></td></tr></table></figure>
+<p>虚拟版本号<br>go.mod文件和go命令通常使用语义版本作为描述模块版本的标准形式，这样可以比较不同版本的先后顺序。例如模块的版本是v1.2.3，那么通过重新对版本号进行标签处理，得到该版本的虚拟版本。形式如：<code>v0.0.0-yyyymmddhhmmss-abcdefabcdef</code>。其中时间是提交时的UTC时间，最后的后缀是提交的哈希值前缀。时间部分确保两个虚拟版本号可以进行比较，以确定两者顺序。<br>下面有三种形式的虚拟版本号：</p>
+<ul>
+<li><code>vX.0.0-yyyymmddhhmmss-abcdefabcdef</code>，这种情况适合用在在目标版本提交之前 ，没有更早的的版本。（这种形式本来是唯一的形式，所以一些老的go.mod文件使用这种形式）</li>
+</ul>
+<ul>
+<li><p><code>vX.Y.Z-pre.0.yyyymmddhhmmss-abcdefabcdef</code>，这种情况被用在当目标版本提交之前的最新版本提交是<code>vX.Y.Z-pre</code>。</p>
+</li>
+<li><p><code>vX.Y.(Z+1)-0.yyyymmddhhmmss-abcdefabcdef</code>，同理，这种情况是当目标版本提交之前的最新版本是<code>vX.Y.Z</code>。</p>
+</li>
+<li>虚拟版本的生成不需要你去手动操作，go命令会将接收的commit哈希值自动转化为虚拟版本号。</li>
+</ul>
+<p>环境变量——GO111MODULE<br>Go1.11 module支持一个临时的环境变量——GO111MODULE,它可以设置以下三个字符串中的一个：<code>off,on</code>或者<code>auto</code>，用来控制是否启用module功能。</p>
+<ul>
+<li>GO111MODULE=off，设置成这个的时候，go命令行将不会支持module功能，寻找依赖包的方式将会沿用旧版本那种通过vendor目录或者GOPATH模式来查找。</li>
+</ul>
+<ul>
+<li><p>GO111MODULE=on，这种设置，go命令行会使用modules，而一点也不会去GOPATH目录下查找。这种方式也称为“模块-感知”或者“模块-感知 模式”。</p>
+</li>
+<li><p>GO111MODULE=auto，或者不设置此变量的值，go命令行将会根据当前目录来决定是否启用module功能。这种情况下可以分为两种情形：当前目录在<code>GOPATH/src</code>之外且该目录包含go.mod文件，或者当前文件在包含go.mod文件的目录下面。</p>
+</li>
+</ul>
+<p>当module功能启用时，GOPATH在项目构建过程中不再担当import的角色，但它仍然存储下载的依赖包，具体位置在<code>GOPATH/pkg/mod</code>。</p>
+<p>具体使用步骤：</p>
+<ol>
+<li><p>首先将你的版本更新到最新的Go版本1.11，如何更新版本可以自行百度。</p>
+<p>2.通过go命令行，进入到你当前的工程目录下，在命令行设置临时环境变量<code>set GO111MODULE=on</code>；</p>
+<p>3.执行命令<code>go mod init</code>在当前目录下生成一个go.mod文件，执行这条命令时，当前目录不能存在go.mod文件。如果之前生成过，要先删除；</p>
+<p>4.如果你工程中存在一些不能确定版本的包，那么生成的go.mod文件可能就不完整，因此继续执行下面的命令；</p>
+<p>5.执行<code>go mod tidy</code>命令，它会添加缺失的模块以及移除不需要的模块。执行后会生成<code>go.sum</code>文件(模块下载条目)。添加参数-v，例如<code>go mod tidy -v</code>可以将执行的信息，即删除和添加的包打印到命令行；</p>
+<p>6.执行命令<code>go mod verify</code>来检查当前模块的依赖是否全部下载下来，是否下载下来被修改过。如果所有的模块都没有被修改过，那么执行这条命令之后，会打印<code>all modules verified</code>。</p>
+<p>7.执行命令<code>go mod vendo</code>r生成vendor文件夹，该文件夹下将会放置你go.mod文件描述的依赖包，文件夹下同时还有一个文件<code>modules.txt</code>，它是你整个工程的所有模块。在执行这条命令之前，如果你工程之前有vendor目录，应该先进行删除。同理<code>go mod vendor -v</code>会将添加到vendor中的模块打印出来；</p>
+</li>
+</ol>
 
       
     </div>
@@ -484,12 +497,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2018/09/29/Linux命令-du命令/">Linux命令-du命令</a></p>
+  <p><span>本文标题:</span><a href="/2018/11/10/Go1-11新功能module的介绍及使用/">Go1-11新功能module的介绍及使用</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
-  <p><span>发布时间:</span>2018年09月29日 - 13:09</p>
-  <p><span>最后更新:</span>2018年09月29日 - 12:09</p>
-  <p><span>原始链接:</span><a href="/2018/09/29/Linux命令-du命令/" title="Linux命令-du命令">http://yoursite.com/2018/09/29/Linux命令-du命令/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/29/Linux命令-du命令/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2018年11月10日 - 19:11</p>
+  <p><span>最后更新:</span>2018年11月10日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/10/Go1-11新功能module的介绍及使用/" title="Go1-11新功能module的介绍及使用">http://yoursite.com/2018/11/10/Go1-11新功能module的介绍及使用/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/11/10/Go1-11新功能module的介绍及使用/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -524,7 +537,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Linux命令/" rel="tag"><i class="fa fa-tag"></i> Linux命令</a>
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
           
         </div>
       
@@ -537,8 +550,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/29/Linux命令-gzip命令/" rel="next" title="Linux命令-gzip命令">
-                <i class="fa fa-chevron-left"></i> Linux命令-gzip命令
+              <a href="/2018/11/10/Derek解读-Bytom源码分析-持久化存储LevelDB2-cache缓存/" rel="next" title="Derek解读-Bytom源码分析-持久化存储LevelDB2-cache缓存">
+                <i class="fa fa-chevron-left"></i> Derek解读-Bytom源码分析-持久化存储LevelDB2-cache缓存
               </a>
             
           </div>
@@ -546,10 +559,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/29/Linux命令-df命令/" rel="prev" title="Linux命令-df命令">
-                Linux命令-df命令 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -794,7 +803,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选项"><span class="nav-number">2.</span> <span class="nav-text">选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用实例"><span class="nav-number">3.</span> <span class="nav-text">常用实例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要概念介绍"><span class="nav-number">1.</span> <span class="nav-text">主要概念介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#go-mod文件"><span class="nav-number">1.1.</span> <span class="nav-text">go.mod文件</span></a></li></ol></li></ol></div>
             
 
           </div>
