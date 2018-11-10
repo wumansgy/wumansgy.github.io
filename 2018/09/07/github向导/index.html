@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="Wuman&#39;s Blog">
 <meta property="og:description" content="Hello World项目是计算机编程的悠久传统。这是一个简单的练习，让你开始学习新的东西。让我们开始使用GitHub！ 你将学到如下内容： 1: 创建和使用一个仓库。 2: 开始和管理一个分支。 3: 更改一个文件，然后推送到仓库，并且附带一些注释。 4: 打开和合并一个推送请求。 创建一个仓库仓库用来组织一个单一的项目，可以包含目录和文件，图片，视频，表格和数据集等所有项目所需要的内容。建议增">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-07T06:33:13.319Z">
+<meta property="og:updated_time" content="2018-11-04T00:50:33.205Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="github向导">
 <meta name="twitter:description" content="Hello World项目是计算机编程的悠久传统。这是一个简单的练习，让你开始学习新的东西。让我们开始使用GitHub！ 你将学到如下内容： 1: 创建和使用一个仓库。 2: 开始和管理一个分支。 3: 更改一个文件，然后推送到仓库，并且附带一些注释。 4: 打开和合并一个推送请求。 创建一个仓库仓库用来组织一个单一的项目，可以包含目录和文件，图片，视频，表格和数据集等所有项目所需要的内容。建议增">
@@ -371,12 +371,24 @@
                 
               
 
-              <time title="创建时间：2018-09-07 14:15:29 / 修改时间：14:33:13" itemprop="dateCreated datePublished" datetime="2018-09-07T14:15:29+08:00">2018-09-07</time>
+              <time title="创建时间：2018-09-07 14:15:29" itemprop="dateCreated datePublished" datetime="2018-09-07T14:15:29+08:00">2018-09-07</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-04 08:50:33" itemprop="dateModified" datetime="2018-11-04T08:50:33+08:00">2018-11-04</time>
               
             
           </span>
@@ -444,21 +456,21 @@
 <p>Git 全局设置</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;wumansgy&quot;</span><br><span class="line">git config --global user.email &quot;wumansgy@wumansgy.com&quot;</span><br></pre></td></tr></table></figure>
 <p>创建新版本库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/wumansgy/wuman-Small-projects.git</span><br><span class="line">cd hello-world</span><br><span class="line">touch README.md</span><br><span class="line">git add README.md</span><br><span class="line">git commit -m &quot;add README&quot;</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/wumansgy/wuman-Small-projects.git</span><br><span class="line">cd wuman-Small-projects</span><br><span class="line">touch README.md</span><br><span class="line">git add README.md</span><br><span class="line">git commit -m &quot;add README&quot;</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
 <p>已存在的文件夹</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd existing_folder</span><br><span class="line">git init</span><br><span class="line">git remote add origin https://github.com/wumansgy/wuman-Small-projects.git</span><br><span class="line">git add .</span><br><span class="line">git commit</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
 <p>已存在的 Git 版本库</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd existing_repo</span><br><span class="line">git remote add origin https://github.com/wumansgy/wuman-Small-projects.git</span><br><span class="line">git push -u origin --all</span><br><span class="line">git push -u origin --tags</span><br></pre></td></tr></table></figure>
 <h2 id="创建一个分支"><a href="#创建一个分支" class="headerlink" title="创建一个分支"></a>创建一个分支</h2><p>github上默认分支为master。并且还提供了将分支合并的功能。</p>
-<p>1: 打开hello-world仓库首页。</p>
+<p>1: 打开wuman-Small-projects仓库首页。</p>
 <p>2: 在项目名称之后单击+号，弹出菜单，并选择新分支，赚到分支创建页。</p>
 <p>3：输入分支名称，单击绿色创建分支按钮，即可创建成功。</p>
-<p>4: 创建成功后，回到hello-world项目首页，可以看到新创建的分支。</p>
-<h2 id="更改和提交更新"><a href="#更改和提交更新" class="headerlink" title="更改和提交更新"></a>更改和提交更新</h2><p>1: 在hello-world项目首页，在对应项目名称的后面单击+号，弹出菜单，并选择新文件（也可以选择上传文件以上传一个新的本地文件，或者单击新目录以创建一个新目录）。</p>
+<p>4: 创建成功后，回到wuman-Small-projects项目首页，可以看到新创建的分支。</p>
+<h2 id="更改和提交更新"><a href="#更改和提交更新" class="headerlink" title="更改和提交更新"></a>更改和提交更新</h2><p>1: 在wuman-Small-projects项目首页，在对应项目名称的后面单击+号，弹出菜单，并选择新文件（也可以选择上传文件以上传一个新的本地文件，或者单击新目录以创建一个新目录）。</p>
 <p>或者如果有文件存在，打开对应的文件，然后单击编辑按钮，以开始编辑一个存在的文件。</p>
 <p>2: 我们以新文件为例，如下图，输入文件名称，文件内容，并且在下方输入注释，然后单击提交修改即可完成新文件或者修改文件的功能：</p>
 <h2 id="开启一个推送请求"><a href="#开启一个推送请求" class="headerlink" title="开启一个推送请求"></a>开启一个推送请求</h2><p>如果将某个分支的更改情况推送到另外一个分支，或者master，需要提交一个推送请求。</p>
-<p>1: 打开hello-world项目首页，单击最上头的合并请求。</p>
+<p>1: 打开wuman-Small-projects项目首页，单击最上头的合并请求。</p>
 <p>2: 单击绿色的新建合并请求。</p>
 <p>3: 选择来源分支（即当前分支newbranch）与目标分支（比如master），单击比较分支后继续。</p>
 <p>4: 填写标题和描述，确定来源分支和目标分支，以及确定最下方的提交和变更内容，最后单击绿色的提交新的合并请求。</p>
@@ -520,7 +532,7 @@
   <p><span>本文标题:</span><a href="/2018/09/07/github向导/">github向导</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
   <p><span>发布时间:</span>2018年09月07日 - 14:09</p>
-  <p><span>最后更新:</span>2018年09月07日 - 14:09</p>
+  <p><span>最后更新:</span>2018年11月04日 - 08:11</p>
   <p><span>原始链接:</span><a href="/2018/09/07/github向导/" title="github向导">http://yoursite.com/2018/09/07/github向导/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/09/07/github向导/"  aria-label="复制成功！"></i></span>
   </p>
@@ -652,7 +664,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">145</span>
+                    <span class="site-state-item-count">158</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -768,7 +780,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">235.6k</span>
+      <span class="site-state-item-count">248.2k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 

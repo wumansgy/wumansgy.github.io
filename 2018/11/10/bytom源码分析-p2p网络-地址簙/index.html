@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="bytom源码分析-P2P网络-地址簿简介https://github.com/Bytom/bytom 本章介绍bytom代码P2P网络中addrbook地址簿  作者使用MacOS操作系统，其他平台也大同小异 Golang Version: 1.8  addrbook介绍addrbook用于存储P2P网络中保留最近的对端节点地址在MacOS下，默认的地址簿路径存储在~/Library/Bytom">
+<meta name="keywords" content="go语言,区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bytom源码分析-p2p网络-地址簙">
+<meta property="og:url" content="http://yoursite.com/2018/11/10/bytom源码分析-p2p网络-地址簙/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="bytom源码分析-P2P网络-地址簿简介https://github.com/Bytom/bytom 本章介绍bytom代码P2P网络中addrbook地址簿  作者使用MacOS操作系统，其他平台也大同小异 Golang Version: 1.8  addrbook介绍addrbook用于存储P2P网络中保留最近的对端节点地址在MacOS下，默认的地址簿路径存储在~/Library/Bytom">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-10T08:11:13.357Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bytom源码分析-p2p网络-地址簙">
+<meta name="twitter:description" content="bytom源码分析-P2P网络-地址簿简介https://github.com/Bytom/bytom 本章介绍bytom代码P2P网络中addrbook地址簿  作者使用MacOS操作系统，其他平台也大同小异 Golang Version: 1.8  addrbook介绍addrbook用于存储P2P网络中保留最近的对端节点地址在MacOS下，默认的地址簿路径存储在~/Library/Bytom">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/10/bytom源码分析-p2p网络-地址簙/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>bytom源码分析-p2p网络-地址簙 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/10/bytom源码分析-p2p网络-地址簙/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bytom源码分析-p2p网络-地址簙
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-10 15:53:26 / 修改时间：16:11:13" itemprop="dateCreated datePublished" datetime="2018-11-10T15:53:26+08:00">2018-11-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="bytom源码分析-P2P网络-地址簿"><a href="#bytom源码分析-P2P网络-地址簿" class="headerlink" title="bytom源码分析-P2P网络-地址簿"></a>bytom源码分析-P2P网络-地址簿</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="https://github.com/Bytom/bytom" target="_blank" rel="noopener">https://github.com/Bytom/bytom</a></p>
+<p>本章介绍bytom代码P2P网络中addrbook地址簿</p>
+<blockquote>
+<p>作者使用MacOS操作系统，其他平台也大同小异</p>
+<p>Golang Version: 1.8</p>
+</blockquote>
+<h2 id="addrbook介绍"><a href="#addrbook介绍" class="headerlink" title="addrbook介绍"></a>addrbook介绍</h2><p>addrbook用于存储P2P网络中保留最近的对端节点地址<br>在MacOS下，默认的地址簿路径存储在~/Library/Bytom/addrbook.json</p>
+<h3 id="地址簿格式"><a href="#地址簿格式" class="headerlink" title="地址簿格式"></a>地址簿格式</h3><p><strong>~/Library/Bytom/addrbook.json</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;Key&quot;: &quot;359be6d08bc0c6e21c84bbb2&quot;,</span><br><span class="line">    &quot;Addrs&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;Addr&quot;: &#123;</span><br><span class="line">                &quot;IP&quot;: &quot;122.224.11.144&quot;,</span><br><span class="line">                &quot;Port&quot;: 46657</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;Src&quot;: &#123;</span><br><span class="line">                &quot;IP&quot;: &quot;198.74.61.131&quot;,</span><br><span class="line">                &quot;Port&quot;: 46657</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;Attempts&quot;: 0,</span><br><span class="line">            &quot;LastAttempt&quot;: &quot;2018-05-04T12:58:23.894057702+08:00&quot;,</span><br><span class="line">            &quot;LastSuccess&quot;: &quot;0001-01-01T00:00:00Z&quot;,</span><br><span class="line">            &quot;BucketType&quot;: 1,</span><br><span class="line">            &quot;Buckets&quot;: [</span><br><span class="line">                181,</span><br><span class="line">                10</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="地址类型"><a href="#地址类型" class="headerlink" title="地址类型"></a>地址类型</h2><p>在addrbook中存储的地址有两种：<br><strong>p2p/addrbook.go</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const (</span><br><span class="line">	bucketTypeNew = 0x01  // 标识新地址，不可靠地址（未成功连接过）。只存储在一个bucket中</span><br><span class="line">	bucketTypeOld = 0x02  // 标识旧地址，可靠地址（已成功连接过）。可以存储在多个bucket中，最多为maxNewBucketsPerAddress个</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>注意: 一个地址的类型变更不在此文章中做介绍，后期的文章会讨论该问题</p>
+<h2 id="地址簿相关结构体"><a href="#地址簿相关结构体" class="headerlink" title="地址簿相关结构体"></a>地址簿相关结构体</h2><p>地址簿</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">type AddrBook struct &#123;</span><br><span class="line">	cmn.BaseService</span><br><span class="line"></span><br><span class="line">	mtx               sync.Mutex</span><br><span class="line">	filePath          string  // 地址簿路径</span><br><span class="line">	routabilityStrict bool  // 是否可路由，默认为true</span><br><span class="line">	rand              *rand.Rand </span><br><span class="line">	key               string  // 地址簿标识，用于计算addrNew和addrOld的索引</span><br><span class="line">	ourAddrs          map[string]*NetAddress  // 存储本地网络地址，用于添加p2p地址时做排除使用</span><br><span class="line">	addrLookup        map[string]*knownAddress // 存储新、旧地址集，用于查询</span><br><span class="line">	addrNew           []map[string]*knownAddress // 存储新地址</span><br><span class="line">	addrOld           []map[string]*knownAddress // 存储旧地址</span><br><span class="line">	wg                sync.WaitGroup</span><br><span class="line">	nOld              int // 旧地址数量</span><br><span class="line">	nNew              int // 新地址数量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>已知地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type knownAddress struct &#123;</span><br><span class="line">	Addr        *NetAddress // 已知peer的addr</span><br><span class="line">	Src         *NetAddress // 已知peer的addr的来源addr</span><br><span class="line">	Attempts    int32 // 连接peer的重试次数</span><br><span class="line">	LastAttempt time.Time // 最近一次尝试连接的时间</span><br><span class="line">	LastSuccess time.Time // 最近一次尝试成功连接的时间</span><br><span class="line">	BucketType  byte // 地址的类型（表示可靠地址或不可靠地址）</span><br><span class="line">	Buckets     []int // 当前addr所属的buckets</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>routabilityStrict参数表示地址簿是否存储的ip是否可路由。可路由是根据RFC划分，具体参考资料：<a href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml" target="_blank" rel="noopener">RFC标准</a></p>
+<h2 id="初始化地址簿"><a href="#初始化地址簿" class="headerlink" title="初始化地址簿"></a>初始化地址簿</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">// NewAddrBook creates a new address book.</span><br><span class="line">// Use Start to begin processing asynchronous address updates.</span><br><span class="line">func NewAddrBook(filePath string, routabilityStrict bool) *AddrBook &#123;</span><br><span class="line">	am := &amp;AddrBook&#123;</span><br><span class="line">		rand:              rand.New(rand.NewSource(time.Now().UnixNano())),</span><br><span class="line">		ourAddrs:          make(map[string]*NetAddress),</span><br><span class="line">		addrLookup:        make(map[string]*knownAddress),</span><br><span class="line">		filePath:          filePath,</span><br><span class="line">		routabilityStrict: routabilityStrict,</span><br><span class="line">	&#125;</span><br><span class="line">	am.init()</span><br><span class="line">	am.BaseService = *cmn.NewBaseService(nil, &quot;AddrBook&quot;, am)</span><br><span class="line">	return am</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// When modifying this, don&apos;t forget to update loadFromFile()</span><br><span class="line">func (a *AddrBook) init() &#123;</span><br><span class="line">  // 地址簿唯一标识</span><br><span class="line">	a.key = crypto.CRandHex(24) // 24/2 * 8 = 96 bits</span><br><span class="line">	// New addr buckets， 默认为256个大小</span><br><span class="line">	a.addrNew = make([]map[string]*knownAddress, newBucketCount)</span><br><span class="line">	for i := range a.addrNew &#123;</span><br><span class="line">		a.addrNew[i] = make(map[string]*knownAddress)</span><br><span class="line">	&#125;</span><br><span class="line">	// Old addr buckets，默认为64个大小</span><br><span class="line">	a.addrOld = make([]map[string]*knownAddress, oldBucketCount)</span><br><span class="line">	for i := range a.addrOld &#123;</span><br><span class="line">		a.addrOld[i] = make(map[string]*knownAddress)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="bytomd启动时加载本地地址簿"><a href="#bytomd启动时加载本地地址簿" class="headerlink" title="bytomd启动时加载本地地址簿"></a>bytomd启动时加载本地地址簿</h2><p>loadFromFile在bytomd启动时，首先会加载本地的地址簿</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">// OnStart implements Service.</span><br><span class="line">func (a *AddrBook) OnStart() error &#123;</span><br><span class="line">	a.BaseService.OnStart()</span><br><span class="line">	a.loadFromFile(a.filePath)</span><br><span class="line">	a.wg.Add(1)</span><br><span class="line">	go a.saveRoutine()</span><br><span class="line">	return nil</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Returns false if file does not exist.</span><br><span class="line">// cmn.Panics if file is corrupt.</span><br><span class="line">func (a *AddrBook) loadFromFile(filePath string) bool &#123;</span><br><span class="line">	// If doesn&apos;t exist, do nothing.</span><br><span class="line">	// 如果本地地址簿不存在则直接返回</span><br><span class="line">	_, err := os.Stat(filePath)</span><br><span class="line">	if os.IsNotExist(err) &#123;</span><br><span class="line">		return false</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  // 加载地址簿json内容</span><br><span class="line">	// Load addrBookJSON&#123;&#125;</span><br><span class="line">	r, err := os.Open(filePath)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		cmn.PanicCrisis(cmn.Fmt(&quot;Error opening file %s: %v&quot;, filePath, err))</span><br><span class="line">	&#125;</span><br><span class="line">	defer r.Close()</span><br><span class="line">	aJSON := &amp;addrBookJSON&#123;&#125;</span><br><span class="line">	dec := json.NewDecoder(r)</span><br><span class="line">	err = dec.Decode(aJSON)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		cmn.PanicCrisis(cmn.Fmt(&quot;Error reading file %s: %v&quot;, filePath, err))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  // 填充addrNew、addrOld等</span><br><span class="line">	// Restore all the fields...</span><br><span class="line">	// Restore the key</span><br><span class="line">	a.key = aJSON.Key</span><br><span class="line">	// Restore .addrNew &amp; .addrOld</span><br><span class="line">	for _, ka := range aJSON.Addrs &#123;</span><br><span class="line">		for _, bucketIndex := range ka.Buckets &#123;</span><br><span class="line">			bucket := a.getBucket(ka.BucketType, bucketIndex)</span><br><span class="line">			bucket[ka.Addr.String()] = ka</span><br><span class="line">		&#125;</span><br><span class="line">		a.addrLookup[ka.Addr.String()] = ka</span><br><span class="line">		if ka.BucketType == bucketTypeNew &#123;</span><br><span class="line">			a.nNew++</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			a.nOld++</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="定时更新地址簿"><a href="#定时更新地址簿" class="headerlink" title="定时更新地址簿"></a>定时更新地址簿</h2><p>bytomd会定时更新本地地址簿，默认2分钟一次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">func (a *AddrBook) saveRoutine() &#123;</span><br><span class="line">	dumpAddressTicker := time.NewTicker(dumpAddressInterval)</span><br><span class="line">out:</span><br><span class="line">	for &#123;</span><br><span class="line">		select &#123;</span><br><span class="line">		case &lt;-dumpAddressTicker.C:</span><br><span class="line">			a.saveToFile(a.filePath)</span><br><span class="line">		case &lt;-a.Quit:</span><br><span class="line">			break out</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	dumpAddressTicker.Stop()</span><br><span class="line">	a.saveToFile(a.filePath)</span><br><span class="line">	a.wg.Done()</span><br><span class="line">	log.Info(&quot;Address handler done&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (a *AddrBook) saveToFile(filePath string) &#123;</span><br><span class="line">	log.WithField(&quot;size&quot;, a.Size()).Info(&quot;Saving AddrBook to file&quot;)</span><br><span class="line"></span><br><span class="line">	a.mtx.Lock()</span><br><span class="line">	defer a.mtx.Unlock()</span><br><span class="line">	// Compile Addrs</span><br><span class="line">	addrs := []*knownAddress&#123;&#125;</span><br><span class="line">	for _, ka := range a.addrLookup &#123;</span><br><span class="line">		addrs = append(addrs, ka)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	aJSON := &amp;addrBookJSON&#123;</span><br><span class="line">		Key:   a.key,</span><br><span class="line">		Addrs: addrs,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	jsonBytes, err := json.MarshalIndent(aJSON, &quot;&quot;, &quot;\t&quot;)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		log.WithField(&quot;err&quot;, err).Error(&quot;Failed to save AddrBook to file&quot;)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	err = cmn.WriteFileAtomic(filePath, jsonBytes, 0644)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		log.WithFields(log.Fields&#123;</span><br><span class="line">			&quot;file&quot;: filePath,</span><br><span class="line">			&quot;err&quot;:  err,</span><br><span class="line">		&#125;).Error(&quot;Failed to save AddrBook to file&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="添加新地址"><a href="#添加新地址" class="headerlink" title="添加新地址"></a>添加新地址</h2><p>当peer之间交换addr时，节点会收到对端节点已知的地址信息，这些信息会被当前节点添加到地址簿中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">func (a *AddrBook) AddAddress(addr *NetAddress, src *NetAddress) &#123;</span><br><span class="line">	a.mtx.Lock()</span><br><span class="line">	defer a.mtx.Unlock()</span><br><span class="line">	log.WithFields(log.Fields&#123;</span><br><span class="line">		&quot;addr&quot;: addr,</span><br><span class="line">		&quot;src&quot;:  src,</span><br><span class="line">	&#125;).Debug(&quot;Add address to book&quot;)</span><br><span class="line">	a.addAddress(addr, src)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func (a *AddrBook) addAddress(addr, src *NetAddress) &#123;</span><br><span class="line">	// 验证地址是否为可路由地址</span><br><span class="line">	if a.routabilityStrict &amp;&amp; !addr.Routable() &#123;</span><br><span class="line">		log.Error(cmn.Fmt(&quot;Cannot add non-routable address %v&quot;, addr))</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	// 验证地址是否为本地节点地址</span><br><span class="line">	if _, ok := a.ourAddrs[addr.String()]; ok &#123;</span><br><span class="line">		// Ignore our own listener address.</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 验证地址是否存在地址集中</span><br><span class="line">	// 如果存在：则判断该地址是否为old可靠地址、是否超过了最大buckets中。否则根据该地址已经被ka.Buckets引用的个数来随机决定是否添加到地址集中</span><br><span class="line">	// 如果不存在：则添加到地址集中。并标识为bucketTypeNew地址类型</span><br><span class="line">	ka := a.addrLookup[addr.String()]</span><br><span class="line"></span><br><span class="line">	if ka != nil &#123;</span><br><span class="line">		// Already old.</span><br><span class="line">		if ka.isOld() &#123;</span><br><span class="line">			return</span><br><span class="line">		&#125;</span><br><span class="line">		// Already in max new buckets.</span><br><span class="line">		if len(ka.Buckets) == maxNewBucketsPerAddress &#123;</span><br><span class="line">			return</span><br><span class="line">		&#125;</span><br><span class="line">		// The more entries we have, the less likely we are to add more.</span><br><span class="line">		factor := int32(2 * len(ka.Buckets))</span><br><span class="line">		if a.rand.Int31n(factor) != 0 &#123;</span><br><span class="line">			return</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		ka = newKnownAddress(addr, src)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 找到该地址在地址集的索引位置并添加</span><br><span class="line">	bucket := a.calcNewBucket(addr, src)</span><br><span class="line">	a.addToNewBucket(ka, bucket)</span><br><span class="line"></span><br><span class="line">	log.Info(&quot;Added new address &quot;, &quot;address:&quot;, addr, &quot; total:&quot;, a.size())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="选择最优节点"><a href="#选择最优节点" class="headerlink" title="选择最优节点"></a>选择最优节点</h2><p>地址簿中存储众多地址，在p2p网络中需选择最优的地址去连接<br>PickAddress(newBias int)函数中newBias是由pex_reactor产生的地址评分。如何计算地址分数在其他章节中再讲<br>根据地址评分随机选择地址可增加区块链安全性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">// Pick an address to connect to with new/old bias.</span><br><span class="line">func (a *AddrBook) PickAddress(newBias int) *NetAddress &#123;</span><br><span class="line">	a.mtx.Lock()</span><br><span class="line">	defer a.mtx.Unlock()</span><br><span class="line"></span><br><span class="line">	if a.size() == 0 &#123;</span><br><span class="line">		return nil</span><br><span class="line">	&#125;</span><br><span class="line">	// newBias地址分数限制在0-100分数之间</span><br><span class="line">	if newBias &gt; 100 &#123;</span><br><span class="line">		newBias = 100</span><br><span class="line">	&#125;</span><br><span class="line">	if newBias &lt; 0 &#123;</span><br><span class="line">		newBias = 0</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// Bias between new and old addresses.</span><br><span class="line">	oldCorrelation := math.Sqrt(float64(a.nOld)) * (100.0 - float64(newBias))</span><br><span class="line">	newCorrelation := math.Sqrt(float64(a.nNew)) * float64(newBias)</span><br><span class="line"></span><br><span class="line">  // 根据地址分数计算是否从addrOld或addrNew中随机选择一个地址</span><br><span class="line">	if (newCorrelation+oldCorrelation)*a.rand.Float64() &lt; oldCorrelation &#123;</span><br><span class="line">		// pick random Old bucket.</span><br><span class="line">		var bucket map[string]*knownAddress = nil</span><br><span class="line">		num := 0</span><br><span class="line">		for len(bucket) == 0 &amp;&amp; num &lt; oldBucketCount &#123;</span><br><span class="line">			bucket = a.addrOld[a.rand.Intn(len(a.addrOld))]</span><br><span class="line">			num++</span><br><span class="line">		&#125;</span><br><span class="line">		if num == oldBucketCount &#123;</span><br><span class="line">			return nil</span><br><span class="line">		&#125;</span><br><span class="line">		// pick a random ka from bucket.</span><br><span class="line">		randIndex := a.rand.Intn(len(bucket))</span><br><span class="line">		for _, ka := range bucket &#123;</span><br><span class="line">			if randIndex == 0 &#123;</span><br><span class="line">				return ka.Addr</span><br><span class="line">			&#125;</span><br><span class="line">			randIndex--</span><br><span class="line">		&#125;</span><br><span class="line">		cmn.PanicSanity(&quot;Should not happen&quot;)</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		// pick random New bucket.</span><br><span class="line">		var bucket map[string]*knownAddress = nil</span><br><span class="line">		num := 0</span><br><span class="line">		for len(bucket) == 0 &amp;&amp; num &lt; newBucketCount &#123;</span><br><span class="line">			bucket = a.addrNew[a.rand.Intn(len(a.addrNew))]</span><br><span class="line">			num++</span><br><span class="line">		&#125;</span><br><span class="line">		if num == newBucketCount &#123;</span><br><span class="line">			return nil</span><br><span class="line">		&#125;</span><br><span class="line">		// pick a random ka from bucket.</span><br><span class="line">		randIndex := a.rand.Intn(len(bucket))</span><br><span class="line">		for _, ka := range bucket &#123;</span><br><span class="line">			if randIndex == 0 &#123;</span><br><span class="line">				return ka.Addr</span><br><span class="line">			&#125;</span><br><span class="line">			randIndex--</span><br><span class="line">		&#125;</span><br><span class="line">		cmn.PanicSanity(&quot;Should not happen&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">	return nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="移除一个地址"><a href="#移除一个地址" class="headerlink" title="移除一个地址"></a>移除一个地址</h2><p>当一个地址被标记为Bad时则从地址集中移除。目前bytomd的代码版本并未调用过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">func (a *AddrBook) MarkBad(addr *NetAddress) &#123;</span><br><span class="line">	a.RemoveAddress(addr)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// RemoveAddress removes the address from the book.</span><br><span class="line">func (a *AddrBook) RemoveAddress(addr *NetAddress) &#123;</span><br><span class="line">	a.mtx.Lock()</span><br><span class="line">	defer a.mtx.Unlock()</span><br><span class="line">	ka := a.addrLookup[addr.String()]</span><br><span class="line">	if ka == nil &#123;</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	log.WithField(&quot;addr&quot;, addr).Info(&quot;Remove address from book&quot;)</span><br><span class="line">	a.removeFromAllBuckets(ka)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (a *AddrBook) removeFromAllBuckets(ka *knownAddress) &#123;</span><br><span class="line">	for _, bucketIdx := range ka.Buckets &#123;</span><br><span class="line">		bucket := a.getBucket(ka.BucketType, bucketIdx)</span><br><span class="line">		delete(bucket, ka.Addr.String())</span><br><span class="line">	&#125;</span><br><span class="line">	ka.Buckets = nil</span><br><span class="line">	if ka.BucketType == bucketTypeNew &#123;</span><br><span class="line">		a.nNew--</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		a.nOld--</span><br><span class="line">	&#125;</span><br><span class="line">	delete(a.addrLookup, ka.Addr.String())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>转载链接：<a href="https://shanhuhai5739.github.io/2018/04/28/bytom%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-P2P%E7%BD%91%E7%BB%9C-%E5%9C%B0%E5%9D%80%E7%B0%BF/" target="_blank" rel="noopener">https://shanhuhai5739.github.io/2018/04/28/bytom%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-P2P%E7%BD%91%E7%BB%9C-%E5%9C%B0%E5%9D%80%E7%B0%BF/</a></p>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/10/bytom源码分析-p2p网络-地址簙/">bytom源码分析-p2p网络-地址簙</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2018年11月10日 - 15:11</p>
+  <p><span>最后更新:</span>2018年11月10日 - 16:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/10/bytom源码分析-p2p网络-地址簙/" title="bytom源码分析-p2p网络-地址簙">http://yoursite.com/2018/11/10/bytom源码分析-p2p网络-地址簙/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/11/10/bytom源码分析-p2p网络-地址簙/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go语言/" rel="tag"><i class="fa fa-tag"></i> go语言</a>
+          
+            <a href="/tags/区块链/" rel="tag"><i class="fa fa-tag"></i> 区块链</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/10/bytom源码分析-p2p网络-upnp端口映射/" rel="next" title="bytom源码分析-P2P网络-upnp端口映射">
+                <i class="fa fa-chevron-left"></i> bytom源码分析-P2P网络-upnp端口映射
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/10/bytom源码分析-p2p网络-孤快管理/" rel="prev" title="bytom源码分析-孤快管理">
+                bytom源码分析-孤快管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">158</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">248.2k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#bytom源码分析-P2P网络-地址簿"><span class="nav-number">1.</span> <span class="nav-text">bytom源码分析-P2P网络-地址簿</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#addrbook介绍"><span class="nav-number">1.2.</span> <span class="nav-text">addrbook介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#地址簿格式"><span class="nav-number">1.2.1.</span> <span class="nav-text">地址簿格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#地址类型"><span class="nav-number">1.3.</span> <span class="nav-text">地址类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#地址簿相关结构体"><span class="nav-number">1.4.</span> <span class="nav-text">地址簿相关结构体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化地址簿"><span class="nav-number">1.5.</span> <span class="nav-text">初始化地址簿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bytomd启动时加载本地地址簿"><span class="nav-number">1.6.</span> <span class="nav-text">bytomd启动时加载本地地址簿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定时更新地址簿"><span class="nav-number">1.7.</span> <span class="nav-text">定时更新地址簿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加新地址"><span class="nav-number">1.8.</span> <span class="nav-text">添加新地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择最优节点"><span class="nav-number">1.9.</span> <span class="nav-text">选择最优节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移除一个地址"><span class="nav-number">1.10.</span> <span class="nav-text">移除一个地址</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
