@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[比特币相关交易图片]]></title>
+    <url>%2F2018%2F12%2F21%2F%E6%AF%94%E7%89%B9%E5%B8%81%E7%9B%B8%E5%85%B3%E4%BA%A4%E6%98%93%E5%9B%BE%E7%89%87%2F</url>
+    <content type="text"><![CDATA[几张比特币中的相关图片比特币地址生成 比特币交易大概 解锁脚本和锁定脚本相关]]></content>
+      <categories>
+        <category>区块链</category>
+      </categories>
+      <tags>
+        <tag>区块链</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Go1-11新功能module的介绍及使用]]></title>
     <url>%2F2018%2F11%2F10%2FGo1-11%E6%96%B0%E5%8A%9F%E8%83%BDmodule%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%2F</url>
     <content type="text"><![CDATA[Go1.1.1版本发布(2018-08-24发布)已经过去一段时间，从官方的博客中看到，有两个比较突出的特色，一个就是今天讲的module，模块概念。目前该功能还在试验阶段，有些地方还需要不断的进行完善。不过可以先尝尝鲜，感受下这个功能的魅力。 主要概念介绍module是一个相关Go包的集合，它是源代码更替和版本控制的单元。模块由源文件形成的go.mod文件的根目录定义，包含go.mod文件的目录也被称为模块根目录。moudles取代旧的的基于GOPATH方法来指定在工程中使用哪些源文件或导入包。模块路径是导入包的路径前缀，go.mod文件定义模块路径，并且列出了在项目构建过程中使用的特定版本。 go.mod文件go.mod文件还可以指定要替换和排除的版本，命令行会自动根据go.mod文件来维护需求声明中的版本。如果想获取更多的有关go.mod文件的介绍，可以使用命令go help go.mod。 1go.mod文件用“//”注释，而不用“/**/”。文件的每行都有一条指令，由一个动作加上参数组成。例如： 12345module my/thingrequire other/thing v1.0.2require new/thing v2.3.4exclude old/thing v1.2.3replace bad/thing v1.4.5 =&gt; good/thing v1.4.5 上面三个动词分别表示：项目需要的依赖包及版本、排除某些包的特别版本、取代当前项目中的某些依赖包。相同动作的命令可以放到一个动词+括号组成的结构中，例如： 1234require ( new/thing v2.3.4 old/thing v1.2.3) 其他命令的支持旧的版本，构建编译命令go build中的参数没有-mod参数，最新的版本现在多了这个，用来对go.mod文件进行更新或其他使用控制。形式如：go build -mod [mode]，其中mode有以下几种取值：readonly，release，vendor。当执行go build -mod=vendor的时候，会在生成可执行文件的同时将项目的依赖包放到主模块的vendor目录下。go get -m [packages]会将下载的依赖包放到GOPATH/pkg/mod目录下，并且将依赖写入到go.mod文件。go get -u=patch会更新主模块下的所有依赖包。 Go mod工具在最新的版本，为了支持在命令行直接控制module的操作，Go提供了mod工具。格式如下：go mod &lt;command&gt; [arguments]。其中命令有以下几种取值： 1234567download //下载模块到本地缓存，具体可以通过命令go env查看，其中环境变量GOCACHE就是缓存的地址，如果该文件夹的内容太大，可以通过命令go clean -cacheedit //从工具或脚本中编辑go.mod文件graph //打印模块需求图init //在当前目录下初始化新的模块tidy //添加缺失的模块以及移除无用的模块verify //验证依赖项是否达到预期的目的why //解释为什么需要包或模块 虚拟版本号go.mod文件和go命令通常使用语义版本作为描述模块版本的标准形式，这样可以比较不同版本的先后顺序。例如模块的版本是v1.2.3，那么通过重新对版本号进行标签处理，得到该版本的虚拟版本。形式如：v0.0.0-yyyymmddhhmmss-abcdefabcdef。其中时间是提交时的UTC时间，最后的后缀是提交的哈希值前缀。时间部分确保两个虚拟版本号可以进行比较，以确定两者顺序。下面有三种形式的虚拟版本号： vX.0.0-yyyymmddhhmmss-abcdefabcdef，这种情况适合用在在目标版本提交之前 ，没有更早的的版本。（这种形式本来是唯一的形式，所以一些老的go.mod文件使用这种形式） vX.Y.Z-pre.0.yyyymmddhhmmss-abcdefabcdef，这种情况被用在当目标版本提交之前的最新版本提交是vX.Y.Z-pre。 vX.Y.(Z+1)-0.yyyymmddhhmmss-abcdefabcdef，同理，这种情况是当目标版本提交之前的最新版本是vX.Y.Z。 虚拟版本的生成不需要你去手动操作，go命令会将接收的commit哈希值自动转化为虚拟版本号。 环境变量——GO111MODULEGo1.11 module支持一个临时的环境变量——GO111MODULE,它可以设置以下三个字符串中的一个：off,on或者auto，用来控制是否启用module功能。 GO111MODULE=off，设置成这个的时候，go命令行将不会支持module功能，寻找依赖包的方式将会沿用旧版本那种通过vendor目录或者GOPATH模式来查找。 GO111MODULE=on，这种设置，go命令行会使用modules，而一点也不会去GOPATH目录下查找。这种方式也称为“模块-感知”或者“模块-感知 模式”。 GO111MODULE=auto，或者不设置此变量的值，go命令行将会根据当前目录来决定是否启用module功能。这种情况下可以分为两种情形：当前目录在GOPATH/src之外且该目录包含go.mod文件，或者当前文件在包含go.mod文件的目录下面。 当module功能启用时，GOPATH在项目构建过程中不再担当import的角色，但它仍然存储下载的依赖包，具体位置在GOPATH/pkg/mod。 具体使用步骤： 首先将你的版本更新到最新的Go版本1.11，如何更新版本可以自行百度。 2.通过go命令行，进入到你当前的工程目录下，在命令行设置临时环境变量set GO111MODULE=on； 3.执行命令go mod init在当前目录下生成一个go.mod文件，执行这条命令时，当前目录不能存在go.mod文件。如果之前生成过，要先删除； 4.如果你工程中存在一些不能确定版本的包，那么生成的go.mod文件可能就不完整，因此继续执行下面的命令； 5.执行go mod tidy命令，它会添加缺失的模块以及移除不需要的模块。执行后会生成go.sum文件(模块下载条目)。添加参数-v，例如go mod tidy -v可以将执行的信息，即删除和添加的包打印到命令行； 6.执行命令go mod verify来检查当前模块的依赖是否全部下载下来，是否下载下来被修改过。如果所有的模块都没有被修改过，那么执行这条命令之后，会打印all modules verified。 7.执行命令go mod vendor生成vendor文件夹，该文件夹下将会放置你go.mod文件描述的依赖包，文件夹下同时还有一个文件modules.txt，它是你整个工程的所有模块。在执行这条命令之前，如果你工程之前有vendor目录，应该先进行删除。同理go mod vendor -v会将添加到vendor中的模块打印出来；]]></content>
@@ -1598,8 +1609,8 @@
         <category>C/C++</category>
       </categories>
       <tags>
-        <tag>小Demo</tag>
         <tag>C/C++</tag>
+        <tag>小Demo</tag>
       </tags>
   </entry>
   <entry>
@@ -1778,17 +1789,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[go语言中的面向对象，接口类型，工厂设计模式解读]]></title>
-    <url>%2F2018%2F09%2F01%2Fgo%E8%AF%AD%E8%A8%80%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%2F</url>
-    <content type="text"><![CDATA[工厂模式： 定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂方法模式 抽象工厂模式针对的是一个产品等级结构 针对的是面向多个产品等级结构一个抽象产品类 多个抽象产品类可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例加减乘除四则运算器工厂模式举例子 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677package mainimport "fmt"type operation struct&#123; //定义一个父类两个数据 num1 float64 num2 float64&#125;type operationAdd struct&#123; //加法子类 operation&#125;func (op *operationAdd)getresult()float64&#123; //加法类的方法 return op.num1+op.num2&#125;type operationSub struct&#123; //减法子类 operation&#125;func (sub *operationSub)getresult()float64&#123; //减法类的方法 return sub.num1-sub.num2&#125;type operationMult struct&#123; //乘法子类 operation&#125;func (mult *operationMult)getresult()float64&#123; return mult.num1*mult.num2&#125;type operationDivi struct&#123; operation&#125; //除法子类func (divi *operationDivi)getresult()float64&#123; return divi.num1/divi.num2&#125;type operationer interface&#123; //定义接口 getresult() float64 //加法的方法&#125;type operationfactor struct &#123; //operation //用于创建对象的类，工厂模式&#125;func (op *operationfactor)creatoperation(ope string,num1 float64,num2 float64)float64&#123; //用于构件对象类 var result float64 switch ope &#123; case "+": add:=&amp;operationAdd&#123;operation&#123;num1,num2&#125;&#125; //按照传过来的符号来创建相应的对象 result=operationwho(add) //传递给多态的函数，直接调用 case "-": sub:=&amp;operationSub&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(sub) case "*": mult:=&amp;operationMult&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(mult) case "/": divi:=&amp;operationDivi&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(divi) &#125; return result&#125;func operationwho(i operationer)float64&#123; return i.getresult() //此处为创建一个多态的函数&#125;func main()&#123; //m:=&amp;operationAdd&#123;operation&#123;3,4&#125;&#125; //var iop operationer //iop=m //sum:=iop.getresult() //fmt.Println(sum) var op1 operationfactor //直接创建工厂类对象 sum:=op1.creatoperation("+",9,6) //直接调用工厂类的方法 fmt.Println(sum) var op2 operationfactor sub:=op2.creatoperation("-",9,8) fmt.Println(sub) var op3 operationfactor mult:=op3.creatoperation("*",3,4) fmt.Println(mult) var op4 operationfactor div:=op4.creatoperation("/",9,10) fmt.Println(div)&#125; 在上面的例子当中，如果对面向对象没有接触的话可能会有一些不好理解，在go语言当中面向对象可能和别的语言有一些不同，go语言是利用匿名字段来实现继承，在上面的例子中多态函数的实现可以让函数调用更加方便，比如每个结构体类都有10几个甚至更多的函数，那么直接都把这些函数封装在多态的函数里面，那么每次调用直接传递一个结构体类给多态函数就直接全部调用了，这样就是很方便的]]></content>
-      <categories>
-        <category>GO语言</category>
-      </categories>
-      <tags>
-        <tag>go语言</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[go语言简单排序之冒泡和插入排序]]></title>
     <url>%2F2018%2F09%2F01%2Fgo%E8%AF%AD%E8%A8%80%E5%86%92%E6%B3%A1%E5%92%8C%E6%8F%92%E5%8F%991%2F</url>
     <content type="text"><![CDATA[编程即数学，在编程中也会遇到很多的数学问题的集合，今天我们来讲解一下编程中最常见的冒泡排序，以及冒泡排序之后的插入排序 1：冒泡排序：见名知意，冒泡在我们生活当中可以有哪些常见的事物呢，比如在生活当中，大家都见到过烧开水的状态，那么水中的气泡就会不断的往上面漂浮，应用物理学上的知识来讲就是气泡的质量比较轻，在水中有浮力，就会不断的上浮，那么我们应该怎样应用到编程中的冒泡排序呢，我们先来看一段代码，然后慢慢分析 12345678910111213141516171819package mainimport "fmt"//func main() &#123; arr := [10]int&#123;9, 1, 5, 6, 3, 7, 10, 8, 2, 4&#125; //先定义一个乱序数组 //冒泡排序 for i := 0; i &lt; 10-1; i++ &#123; //外面的循环用来循环次数 for j := 0; j &lt; 10-1-i; j++ &#123; //里面的循环用来循环 每次对比到哪里 if arr[j] &gt; arr[j+1] &#123; //数据交换 arr[j], arr[j+1] = arr[j+1], arr[j] //go语言的多个数据交换格式 //temp := arr[j] //普通数据交换格式 //arr[j] = arr[j+1] //arr[j+1] = temp &#125; &#125; &#125; fmt.Println(arr)&#125; 我们看到这个代码和这张图片，在图片中我们只写了前面几次，先来看第一次，第一个元素和第二个相比4比2大，如果第一个元素比第二个大那么就交换一下，然后第二个元素和第三个相比，如果大就交换，然后第三第四相比，第四第五相比，一直比到最后一个和倒数第一个，有没有发现这样比一次就能确定一个最大的数，而且最大的数是放在最后一个元素里面的，这样一次就是外面的外循环 1for i := 0; i &lt; 10-1; i++ &#123; //这句话就是外面的循环 然后确定第一个最大的放最后一个，那么我们然后怎么办呢 ，然后我们当然继续下一次对比然后再确定一个第二大的放在倒数第二的位置啊，最大的确定下来后，我们继续从第一个开始遍历，但是这次遍历要注意了，不需要遍历到最后一个元素，而只需遍历到倒数第二个就行了，这是为什么呢，因为最后一个元素已经确定下来是最大的了，所以就不需要对比了，我们来看内循环 12for j := 0; j &lt; 10-1-i; j++ &#123; //里面的循环用来循环 每次对比到哪里//这里的判断条件是 小于10-1-i，i是什么呢，就是外循环的次数，所以只需要对比到10-1-i就行 然后内循环每次对比相邻的两个元素，如果前面大于后面的那么就交换， 12345//数据交换 arr[j], arr[j+1] = arr[j+1], arr[j] //go语言的多个数据交换格式 //temp := arr[j] //普通数据交换格式 //arr[j] = arr[j+1] //arr[j+1] = temp 这里面数据交换 有两种格式，第一种就是GO语言里面的简单交换格式，第二种是常见的交换数据格式，需要定义一个临时变量 然后可以打印出来数组，就变成从小到大的升序数组了， 那么如果要变成降序排序怎么改呢？ 来看这句话 1if arr[j] &gt; arr[j+1] &#123; 我们只需要把这里的大于号改成小于号就行啦 不喜勿喷，谢谢哈哈插入排序后续]]></content>
@@ -1798,6 +1798,17 @@
       <tags>
         <tag>go语言</tag>
         <tag>排序问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[go语言中的面向对象，接口类型，工厂设计模式解读]]></title>
+    <url>%2F2018%2F09%2F01%2Fgo%E8%AF%AD%E8%A8%80%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[工厂模式： 定义一个用于创建对象的接口，让子类决定实例化哪一个类抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类个人觉得这个区别在于产品，如果产品单一，最合适用工厂模式，但是如果有多个业务品种、业务分类时，通过抽象工厂模式产生需要的对象是一种非常好的解决方式。再通俗深化理解下：工厂模式针对的是一个产品等级结构 ，抽象工厂模式针对的是面向多个产品等级结构的。工厂方法模式 抽象工厂模式针对的是一个产品等级结构 针对的是面向多个产品等级结构一个抽象产品类 多个抽象产品类可以派生出多个具体产品类 每个抽象产品类可以派生出多个具体产品类一个抽象工厂类，可以派生出多个具体工厂类 一个抽象工厂类，可以派生出多个具体工厂类每个具体工厂类只能创建一个具体产品类的实例 每个具体工厂类可以创建多个具体产品类的实例加减乘除四则运算器工厂模式举例子 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677package mainimport "fmt"type operation struct&#123; //定义一个父类两个数据 num1 float64 num2 float64&#125;type operationAdd struct&#123; //加法子类 operation&#125;func (op *operationAdd)getresult()float64&#123; //加法类的方法 return op.num1+op.num2&#125;type operationSub struct&#123; //减法子类 operation&#125;func (sub *operationSub)getresult()float64&#123; //减法类的方法 return sub.num1-sub.num2&#125;type operationMult struct&#123; //乘法子类 operation&#125;func (mult *operationMult)getresult()float64&#123; return mult.num1*mult.num2&#125;type operationDivi struct&#123; operation&#125; //除法子类func (divi *operationDivi)getresult()float64&#123; return divi.num1/divi.num2&#125;type operationer interface&#123; //定义接口 getresult() float64 //加法的方法&#125;type operationfactor struct &#123; //operation //用于创建对象的类，工厂模式&#125;func (op *operationfactor)creatoperation(ope string,num1 float64,num2 float64)float64&#123; //用于构件对象类 var result float64 switch ope &#123; case "+": add:=&amp;operationAdd&#123;operation&#123;num1,num2&#125;&#125; //按照传过来的符号来创建相应的对象 result=operationwho(add) //传递给多态的函数，直接调用 case "-": sub:=&amp;operationSub&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(sub) case "*": mult:=&amp;operationMult&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(mult) case "/": divi:=&amp;operationDivi&#123;operation&#123;num1,num2&#125;&#125; result=operationwho(divi) &#125; return result&#125;func operationwho(i operationer)float64&#123; return i.getresult() //此处为创建一个多态的函数&#125;func main()&#123; //m:=&amp;operationAdd&#123;operation&#123;3,4&#125;&#125; //var iop operationer //iop=m //sum:=iop.getresult() //fmt.Println(sum) var op1 operationfactor //直接创建工厂类对象 sum:=op1.creatoperation("+",9,6) //直接调用工厂类的方法 fmt.Println(sum) var op2 operationfactor sub:=op2.creatoperation("-",9,8) fmt.Println(sub) var op3 operationfactor mult:=op3.creatoperation("*",3,4) fmt.Println(mult) var op4 operationfactor div:=op4.creatoperation("/",9,10) fmt.Println(div)&#125; 在上面的例子当中，如果对面向对象没有接触的话可能会有一些不好理解，在go语言当中面向对象可能和别的语言有一些不同，go语言是利用匿名字段来实现继承，在上面的例子中多态函数的实现可以让函数调用更加方便，比如每个结构体类都有10几个甚至更多的函数，那么直接都把这些函数封装在多态的函数里面，那么每次调用直接传递一个结构体类给多态函数就直接全部调用了，这样就是很方便的]]></content>
+      <categories>
+        <category>GO语言</category>
+      </categories>
+      <tags>
+        <tag>go语言</tag>
       </tags>
   </entry>
 </search>
