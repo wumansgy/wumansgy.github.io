@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="准备工作   官方帮助文档：https://hyperledger-fabric.readthedocs.io/en/release-1.2/ 安装 cURL(https://curl.haxx.se/download.html),`curl —version` 查询版本 安装docker，docker --version 查询版本 安装docker-compose,docker-compose">
+<meta name="keywords" content="HyperLedger-Fabric">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HyperLedger-Fabric-01环境搭建">
+<meta property="og:url" content="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="准备工作   官方帮助文档：https://hyperledger-fabric.readthedocs.io/en/release-1.2/ 安装 cURL(https://curl.haxx.se/download.html),`curl —version` 查询版本 安装docker，docker --version 查询版本 安装docker-compose,docker-compose">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/hyper1.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/hyper3.png">
+<meta property="og:updated_time" content="2019-01-01T15:39:47.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HyperLedger-Fabric-01环境搭建">
+<meta name="twitter:description" content="准备工作   官方帮助文档：https://hyperledger-fabric.readthedocs.io/en/release-1.2/ 安装 cURL(https://curl.haxx.se/download.html),`curl —version` 查询版本 安装docker，docker --version 查询版本 安装docker-compose,docker-compose">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/hyper1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HyperLedger-Fabric-01环境搭建 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HyperLedger-Fabric-01环境搭建
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-01 23:32:46 / 修改时间：23:39:47" itemprop="dateCreated datePublished" datetime="2019-01-01T23:32:46+08:00">2019-01-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Docker以及HyperLedger-Fabric/" itemprop="url" rel="index"><span itemprop="name">Docker以及HyperLedger-Fabric</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>准备工作</p>
+<blockquote>
+<ol>
+<li>官方帮助文档：<a href="https://hyperledger-fabric.readthedocs.io/en/release-1.2/" target="_blank" rel="noopener">https://hyperledger-fabric.readthedocs.io/en/release-1.2/</a></li>
+<li>安装 cURL(<a href="https://curl.haxx.se/download.html),`curl" target="_blank" rel="noopener">https://curl.haxx.se/download.html),`curl</a> —version` 查询版本</li>
+<li>安装docker，<code>docker --version</code> 查询版本</li>
+<li>安装docker-compose,<code>docker-compose --version</code> 查询版本</li>
+<li>安装 go 语言环境，<code>go version</code> 查询版本</li>
+<li>安装node.js, <code>node  -v</code> 查询版本</li>
+<li>Python 版本要求为 2.7，<code>python --version</code> 查询版本</li>
+</ol>
+</blockquote>
+<h3 id="1-1-安装docker"><a href="#1-1-安装docker" class="headerlink" title="1.1 安装docker"></a>1.1 安装docker</h3><ol>
+<li><p>基础软件安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 安装基本软件</span><br><span class="line"><span class="meta">$</span> sudo apt-get update</span><br><span class="line"><span class="meta">$</span> sudo apt-get install apt-transport-https ca-certificates curl git software-properties-common lrzsz -y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加阿里的docker镜像仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 添加阿里的docker镜像仓库</span><br><span class="line"><span class="meta">$</span> curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -</span><br><span class="line"><span class="meta">$</span> sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"</span><br><span class="line"><span class="meta">#</span> 更新软件源</span><br><span class="line"><span class="meta">$</span> sudo apt-get update</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装docker</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 安装docker</span><br><span class="line"><span class="meta">$</span> sudo apt-get install docker-ce -y</span><br><span class="line"><span class="meta">#</span> 查看安装的docker版本</span><br><span class="line"><span class="meta">$</span> docker version</span><br><span class="line">	Client:</span><br><span class="line">         Version:           18.06.1-ce</span><br><span class="line">         API version:       1.38</span><br><span class="line">         Go version:        go1.10.3</span><br><span class="line">         Git commit:        e68fc7a</span><br><span class="line">         Built:             Tue Aug 21 17:24:51 2018</span><br><span class="line">         OS/Arch:           linux/amd64</span><br><span class="line">         Experimental:      false</span><br><span class="line">    Got permission denied while trying to connect to the Docker daemon socket at</span><br><span class="line">    unix:///var/run/docker.sock: Get</span><br><span class="line">    http://%2Fvar%2Frun%2Fdocker.sock/v1.38/version: </span><br><span class="line">    dial unix /var/run/docker.sock: connect: `permission denied`</span><br><span class="line"><span class="meta">#</span> 当前用户直接操作docker时, 权限不够, 需要做下面的第4不操作</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将当前用户添加到docker组</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 将用户加入该 group 内。然后退出并重新登录就生效啦。</span><br><span class="line"><span class="meta">$</span> sudo gpasswd -a $&#123;USER&#125; docker</span><br><span class="line"><span class="meta">#</span> 重启docker服务</span><br><span class="line"><span class="meta">$</span> systemctl restart docker</span><br><span class="line"><span class="meta">#</span> 当前用户切换到docker群组</span><br><span class="line"><span class="meta">$</span> newgrp - docker</span><br><span class="line"><span class="meta">$</span> docker version</span><br><span class="line">	Client:</span><br><span class="line">         Version:           18.06.1-ce</span><br><span class="line">         API version:       1.38</span><br><span class="line">         Go version:        go1.10.3</span><br><span class="line">         Git commit:        e68fc7a</span><br><span class="line">         Built:             Tue Aug 21 17:24:51 2018</span><br><span class="line">         OS/Arch:           linux/amd64</span><br><span class="line">         Experimental:      false</span><br><span class="line"></span><br><span class="line">    Server:</span><br><span class="line">         Engine:</span><br><span class="line">         Version:          18.06.1-ce</span><br><span class="line">         API version:      1.38 (minimum version 1.12)</span><br><span class="line">         Go version:       go1.10.3</span><br><span class="line">         Git commit:       e68fc7a</span><br><span class="line">         Built:            Tue Aug 21 17:23:15 2018</span><br><span class="line">         OS/Arch:          linux/amd64</span><br><span class="line">         Experimental:     false</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装docker-compose</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>安装依赖工具</span><br><span class="line"><span class="meta">$</span> sudo apt-get install python-pip -y</span><br><span class="line"><span class="meta">#</span>安装编排工具</span><br><span class="line"><span class="meta">$</span> sudo pip install docker-compose</span><br><span class="line"><span class="meta">#</span>查看版本</span><br><span class="line"><span class="meta">$</span> sudo docker-compose version</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="1-2-安装go"><a href="#1-2-安装go" class="headerlink" title="1.2 安装go"></a>1.2 安装go</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 安装包下载地址:</span><br><span class="line">https://golang.org/dl/  - 翻墙</span><br><span class="line">https://studygolang.com/dl - 国内镜像源</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/01/01/HyperLedger-Fabric-01环境搭建/hyper1.png" alt="1536569707498"></p>
+<p>如果没有进行安装包下载, 课直接使用如下命令(目前最新版本):</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1. 使用wget工具下载安装包</span><br><span class="line"><span class="meta">$</span> wget https://dl.google.com/go/go1.11.linux-amd64.tar.gz</span><br><span class="line"><span class="meta">#</span> 2. 解压tar包到/usr/local</span><br><span class="line"><span class="meta">$</span> sudo tar zxvf go1.11.linux-amd64.tar.gz -C /usr/local</span><br><span class="line"><span class="meta">#</span> 3. 创建Go目录</span><br><span class="line"><span class="meta">$</span> mkdir $HOME/go</span><br><span class="line"><span class="meta">#</span> 4. 用vi打开~./bashrc，配置环境变量</span><br><span class="line"><span class="meta">$</span> vim ~/.bashrc</span><br><span class="line"><span class="meta">#</span> 5. 增加下面的环境变量，保存退出</span><br><span class="line">	export GOROOT=/usr/local/go</span><br><span class="line">    export GOPATH=$HOME/go</span><br><span class="line">    export PATH=$PATH:$GOROOT/bin:$GOPATH/bin</span><br><span class="line"><span class="meta">#</span> 6. 使环境变量立即生效, 一些命令二选一</span><br><span class="line"><span class="meta">$</span> source ~/.bashrc  </span><br><span class="line"><span class="meta">$</span> . ~/.bashrc</span><br><span class="line"><span class="meta">#</span> 7. 检测go是否安装好</span><br><span class="line"><span class="meta">$</span> go version</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-安装Node-js"><a href="#1-3-安装Node-js" class="headerlink" title="1.3 安装Node.js"></a>1.3 安装Node.js</h3><ol>
+<li><p>官方下载地址</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">https://nodejs.org/en/download/</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/01/01/HyperLedger-Fabric-01环境搭建/hyper3.png" alt="1536572107278"></p>
+</li>
+<li><p>下载二进制源码包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> wget https://nodejs.org/dist/v8.11.4/node-v8.11.4-linux-x64.tar.xz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压并安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 指定压缩包解压到/opt目录下</span><br><span class="line"><span class="meta">$</span> sudo tar xvf node-v8.11.4-linux-x64.tar.xz -C /opt</span><br><span class="line">	- 在/opt目录下得到 node-v8.11.4-linux-x64 目录</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将node.js设置为全局可用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 打开系统级别的配置文件 /etc/profile</span><br><span class="line"><span class="meta">$</span> sudo vim /etc/profile</span><br><span class="line"><span class="meta">#</span> 添加如下配置项, 保存退出</span><br><span class="line">    export NODEJS_HOME=/opt/node-v8.11.4-linux-x64</span><br><span class="line">    export PATH=$PATH:$NODEJS_HOME/bin</span><br><span class="line"><span class="meta">#</span> 重新加载配置文件</span><br><span class="line"><span class="meta">$</span> . /etc/profile</span><br><span class="line">/etc/profile -&gt; 设置环境变量的配置文件</span><br><span class="line">	- 对当前系统下所有用户生效</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> node -v</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="1-4-部署hyperledger-Fabric"><a href="#1-4-部署hyperledger-Fabric" class="headerlink" title="1.4 部署hyperledger Fabric"></a>1.4 部署hyperledger Fabric</h3><ol>
+<li><p>下载并执行fabric的引导脚本bootstrap.sh</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 创建放置的目录，然后进入该目录，用curl下载脚本。</span><br><span class="line"><span class="meta">$</span> cd ~ # 这里在家目录下创建放置目录</span><br><span class="line"><span class="meta">$</span> mkdir hyperledger-fabric # 创建放置目录</span><br><span class="line"><span class="meta">$</span> cd hyperledger-fabric</span><br><span class="line"><span class="meta">#</span> 下载并执行脚本, [ ***语法格式*** ] - </span><br><span class="line"><span class="meta">#</span> 下边是具体的执行命令 - 看我</span><br><span class="line"><span class="meta">#</span> 下边是具体的执行命令 - 看我</span><br><span class="line"><span class="meta">#</span> 下边是具体的执行命令 -- 重要的事情说三遍, 使用下边不翻墙的命令</span><br><span class="line"><span class="meta">$</span> curl -sSL http://bit.ly/2ysbOFE | bash -s &lt;fabric&gt; &lt;fabric-ca&gt; &lt;thirdparty&gt;</span><br><span class="line">	- fabric: fabric的版本</span><br><span class="line">	- fabric-ca: fabric-ca的版本</span><br><span class="line">	- thirdparty: 第三方库的版本</span><br><span class="line"><span class="meta">#</span> 下载并执行脚本, [ ***需要翻墙, 需要翻墙, 需要翻墙, 需要翻墙, 需要翻墙,*** ]</span><br><span class="line"><span class="meta">$</span> curl -sSL http://bit.ly/2ysbOFE | bash -s 1.2.1 1.2.1 0.4.10</span><br><span class="line">	- http://bit.ly/2ysbOFE: 该地址必须翻墙才能访问</span><br><span class="line"><span class="meta">#</span> ***不翻墙的方式***</span><br><span class="line"><span class="meta">$</span> curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s 1.2.1 1.2.1 0.4.10</span><br><span class="line"><span class="meta">#</span> 该脚本启动之后会下载两个压缩包和一些镜像文件, 整个过程会比较长, 耐心等待...</span><br><span class="line"><span class="meta">#</span> 温馨提示: 这个过程会让你产生想要砸电脑的冲动, 控制好你的情绪!!!!</span><br><span class="line"><span class="meta">#</span> 上述命令刚开始会下载以下两个压缩包, 这两个包下载速度特别慢慢慢慢慢慢慢.......</span><br><span class="line"><span class="meta">#</span> 	1. hyperledger-fabric-linux-amd64-1.2.0.tar.gz</span><br><span class="line"><span class="meta">#</span> 	2. hyperledger-fabric-ca-linux-amd64-1.2.0.tar.gz</span><br><span class="line">以上两个压缩包下载下来之后会被解压, 解压目录:</span><br><span class="line">~/hyperledger-fabric/fabric-samples</span><br><span class="line">可以将事先下载好的两个压缩包放到该目录下, 提高下载速度 (强烈建议), 放好之后再重新执行上边的curl命令</span><br></pre></td></tr></table></figure>
+<p>安装过程中输出的log信息</p>
+<blockquote>
+<p>Installing hyperledger/fabric-samples repo</p>
+<p>===&gt; Cloning hyperledger/fabric-samples repo and checkout v1.2.0<br>正克隆到 ‘fabric-samples’…<br>remote: Enumerating objects: 29, done.<br>remote: Counting objects: 100% (29/29), done.<br>remote: Compressing objects: 100% (28/28), done.<br>remote: Total 1821 (delta 5), reused 25 (delta 1), pack-reused 1792<br>接收对象中: 100% (1821/1821), 646.82 KiB | 156.00 KiB/s, 完成.<br>处理 delta 中: 100% (877/877), 完成.<br>注意：正在检出 ‘v1.2.0’。</p>
+<p>您正处于分离头指针状态。您可以查看、做试验性的修改及提交，并且您可以通过另外<br>的检出分支操作丢弃在这个状态下所做的任何提交。</p>
+<p>如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在检出命令添加<br>参数 -b 来实现（现在或稍后）。例如：</p>
+<p>  git checkout -b &lt;新分支名&gt;</p>
+<p>HEAD 目前位于 ed81d7b [FAB-10811] fabric-ca sample is broken on v1.2</p>
+<p>Installing Hyperledger Fabric binaries</p>
+<p>===&gt; Downloading version 1.2.0 platform specific fabric binaries<br>===&gt; Downloading:  <a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.2.0/hyperledger-fabric-linux-amd64-1.2.0.tar.gz" target="_blank" rel="noopener">https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.2.0/hyperledger-fabric-linux-amd64-1.2.0.tar.gz</a><br>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current<br>​                                 Dload  Upload   Total   Spent    Left  Speed<br>  4 39.0M    4 1650k    0     0   7322      0  1:33:08  0:03:50  1:29:18  1642<br>==&gt; File downloaded. Verifying the md5sum…<br>==&gt; Extracting hyperledger-fabric-linux-amd64-1.2.0.tar.gz…<br>==&gt; Done.<br>===&gt; Downloading version 1.2.0 platform specific fabric-ca-client binary<br>===&gt; Downloading:  <a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric-ca/hyperledger-fabric-ca/linux-amd64-1.2.0/hyperledger-fabric-ca-linux-amd64-1.2.0.tar.gz" target="_blank" rel="noopener">https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric-ca/hyperledger-fabric-ca/linux-amd64-1.2.0/hyperledger-fabric-ca-linux-amd64-1.2.0.tar.gz</a><br>==&gt; Partial binary file found. Resuming download…<br>==&gt; File downloaded. Verifying the md5sum…<br>==&gt; Extracting hyperledger-fabric-ca-linux-amd64-1.2.0.tar.gz…<br>==&gt; Done.</p>
+<p>Installing Hyperledger Fabric docker images</p>
+<p>===&gt; Pulling fabric Images<br>==&gt; FABRIC IMAGE: peer</p>
+<p>1.2.0: Pulling from hyperledger/fabric-peer<br>b234f539f7a1: Pull complete<br>55172d420b43: Pull complete<br>5ba5bbeb6b91: Pull complete<br>43ae2841ad7a: Pull complete<br>f6c9c6de4190: Pull complete<br>c6af77e36488: Pull complete<br>964f7f4f22f3: Pull complete<br>d4a3f4cfba3d: Pull complete<br>73782018d902: Pull complete<br>039eb34e730e: Pull complete<br>Digest: sha256:949b38bad9496d7694b54d30b90b72653804d761a44d721c4dc7a16a5cbcabe8<br>Status: Downloaded newer image for hyperledger/fabric-peer:1.2.0<br>==&gt; FABRIC IMAGE: orderer</p>
+<p>1.2.0: Pulling from hyperledger/fabric-orderer<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>d4a3f4cfba3d: Already exists<br>8d0e11f5a0f7: Pull complete<br>0bda0f004d88: Pull complete<br>Digest: sha256:a10f6d1d4cbb5a0264634c8b5ec63ff6cbbfc7c9fb369a06cc6dfe504d976259<br>Status: Downloaded newer image for hyperledger/fabric-orderer:1.2.0<br>==&gt; FABRIC IMAGE: ccenv</p>
+<p>1.2.0: Pulling from hyperledger/fabric-ccenv<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>13cd31405e09: Pull complete<br>e03b35c19d96: Pull complete<br>96c2920985e3: Pull complete<br>e91461be8304: Pull complete<br>950c3368692b: Pull complete<br>c5de8d20c137: Pull complete<br>5536b64bc67b: Pull complete<br>Digest: sha256:0a7fb37111cafce79cf89ca8d1af5ca6f721e60a8bd1b2b93521e671e3348af2<br>Status: Downloaded newer image for hyperledger/fabric-ccenv:1.2.0<br>==&gt; FABRIC IMAGE: tools</p>
+<p>1.2.0: Pulling from hyperledger/fabric-tools<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>13cd31405e09: Already exists<br>e03b35c19d96: Already exists<br>96c2920985e3: Already exists<br>e91461be8304: Already exists<br>314928def9dd: Pull complete<br>d5b68ae13f8d: Pull complete<br>dde25187799d: Pull complete<br>Digest: sha256:24cca44a2f2ab6325c6ccc1c91a10bd3e0e71764037a85a473f7e9621b3a0f91<br>Status: Downloaded newer image for hyperledger/fabric-tools:1.2.0<br>===&gt; Pulling fabric ca Image<br>==&gt; FABRIC CA IMAGE</p>
+<p>1.2.0: Pulling from hyperledger/fabric-ca<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>f7a6370a6f7f: Pull complete<br>37cc94e973b2: Pull complete<br>a80e45d2f608: Pull complete<br>8feb19f73d3a: Pull complete<br>5f3ea048e0c0: Pull complete<br>Digest: sha256:5fe6d502e52ec2a8d98ee5653e1ba31952098115fb57710ddae86f2c3cc82dad<br>Status: Downloaded newer image for hyperledger/fabric-ca:1.2.0<br>===&gt; Pulling thirdparty docker images<br>==&gt; THIRDPARTY DOCKER IMAGE: couchdb</p>
+<p>0.4.10: Pulling from hyperledger/fabric-couchdb<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>13cd31405e09: Already exists<br>e03b35c19d96: Already exists<br>96c2920985e3: Already exists<br>e91461be8304: Already exists<br>6a752ce8f7fe: Pull complete<br>a49e2cb854b0: Pull complete<br>493b25e70e6d: Pull complete<br>2721753a3e7c: Pull complete<br>adede0f2a5f1: Pull complete<br>9eb593f76305: Pull complete<br>bb49a3450e11: Pull complete<br>929b9bb5d788: Pull complete<br>Digest: sha256:c65891b6c2374a06aff61dad8cd60e1f7a8dc2b72cc9f6f5c2f853f94509c1b1<br>Status: Downloaded newer image for hyperledger/fabric-couchdb:0.4.10<br>==&gt; THIRDPARTY DOCKER IMAGE: kafka</p>
+<p>0.4.10: Pulling from hyperledger/fabric-kafka<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>13cd31405e09: Already exists<br>e03b35c19d96: Already exists<br>96c2920985e3: Already exists<br>e91461be8304: Already exists<br>146aa6695f33: Pull complete<br>954e41d8cd46: Pull complete<br>9d750070047f: Pull complete<br>Digest: sha256:3b58cd0f26e7f4d8c49373d6b91e1e465a97321ce106da9c055ed452bb9d7184<br>Status: Downloaded newer image for hyperledger/fabric-kafka:0.4.10<br>==&gt; THIRDPARTY DOCKER IMAGE: zookeeper</p>
+<p>0.4.10: Pulling from hyperledger/fabric-zookeeper<br>b234f539f7a1: Already exists<br>55172d420b43: Already exists<br>5ba5bbeb6b91: Already exists<br>43ae2841ad7a: Already exists<br>f6c9c6de4190: Already exists<br>c6af77e36488: Already exists<br>964f7f4f22f3: Already exists<br>13cd31405e09: Already exists<br>e03b35c19d96: Already exists<br>96c2920985e3: Already exists<br>e91461be8304: Already exists<br>c335e6e59168: Pull complete<br>016e000b0cc8: Pull complete<br>e716b0c9790c: Pull complete<br>390f47e71470: Pull complete<br>Digest: sha256:151fe67421663fe860c1aba4b80877a22b6b8fa18cbc97990c309c603cd6f5f1<br>Status: Downloaded newer image for hyperledger/fabric-zookeeper:0.4.10</p>
+</blockquote>
+<p><strong>通过上述操作拉取的docker镜像为:</strong></p>
+<p>|         镜像文件名称         |                        用途                        |<br>| :—————————————: | :————————————————————————: |<br>|   hyperledger/fabric-peer    |                  peer模块镜像文件                  |<br>|  hyperledger/fabric-orderer  |               orderer节点库镜像文件                |<br>|   hyperledger/fabric-ccenv   |         Go语言chaincode运行环境库镜像文件          |<br>|   hyperledger/fabric-tools   | 相关工具镜像文件包含了cryptogen, configtxgen等工具 |<br>|    hyperledger/fabric-ca     |                   CA模块镜像文件                   |<br>|  hyperledger/fabric-couchdb  |               couchdb数据库镜像文件                |<br>|   hyperledger/fabric-kafka   |                  kafka库镜像文件                   |<br>| hyperledger/fabric-zookeeper |                zookeeper库镜像文件                 |</p>
+<p>下载完，可以看到已经下载的docker相关镜像</p>
+</li>
+</ol>
+<blockquote>
+<p>===&gt; List out hyperledger docker images</p>
+<blockquote>
+<blockquote>
+<p>hyperledger/fabric-ca                1.2.0               66cc132bd09c        2 months ago        252MB</p>
+<p>hyperledger/fabric-ca                latest              66cc132bd09c        2 months ago        252MB<br>hyperledger/fabric-tools            1.2.0               379602873003        2 months ago        1.51GB<br>hyperledger/fabric-tools            latest              379602873003        2 months ago        1.51GB<br>hyperledger/fabric-ccenv           1.2.0               6acf31e2d9a4        2 months ago        1.43GB<br>hyperledger/fabric-ccenv           latest              6acf31e2d9a4        2 months ago        1.43GB<br>hyperledger/fabric-orderer        1.2.0               4baf7789a8ec        2 months ago        152MB<br>hyperledger/fabric-orderer        latest              4baf7789a8ec        2 months ago        152MB<br>hyperledger/fabric-peer             1.2.0               82c262e65984        2 months ago        159MB<br>hyperledger/fabric-peer             latest              82c262e65984        2 months ago        159MB<br>hyperledger/fabric-zookeeper   0.4.10              2b51158f3898        2 months ago        1.44GB<br>hyperledger/fabric-zookeeper    latest              2b51158f3898        2 months ago        1.44GB<br>hyperledger/fabric-kafka            0.4.10              936aef6db0e6        2 months ago        1.45GB<br>hyperledger/fabric-kafka              latest              936aef6db0e6        2 months ago        1.45GB<br>hyperledger/fabric-couchdb      0.4.10              3092eca241fc        2 months ago        1.61GB<br>hyperledger/fabric-couchdb       latest              3092eca241fc        2 months ago        1.61GB</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ol>
+<li><p>设置全局访问</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 进入到 ~/hyperledger-fabric/fabric-samples/bin 目录</span><br><span class="line"><span class="meta">$</span> cd ~/hyperledger-fabric/fabric-samples/bin</span><br><span class="line">itcast@ubuntu:~/hyperledger-fabric/fabric-samples/bin$ tree</span><br><span class="line">    .</span><br><span class="line">    ├── configtxgen</span><br><span class="line">    ├── configtxlator</span><br><span class="line">    ├── cryptogen</span><br><span class="line">    ├── discover</span><br><span class="line">    ├── fabric-ca-client</span><br><span class="line">    ├── get-docker-images.sh</span><br><span class="line">    ├── idemixgen</span><br><span class="line">    ├── orderer</span><br><span class="line">    └── peer</span><br><span class="line"><span class="meta">#</span> 将这些二进制文件拷贝到 /usr/local/bin 目录下</span><br><span class="line"><span class="meta">$</span> sudo cp * /usr/local/bin</span><br><span class="line"><span class="meta">#</span> 执行完上述操作之后, fabric的这些可执行程序就可以在全局范围内使用了</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="1-5-First-Network-环境测试"><a href="#1-5-First-Network-环境测试" class="headerlink" title="1.5 First-Network 环境测试"></a>1.5 First-Network 环境测试</h3><h4 id="1-5-1-生成相应文件"><a href="#1-5-1-生成相应文件" class="headerlink" title="1.5.1 生成相应文件"></a>1.5.1 生成相应文件</h4><p><strong>执行 ./byfn.sh generate 命令生成相应的文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cd ~/hyperledger-fabric/fabric-samples/first-network/</span><br><span class="line"><span class="meta">$</span> ./byfn.sh generate</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Generating certs and genesis block for channel ‘mychannel’ with CLI timeout of ‘10’ seconds and CLI delay of ‘3’ seconds<br>Continue? [Y/n] y<br>proceeding …<br>/home/zoro/hyperledger-fabric/fabric-samples/first-network/../bin/cryptogen</p>
+<h6 id=""><a href="#" class="headerlink" title="#"></a>#</h6><font color="blue" size="5">Generate certificates using cryptogen tool</font>
+
+<h6 id="-1"><a href="#-1" class="headerlink" title="#"></a>#</h6><ul>
+<li><font color="red">cryptogen generate —config=./crypto-config.yaml</font><br>org1.example.com<br>org2.example.com</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+<p>/home/zoro/hyperledger-fabric/fabric-samples/first-network/../bin/configtxgen</p>
+<h6 id="-2"><a href="#-2" class="headerlink" title="#"></a>#</h6><font color="blue" size="5">Generating Orderer Genesis block</font>
+
+<h6 id="-3"><a href="#-3" class="headerlink" title="#"></a>#</h6><ul>
+<li><font color="red">configtxgen <strong>-profile</strong> TwoOrgsOrdererGenesis <strong>-outputBlock</strong> ./channel-artifacts/genesis.block</font><br>2018-09-23 11:03:32.183 CST [common/tools/configtxgen] main -&gt; WARN 001 Omitting the channel ID for configtxgen is deprecated.  Explicitly passing the channel ID will be required in the future, defaulting to ‘testchainid’.<br>2018-09-23 11:03:32.183 CST [common/tools/configtxgen] main -&gt; INFO 002 Loading configuration<br>2018-09-23 11:03:32.190 CST [common/tools/configtxgen/encoder] NewChannelGroup -&gt; WARN 003 Default policy emission is deprecated, please include policy specificiations for the channel group in configtx.yaml<br>2018-09-23 11:03:32.191 CST [common/tools/configtxgen/encoder] NewOrdererGroup -&gt; WARN 004 Default policy emission is deprecated, please include policy specificiations for the orderer group in configtx.yaml<br>2018-09-23 11:03:32.191 CST [common/tools/configtxgen/encoder] NewOrdererOrgGroup -&gt; WARN 005 Default policy emission is deprecated, please include policy specificiations for the orderer org group OrdererOrg in configtx.yaml<br>2018-09-23 11:03:32.192 CST [msp] getMspConfig -&gt; INFO 006 Loading NodeOUs<br>2018-09-23 11:03:32.192 CST [common/tools/configtxgen/encoder] NewOrdererOrgGroup -&gt; WARN 007 Default policy emission is deprecated, please include policy specificiations for the orderer org group Org1MSP in configtx.yaml<br>2018-09-23 11:03:32.193 CST [msp] getMspConfig -&gt; INFO 008 Loading NodeOUs<br>2018-09-23 11:03:32.193 CST [common/tools/configtxgen/encoder] NewOrdererOrgGroup -&gt; WARN 009 Default policy emission is deprecated, please include policy specificiations for the orderer org group Org2MSP in configtx.yaml<br>2018-09-23 11:03:32.193 CST [common/tools/configtxgen] doOutputBlock -&gt; INFO 00a Generating genesis block<br>2018-09-23 11:03:32.194 CST [common/tools/configtxgen] doOutputBlock -&gt; INFO 00b Writing genesis block</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+<h6 id="-4"><a href="#-4" class="headerlink" title="#"></a>#</h6> <font color="blue" size="5">Generating channel configuration transaction 'channel.tx'</font>
+
+<h6 id="-5"><a href="#-5" class="headerlink" title="#"></a>#</h6><ul>
+<li><font color="red">configtxgen <strong>-profile</strong> TwoOrgsChannel <strong>-outputCreateChannelTx</strong> ./channel-artifacts/channel.tx <strong>-channelID</strong> mychannel</font><br>2018-09-23 11:03:32.238 CST [common/tools/configtxgen] main -&gt; INFO 001 Loading configuration<br>2018-09-23 11:03:32.252 CST [common/tools/configtxgen] doOutputChannelCreateTx -&gt; INFO 002 Generating new channel configtx<br>2018-09-23 11:03:32.253 CST [common/tools/configtxgen/encoder] NewApplicationGroup -&gt; WARN 003 Default policy emission is deprecated, please include policy specificiations for the application group in configtx.yaml<br>2018-09-23 11:03:32.253 CST [msp] getMspConfig -&gt; INFO 004 Loading NodeOUs<br>2018-09-23 11:03:32.254 CST [common/tools/configtxgen/encoder] NewApplicationOrgGroup -&gt; WARN 005 Default policy emission is deprecated, please include policy specificiations for the application org group Org1MSP in configtx.yaml<br>2018-09-23 11:03:32.254 CST [msp] getMspConfig -&gt; INFO 006 Loading NodeOUs<br>2018-09-23 11:03:32.254 CST [common/tools/configtxgen/encoder] NewApplicationOrgGroup -&gt; WARN 007 Default policy emission is deprecated, please include policy specificiations for the application org group Org2MSP in configtx.yaml<br>2018-09-23 11:03:32.257 CST [common/tools/configtxgen] doOutputChannelCreateTx -&gt; INFO 008 Writing new channel tx</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+<h6 id="-6"><a href="#-6" class="headerlink" title="#"></a>#</h6><font color="blue" size="5">Generating anchor peer update for Org1MSP</font>
+
+<h6 id="-7"><a href="#-7" class="headerlink" title="#"></a>#</h6><ul>
+<li><font color="red">configtxgen <strong>-profile</strong> TwoOrgsChannel <strong>-outputAnchorPeersUpdate</strong> ./channel-artifacts/Org1MSPanchors.tx <strong>-channelID</strong> mychannel <strong>-asOrg</strong> Org1MSP</font><br>2018-09-23 11:03:32.298 CST [common/tools/configtxgen] main -&gt; INFO 001 Loading configuration<br>2018-09-23 11:03:32.307 CST [common/tools/configtxgen] doOutputAnchorPeersUpdate -&gt; INFO 002 Generating anchor peer update<br>2018-09-23 11:03:32.307 CST [common/tools/configtxgen] doOutputAnchorPeersUpdate -&gt; INFO 003 Writing anchor peer update</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+<h6 id="-8"><a href="#-8" class="headerlink" title="#"></a>#</h6><font color="blue" size="5">Generating anchor peer update for Org2MSP</font>
+
+<h6 id="-9"><a href="#-9" class="headerlink" title="#"></a>#</h6><ul>
+<li><font color="red">configtxgen <strong>-profile</strong> TwoOrgsChannel <strong>-outputAnchorPeersUpdate</strong> ./channel-artifacts/Org2MSPanchors.tx <strong>-channelID</strong> mychannel <strong>-asOrg</strong> Org2MSP</font><br>2018-09-23 11:03:32.350 CST [common/tools/configtxgen] main -&gt; INFO 001 Loading configuration<br>2018-09-23 11:03:32.362 CST [common/tools/configtxgen] doOutputAnchorPeersUpdate -&gt; INFO 002 Generating anchor peer update<br>2018-09-23 11:03:32.363 CST [common/tools/configtxgen] doOutputAnchorPeersUpdate -&gt; INFO 003 Writing anchor peer update</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+</blockquote>
+<h4 id="1-5-2-启动网路"><a href="#1-5-2-启动网路" class="headerlink" title="1.5.2 启动网路"></a>1.5.2 启动网路</h4><p><strong>执行 ./byfn.sh up 启动网络</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> byfn == build your first network</span><br><span class="line"><span class="meta">$</span> ./byfn.sh up</span><br></pre></td></tr></table></figure>
+<p>当我们看到START的时候，表示启动成功。 </p>
+<blockquote>
+<p>Starting for channel ‘mychannel’ with CLI timeout of ‘10’ seconds and CLI delay of ‘3’ seconds<br>Continue? [Y/n] y<br>proceeding …<br>LOCAL_VERSION=1.2.0<br>DOCKER_IMAGE_VERSION=1.2.0<br>Creating network “net_byfn” with the default driver<br>Creating volume “net_peer0.org2.example.com” with default driver<br>Creating volume “net_peer1.org2.example.com” with default driver<br>Creating volume “net_peer1.org1.example.com” with default driver<br>Creating volume “net_peer0.org1.example.com” with default driver<br>Creating volume “net_orderer.example.com” with default driver<br>Creating peer1.org1.example.com … done<br>Creating peer0.org1.example.com … done<br>Creating peer0.org2.example.com … done<br>Creating orderer.example.com    … done<br>Creating peer1.org2.example.com … done<br>Creating cli                    … done</p>
+<p>​                                                                        <font color="red" size="24">START</font></p>
+<p>Build your first network (BYFN) end-to-end test</p>
+<p>Channel name : mychannel<br>Creating channel…</p>
+<ul>
+<li><font color="red">peer channel create -o orderer.example.com:7050 -c mychannel -f ./channel-artifacts/channel.tx --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem</font></li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:03:55.350 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:03:55.420 UTC [cli/common] readBlock -&gt; INFO 002 Got status: &amp;{NOT_FOUND}<br>2018-09-23 03:03:55.422 UTC [channelCmd] InitCmdFactory -&gt; INFO 003 Endorser and orderer connections initialized<br>2018-09-23 03:03:55.629 UTC [cli/common] readBlock -&gt; INFO 004 Received block: 0<br>===================== Channel ‘mychannel’ created ===================== </li>
+</ul>
+<p>Having all peers join the channel…</p>
+<ul>
+<li>peer channel join -b mychannel.block</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:03:55.699 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:03:55.807 UTC [channelCmd] executeJoin -&gt; INFO 002 Successfully submitted proposal to join channel<br>===================== peer0.org1 joined channel ‘mychannel’ ===================== </li>
+<li>peer channel join -b mychannel.block</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:03:58.874 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:03:58.976 UTC [channelCmd] executeJoin -&gt; INFO 002 Successfully submitted proposal to join channel<br>===================== peer1.org1 joined channel ‘mychannel’ ===================== </li>
+<li>peer channel join -b mychannel.block</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:02.058 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:04:02.169 UTC [channelCmd] executeJoin -&gt; INFO 002 Successfully submitted proposal to join channel<br>===================== peer0.org2 joined channel ‘mychannel’ ===================== </li>
+<li>peer channel join -b mychannel.block</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:05.231 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:04:05.339 UTC [channelCmd] executeJoin -&gt; INFO 002 Successfully submitted proposal to join channel<br>===================== peer1.org2 joined channel ‘mychannel’ ===================== </li>
+</ul>
+<p>Updating anchor peers for org1…</p>
+<ul>
+<li>peer channel update -o orderer.example.com:7050 -c mychannel -f ./channel-artifacts/Org1MSPanchors.tx —tls true —cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:08.406 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:04:08.422 UTC [channelCmd] update -&gt; INFO 002 Successfully submitted channel update<br>===================== Anchor peers updated for org ‘Org1MSP’ on channel ‘mychannel’ ===================== </li>
+</ul>
+<p>Updating anchor peers for org2…</p>
+<ul>
+<li>peer channel update -o orderer.example.com:7050 -c mychannel -f ./channel-artifacts/Org2MSPanchors.tx —tls true —cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:11.503 UTC [channelCmd] InitCmdFactory -&gt; INFO 001 Endorser and orderer connections initialized<br>2018-09-23 03:04:11.519 UTC [channelCmd] update -&gt; INFO 002 Successfully submitted channel update<br>===================== Anchor peers updated for org ‘Org2MSP’ on channel ‘mychannel’ ===================== </li>
+</ul>
+<p>Installing chaincode on peer0.org1…</p>
+<ul>
+<li>peer chaincode install -n mycc -v 1.0 -l golang -p github.com/chaincode/chaincode_example02/go/</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:14.610 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 001 Using default escc<br>2018-09-23 03:04:14.610 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 002 Using default vscc<br>2018-09-23 03:04:15.000 UTC [chaincodeCmd] install -&gt; INFO 003 Installed remotely response:<status:200 payload:"ok"=""><br>===================== Chaincode is installed on peer0.org1 ===================== </status:200></li>
+</ul>
+<p>Install chaincode on peer0.org2…</p>
+<ul>
+<li>peer chaincode install -n mycc -v 1.0 -l golang -p github.com/chaincode/chaincode_example02/go/</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:15.069 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 001 Using default escc<br>2018-09-23 03:04:15.069 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 002 Using default vscc<br>2018-09-23 03:04:15.203 UTC [chaincodeCmd] install -&gt; INFO 003 Installed remotely response:<status:200 payload:"ok"=""><br>===================== Chaincode is installed on peer0.org2 ===================== </status:200></li>
+</ul>
+<p>Instantiating chaincode on peer0.org2…</p>
+<ul>
+<li>peer chaincode instantiate -o orderer.example.com:7050 —tls true —cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n mycc -l golang -v 1.0 -c ‘{“Args”:[“init”,”a”,”100”,”b”,”200”]}’ -P ‘AND (‘\’’Org1MSP.peer’\’’,’\’’Org2MSP.peer’\’’)’</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:04:15.284 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 001 Using default escc<br>2018-09-23 03:04:15.284 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 002 Using default vscc<br>===================== Chaincode is instantiated on peer0.org2 on channel ‘mychannel’ ===================== </li>
+</ul>
+<p>Querying chaincode on peer0.org1…<br>===================== Querying on peer0.org1 on channel ‘mychannel’… =====================<br>Attempting to Query peer0.org1 …3 secs</p>
+<ul>
+<li>peer chaincode query -C mychannel -n mycc -c ‘{“Args”:[“query”,”a”]}’</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+<p>100<br>===================== Query successful on peer0.org1 on channel ‘mychannel’ =====================<br>Sending invoke transaction on peer0.org1 peer0.org2…</p>
+<ul>
+<li>peer chaincode invoke -o orderer.example.com:7050 —tls true —cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n mycc —peerAddresses peer0.org1.example.com:7051 —tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt —peerAddresses peer0.org2.example.com:7051 —tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c ‘{“Args”:[“invoke”,”a”,”b”,”10”]}’</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:05:17.876 UTC [chaincodeCmd] chaincodeInvokeOrQuery -&gt; INFO 001 Chaincode invoke successful. result: status:200<br>===================== Invoke transaction successful on peer0.org1 peer0.org2 on channel ‘mychannel’ ===================== </li>
+</ul>
+<p>Installing chaincode on peer1.org2…</p>
+<ul>
+<li>peer chaincode install -n mycc -v 1.0 -l golang -p github.com/chaincode/chaincode_example02/go/</li>
+<li>res=0</li>
+<li>set +x<br>2018-09-23 03:05:17.966 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 001 Using default escc<br>2018-09-23 03:05:17.966 UTC [chaincodeCmd] checkChaincodeCmdParams -&gt; INFO 002 Using default vscc<br>2018-09-23 03:05:18.340 UTC [chaincodeCmd] install -&gt; INFO 003 Installed remotely response:<status:200 payload:"ok"=""><br>===================== Chaincode is installed on peer1.org2 ===================== </status:200></li>
+</ul>
+<p>Querying chaincode on peer1.org2…<br>===================== Querying on peer1.org2 on channel ‘mychannel’… =====================<br>Attempting to Query peer1.org2 …3 secs</p>
+<ul>
+<li>peer chaincode query -C mychannel -n mycc -c ‘{“Args”:[“query”,”a”]}’</li>
+<li>res=0</li>
+<li>set +x</li>
+</ul>
+<p>90<br>===================== Query successful on peer1.org2 on channel ‘mychannel’ ===================== </p>
+<p>========= All GOOD, BYFN execution completed =========== </p>
+<p>​                                                                             <font color="red" size="24">END</font></p>
+</blockquote>
+<p>执行结束，显示END</p>
+<ol>
+<li><p><strong>通过docker ps命令可以查看到节点的启动情况。</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker ps</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>如果我们要停止网络，可以执行./byfn.sh down 命令来停止</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ./byfn.sh down</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Stopping for channel ‘mychannel’ with CLI timeout of ‘10’ seconds and CLI delay of ‘3’ seconds<br>Continue? [Y/n] y<br>proceeding …<br>Stopping cli                    … done<br>Stopping orderer.example.com    … done<br>Stopping peer1.org2.example.com … done<br>Stopping peer1.org1.example.com … done<br>Stopping peer0.org2.example.com … done<br>Stopping peer0.org1.example.com … done<br>Removing cli                    … done<br>Removing orderer.example.com    … done<br>Removing peer1.org2.example.com … done<br>Removing peer1.org1.example.com … done<br>Removing peer0.org2.example.com … done<br>Removing peer0.org1.example.com … done<br>Removing network net_byfn<br>Removing volume net_peer0.org3.example.com<br>WARNING: Volume net_peer0.org3.example.com not found.<br>Removing volume net_peer1.org3.example.com<br>WARNING: Volume net_peer1.org3.example.com not found.<br>Removing volume net_orderer.example.com<br>Removing volume net_peer0.org2.example.com<br>Removing volume net_peer0.org1.example.com<br>Removing volume net_peer1.org1.example.com<br>Removing volume net_peer1.org2.example.com<br>80510c01c3e8<br>3625e4ce1b01<br>43b4b0dfb14f<br>Untagged: dev-peer1.org2.example.com-mycc-1.0-26c2ef32838554aac4f7ad6f100aca865e87959c9a126e86d764c8d01f8346ab:latest<br>Deleted: sha256:3c7cf25f6520e39afe9ca0770821bcf8892c398ffa8fafaa4d39d4b18bf9a7af<br>Deleted: sha256:ac116d2c1fbb503f766149a2acf422b754d59ba4be58902981d03b2969ef21c1<br>Deleted: sha256:3e07d57882218fc26936d29deefba9e3bb0230d63b5e82d727ddbc92c59d942d<br>Deleted: sha256:9c88b5b791167d2d37be1fc39886e5efa00d522aad7df03869b8eb30aa564b5f<br>Untagged: dev-peer0.org1.example.com-mycc-1.0-384f11f484b9302df90b453200cfb25174305fce8f53f4e94d45ee3b6cab0ce9:latest<br>Deleted: sha256:16229f944e6c2e665587638a47c80d9594693aede0d25d736d7225370efc67ae<br>Deleted: sha256:6a5c627fbc23a646b17a493a6b7df67a2535501b8d77915aab6ac2c1ba97b1b3<br>Deleted: sha256:4d0d3e96c80a3e0ee4c3553a125c99bbaffe6f1b487348f87ffb3059d6eb7f2e<br>Deleted: sha256:a9600d47e71d3abb5f5afcbf56b6b21955e1bbe7fcb92040f1349667cf712bc0<br>Untagged: dev-peer0.org2.example.com-mycc-1.0-15b571b3ce849066b7ec74497da3b27e54e0df1345daff3951b94245ce09c42b:latest<br>Deleted: sha256:5f7c63593550d018ab28312c3d040b27a53f2d1e844ddd7d50a2fcf63454594b<br>Deleted: sha256:a00c5883309d6a80aaf22f8b704b594c6129150c5048fd00d742077f212b28f7<br>Deleted: sha256:71fae53aba930c88450ff286a5e54bceece45ea7aee465a8f2806aa967ab2b21<br>Deleted: sha256:08fe44e007fd3d5377b44cca32e8f78d2249b0a1d9ce9312c68636fdacda2edc</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/01/01/HyperLedger-Fabric-01环境搭建/">HyperLedger-Fabric-01环境搭建</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2019年01月01日 - 23:01</p>
+  <p><span>最后更新:</span>2019年01月01日 - 23:01</p>
+  <p><span>原始链接:</span><a href="/2019/01/01/HyperLedger-Fabric-01环境搭建/" title="HyperLedger-Fabric-01环境搭建">http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/01/01/HyperLedger-Fabric-01环境搭建/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HyperLedger-Fabric/" rel="tag"><i class="fa fa-tag"></i> HyperLedger-Fabric</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/30/数据结构和算法微整理/" rel="next" title="数据结构和算法微整理">
+                <i class="fa fa-chevron-left"></i> 数据结构和算法微整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">166</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">286.1k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-安装docker"><span class="nav-number">1.</span> <span class="nav-text">1.1 安装docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-安装go"><span class="nav-number">2.</span> <span class="nav-text">1.2 安装go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-安装Node-js"><span class="nav-number">3.</span> <span class="nav-text">1.3 安装Node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-部署hyperledger-Fabric"><span class="nav-number">4.</span> <span class="nav-text">1.4 部署hyperledger Fabric</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-First-Network-环境测试"><span class="nav-number">5.</span> <span class="nav-text">1.5 First-Network 环境测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-1-生成相应文件"><span class="nav-number">5.1.</span> <span class="nav-text">1.5.1 生成相应文件</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#"><span class="nav-number">5.1.0.1.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-1"><span class="nav-number">5.1.0.2.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-2"><span class="nav-number">5.1.0.3.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-3"><span class="nav-number">5.1.0.4.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-4"><span class="nav-number">5.1.0.5.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-5"><span class="nav-number">5.1.0.6.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-6"><span class="nav-number">5.1.0.7.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-7"><span class="nav-number">5.1.0.8.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-8"><span class="nav-number">5.1.0.9.</span> <span class="nav-text">#</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#-9"><span class="nav-number">5.1.0.10.</span> <span class="nav-text">#</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-2-启动网路"><span class="nav-number">5.2.</span> <span class="nav-text">1.5.2 启动网路</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
