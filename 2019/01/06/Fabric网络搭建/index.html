@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="4 搭建第一个自己的网络 下面让我们手动搭建一个自己的fabric 网络:  创建一个项目目录: 如 mkdir ~/Demo orderer节点个数为1个 组织个数2个 OrgGo OrgCPP   OrgGo有两个peer节点, 该组织有3个用户 OrgCpp有两个peer节点, 该组织有4个用户   4.1 生成Fabric的证书 编写生成组织节点证书的配置文件,我们将其命名为: crypt">
+<meta name="keywords" content="HyperLedger-Fabric">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fabric网络搭建">
+<meta property="og:url" content="http://yoursite.com/2019/01/06/Fabric网络搭建/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="4 搭建第一个自己的网络 下面让我们手动搭建一个自己的fabric 网络:  创建一个项目目录: 如 mkdir ~/Demo orderer节点个数为1个 组织个数2个 OrgGo OrgCPP   OrgGo有两个peer节点, 该组织有3个用户 OrgCpp有两个peer节点, 该组织有4个用户   4.1 生成Fabric的证书 编写生成组织节点证书的配置文件,我们将其命名为: crypt">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-06T13:26:33.176Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fabric网络搭建">
+<meta name="twitter:description" content="4 搭建第一个自己的网络 下面让我们手动搭建一个自己的fabric 网络:  创建一个项目目录: 如 mkdir ~/Demo orderer节点个数为1个 组织个数2个 OrgGo OrgCPP   OrgGo有两个peer节点, 该组织有3个用户 OrgCpp有两个peer节点, 该组织有4个用户   4.1 生成Fabric的证书 编写生成组织节点证书的配置文件,我们将其命名为: crypt">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/06/Fabric网络搭建/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Fabric网络搭建 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/06/Fabric网络搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Fabric网络搭建
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-06 20:44:35 / 修改时间：21:26:33" itemprop="dateCreated datePublished" datetime="2019-01-06T20:44:35+08:00">2019-01-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Docker以及HyperLedger-Fabric/" itemprop="url" rel="index"><span itemprop="name">Docker以及HyperLedger-Fabric</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="4-搭建第一个自己的网络"><a href="#4-搭建第一个自己的网络" class="headerlink" title="4 搭建第一个自己的网络"></a>4 搭建第一个自己的网络</h2><blockquote>
+<p>下面让我们手动搭建一个自己的fabric 网络:</p>
+<ul>
+<li>创建一个项目目录: 如 <code>mkdir ~/Demo</code></li>
+<li>orderer节点个数为1个</li>
+<li>组织个数2个<ul>
+<li>OrgGo</li>
+<li>OrgCPP</li>
+</ul>
+</li>
+<li>OrgGo有两个peer节点, 该组织有3个用户</li>
+<li>OrgCpp有两个peer节点, 该组织有4个用户</li>
+</ul>
+</blockquote>
+<h3 id="4-1-生成Fabric的证书"><a href="#4-1-生成Fabric的证书" class="headerlink" title="4.1 生成Fabric的证书"></a>4.1 生成Fabric的证书</h3><blockquote>
+<p>编写生成组织节点证书的配置文件,我们将其命名为: crypto-config.yaml。在里边指定组织的名称, 节点个数, 用户个数和访问节点的域名信息。</p>
+<p>将如下写好的配置文件放入目录: <code>~/Demo</code> 中</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># crypto-config.yaml</span></span><br><span class="line"><span class="attr">OrdererOrgs:</span> 				<span class="comment"># 排序组织</span></span><br><span class="line"><span class="attr">  - Name:</span> <span class="string">Orderer</span>  			<span class="comment"># 排序节点组织名称</span></span><br><span class="line"><span class="attr">    Domain:</span> <span class="string">wumansgy.com</span>  	<span class="comment"># 排序节点组织的根域名</span></span><br><span class="line"><span class="attr">    Specs:</span> </span><br><span class="line"><span class="attr">      - Hostname:</span> <span class="string">ubuntu</span>   <span class="comment"># 排序节点主机名, 访问该排序节点的域名: ubuntu.wumansgy.com</span></span><br><span class="line">                            <span class="comment"># “Spec”的作用是不受下面的Template模板生成规则影响，个性化指定一个域名</span></span><br><span class="line"></span><br><span class="line"><span class="attr">PeerOrgs:</span></span><br><span class="line"><span class="attr">  - Name:</span> <span class="string">OrgGo</span>    			  <span class="comment"># 组织Org1名称</span></span><br><span class="line"><span class="attr">    Domain:</span> <span class="string">orggo.wumansgy.com</span>  <span class="comment"># 组织Org1的域名</span></span><br><span class="line"><span class="attr">    EnableNodeOUs:</span> <span class="literal">true</span>  	  <span class="comment"># Node.js支持，java的sdk里面默认是注释掉的</span></span><br><span class="line">   </span><br><span class="line"><span class="attr">    Template:</span>  	<span class="comment"># 根据上面注释的模板生成2套公私钥+证书，默认生成规则是peer0-9.组织的域名</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">2</span>  <span class="comment"># 即生成peer0.orggo.wumansgy.com、peer1.orggo.wumansgy.com 两个节点的公私钥和证     </span></span><br><span class="line"><span class="attr">    Users:</span>  	<span class="comment"># 除了admin用户，额外生成一个普通用户</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">3</span>	<span class="comment"># 普通用户个数为3</span></span><br><span class="line"><span class="attr">  - Name:</span> <span class="string">OrgCPP</span></span><br><span class="line"><span class="attr">    Domain:</span> <span class="string">orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    EnableNodeOUs:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    Template:</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">2</span></span><br><span class="line"><span class="attr">    Users:</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 配置文件编写完成, 在Demo目录下执行该命令:</span><br><span class="line"><span class="meta">$</span> cryptogen generate --config=./crypto-config.yaml</span><br><span class="line">orggo.wumansgy.com</span><br><span class="line">orgcpp.wumansgy.com</span><br><span class="line"><span class="meta">#</span> 查看Demo目录中的文件</span><br><span class="line"><span class="meta">$</span> tree -L 6</span><br><span class="line">.</span><br><span class="line">├── crypto-config</span><br><span class="line">│   ├── `ordererOrganizations</span><br><span class="line">│   │   └── wumansgy.com</span><br><span class="line">│   │       ├── ca</span><br><span class="line">│   │       │   ├── 4d61535a2dd55ff1641d7331e3037d59c590feb2abc21a9be04de678b28480cb_sk</span><br><span class="line">│   │       │   └── ca.wumansgy.com-cert.pem</span><br><span class="line">│   │       ├── msp</span><br><span class="line">│   │       │   ├── admincerts</span><br><span class="line">│   │       │   │   └── Admin@wumansgy.com-cert.pem</span><br><span class="line">│   │       │   ├── cacerts</span><br><span class="line">│   │       │   │   └── ca.wumansgy.com-cert.pem</span><br><span class="line">│   │       │   └── tlscacerts</span><br><span class="line">│   │       │       └── tlsca.wumansgy.com-cert.pem</span><br><span class="line">│   │       ├── orderers</span><br><span class="line">│   │       │   └── ubuntu.wumansgy.com</span><br><span class="line">│   │       │       ├── msp</span><br><span class="line">│   │       │       └── tls</span><br><span class="line">│   │       ├── tlsca</span><br><span class="line">│   │       │   ├── e2cf6010c4360cdcf89b636789543dc8e12073ba6035fe811f6e68901370f62d_sk</span><br><span class="line">│   │       │   └── tlsca.wumansgy.com-cert.pem</span><br><span class="line">│   │       └── users</span><br><span class="line">│   │           └── Admin@wumansgy.com</span><br><span class="line">│   │               ├── msp</span><br><span class="line">│   │               └── tls</span><br><span class="line">│   └── `peerOrganizations</span><br><span class="line">│       ├── `orgcpp.wumansgy.com</span><br><span class="line">│       │   ├── ca</span><br><span class="line">│       │   │   ├── b1d3411e8616a50f8d88bde7a68259972565541e0937294b67b09e155468c3cd_sk</span><br><span class="line">│       │   │   └── ca.orgcpp.wumansgy.com-cert.pem</span><br><span class="line">│       │   ├── msp</span><br><span class="line">│       │   │   ├── admincerts</span><br><span class="line">│       │   │   │   └── Admin@orgcpp.wumansgy.com-cert.pem</span><br><span class="line">│       │   │   ├── cacerts</span><br><span class="line">│       │   │   │   └── ca.orgcpp.wumansgy.com-cert.pem</span><br><span class="line">│       │   │   ├── config.yaml</span><br><span class="line">│       │   │   └── tlscacerts</span><br><span class="line">│       │   │       └── tlsca.orgcpp.wumansgy.com-cert.pem</span><br><span class="line">│       │   ├── `peers</span><br><span class="line">│       │   │   ├── `peer0.orgcpp.wumansgy.com</span><br><span class="line">│       │   │   │   ├── msp</span><br><span class="line">│       │   │   │   └── tls</span><br><span class="line">│       │   │   └── `peer1.orgcpp.wumansgy.com</span><br><span class="line">│       │   │       ├── msp</span><br><span class="line">│       │   │       └── tls</span><br><span class="line">│       │   ├── tlsca</span><br><span class="line">│       │   │   ├── 1732fcf1ac3ccfab09c6acbe767af2442b0711ea1128c1d6c1ce059b563266c8_sk</span><br><span class="line">│       │   │   └── tlsca.orgcpp.wumansgy.com-cert.pem</span><br><span class="line">│       │   └── users</span><br><span class="line">│       │       ├── Admin@orgcpp.wumansgy.com</span><br><span class="line">│       │       │   ├── msp</span><br><span class="line">│       │       │   └── tls</span><br><span class="line">│       │       ├── User1@orgcpp.wumansgy.com</span><br><span class="line">│       │       │   ├── msp</span><br><span class="line">│       │       │   └── tls</span><br><span class="line">│       │       ├── User2@orgcpp.wumansgy.com</span><br><span class="line">│       │       │   ├── msp</span><br><span class="line">│       │       │   └── tls</span><br><span class="line">│       │       ├── User3@orgcpp.wumansgy.com</span><br><span class="line">│       │       │   ├── msp</span><br><span class="line">│       │       │   └── tls</span><br><span class="line">│       │       └── User4@orgcpp.wumansgy.com</span><br><span class="line">│       │           ├── msp</span><br><span class="line">│       │           └── tls</span><br><span class="line">│       └── `orggo.wumansgy.com</span><br><span class="line">│           ├── ca</span><br><span class="line">│           │   ├── 33dbbd366922252ee8689e0444e8b6ffb3df3389219ad0716ee9708c2c18953d_sk</span><br><span class="line">│           │   └── ca.orggo.wumansgy.com-cert.pem</span><br><span class="line">│           ├── msp</span><br><span class="line">│           │   ├── admincerts</span><br><span class="line">│           │   │   └── Admin@orggo.wumansgy.com-cert.pem</span><br><span class="line">│           │   ├── cacerts</span><br><span class="line">│           │   │   └── ca.orggo.wumansgy.com-cert.pem</span><br><span class="line">│           │   ├── config.yaml</span><br><span class="line">│           │   └── tlscacerts</span><br><span class="line">│           │       └── tlsca.orggo.wumansgy.com-cert.pem</span><br><span class="line">│           ├── `peers</span><br><span class="line">│           │   ├── `peer0.orggo.wumansgy.com</span><br><span class="line">│           │   │   ├── msp</span><br><span class="line">│           │   │   └── tls</span><br><span class="line">│           │   └── `peer1.orggo.wumansgy.com</span><br><span class="line">│           │       ├── msp</span><br><span class="line">│           │       └── tls</span><br><span class="line">│           ├── tlsca</span><br><span class="line">│           │   ├── ab7a23f336678f1d8799a44aaeb8894503abb6177d6ba1740037fda952ff9bdb_sk</span><br><span class="line">│           │   └── tlsca.orggo.wumansgy.com-cert.pem</span><br><span class="line">│           └── users</span><br><span class="line">│               ├── Admin@orggo.wumansgy.com</span><br><span class="line">│               │   ├── msp</span><br><span class="line">│               │   └── tls</span><br><span class="line">│               ├── User1@orggo.wumansgy.com</span><br><span class="line">│               │   ├── msp</span><br><span class="line">│               │   └── tls</span><br><span class="line">│               ├── User2@orggo.wumansgy.com</span><br><span class="line">│               │   ├── msp</span><br><span class="line">│               │   └── tls</span><br><span class="line">│               └── User3@orggo.wumansgy.com</span><br><span class="line">│                   ├── msp</span><br><span class="line">│                   └── tls</span><br><span class="line">└── crypto-config.yaml</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-创始块和通道文件的创建"><a href="#4-2-创始块和通道文件的创建" class="headerlink" title="4.2 创始块和通道文件的创建"></a>4.2 创始块和通道文件的创建</h3><blockquote>
+<p>Fabric是基于区块链的分布式账本, 每个账本都有自己的区块, 账本的区块链中会存储账本的交易数据，但账本的第一个区块是一个例外，该区块不存储交易数据而是存储配置信息，通常账本的第一个区块称为创始块。</p>
+<p>我们需要些编写生成创始块文件的配置文件，配置文件名字为<code>configtx.yaml, 该名字不要修改</code>, 写好之后放入<code>Demo</code>目录中</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># configtx.yaml</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   Section: Organizations</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   - This section defines the different organizational identities which will</span></span><br><span class="line"><span class="comment">#   be referenced later in the configuration.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Organizations:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="meta">&amp;OrdererOrg</span></span><br><span class="line"><span class="attr">        Name:</span> <span class="string">OrdererOrg</span></span><br><span class="line"><span class="attr">        ID:</span> <span class="string">OrdererMSP</span></span><br><span class="line"><span class="attr">        MSPDir:</span> <span class="string">./crypto-config/ordererOrganizations/wumansgy.com/msp</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">    -</span> <span class="meta">&amp;OrgGo</span></span><br><span class="line"><span class="attr">        Name:</span> <span class="string">OrgGoMSP</span></span><br><span class="line"><span class="attr">        ID:</span> <span class="string">OrgGoMSP</span></span><br><span class="line"><span class="attr">        MSPDir:</span> <span class="string">./crypto-config/peerOrganizations/orggo.wumansgy.com/msp</span></span><br><span class="line"><span class="attr">        AnchorPeers:</span></span><br><span class="line"><span class="attr">            - Host:</span> <span class="string">peer0.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">              Port:</span> <span class="number">7051</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">    -</span> <span class="meta">&amp;OrgCPP</span></span><br><span class="line"><span class="attr">        Name:</span> <span class="string">OrgCppMSP</span></span><br><span class="line"><span class="attr">        ID:</span> <span class="string">OrgCppMSP</span></span><br><span class="line"><span class="attr">        MSPDir:</span> <span class="string">./crypto-config/peerOrganizations/orgcpp.wumansgy.com/msp</span></span><br><span class="line"><span class="attr">        AnchorPeers:</span></span><br><span class="line"><span class="attr">            - Host:</span> <span class="string">peer0.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">              Port:</span> <span class="number">7051</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   SECTION: Capabilities</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   - This section defines the capabilities of fabric network. This is a new</span></span><br><span class="line"><span class="comment">#   concept as of v1.1.0 and should not be utilized in mixed networks with</span></span><br><span class="line"><span class="comment">#   v1.0.x peers and orderers.  </span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Capabilities:</span></span><br><span class="line"><span class="attr">    Global:</span> <span class="meta">&amp;ChannelCapabilities</span></span><br><span class="line"><span class="attr">        V1_1:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    Orderer:</span> <span class="meta">&amp;OrdererCapabilities</span></span><br><span class="line"><span class="attr">        V1_1:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    Application:</span> <span class="meta">&amp;ApplicationCapabilities</span></span><br><span class="line"><span class="attr">        V1_2:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   SECTION: Application</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   - This section defines the values to encode into a config transaction or</span></span><br><span class="line"><span class="comment">#   genesis block for application related parameters</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Application:</span> <span class="meta">&amp;ApplicationDefaults</span></span><br><span class="line"><span class="attr">    Organizations:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   SECTION: Orderer</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   - This section defines the values to encode into a config transaction or</span></span><br><span class="line"><span class="comment">#   genesis block for orderer related parameters</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Orderer:</span> <span class="meta">&amp;OrdererDefaults</span></span><br><span class="line">    <span class="comment"># Available types are "solo" and "kafka"</span></span><br><span class="line"><span class="attr">    OrdererType:</span> <span class="string">solo</span></span><br><span class="line"><span class="attr">    Addresses:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">ubuntu.wumansgy.com:7050</span></span><br><span class="line">    <span class="comment"># Batch Timeout: The amount of time to wait before creating a batch</span></span><br><span class="line"><span class="attr">    BatchTimeout:</span> <span class="number">2</span><span class="string">s</span></span><br><span class="line">    <span class="comment"># Batch Size: Controls the number of messages batched into a block</span></span><br><span class="line"><span class="attr">    BatchSize:</span></span><br><span class="line">        <span class="comment"># Max Message Count: The maximum number of messages to permit in a batch</span></span><br><span class="line"><span class="attr">        MaxMessageCount:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">        AbsoluteMaxBytes:</span> <span class="number">99</span> <span class="string">MB</span></span><br><span class="line"><span class="attr">        PreferredMaxBytes:</span> <span class="number">512</span> <span class="string">KB</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    Kafka:</span></span><br><span class="line">        <span class="comment"># Brokers: A list of Kafka brokers to which the orderer connects</span></span><br><span class="line">        <span class="comment"># <span class="doctag">NOTE:</span> Use IP:port notation</span></span><br><span class="line"><span class="attr">        Brokers:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:9092</span></span><br><span class="line"><span class="attr">    Organizations:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   Profile</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   - Different configuration profiles may be encoded here to be specified</span></span><br><span class="line"><span class="comment">#   as parameters to the configtxgen tool</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Profiles:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    wumansgyOrdererGenesis:</span></span><br><span class="line"><span class="attr">        Capabilities:</span></span><br><span class="line">            <span class="string">&lt;&lt;:</span> <span class="meta">*ChannelCapabilities</span></span><br><span class="line"><span class="attr">        Orderer:</span></span><br><span class="line">            <span class="string">&lt;&lt;:</span> <span class="meta">*OrdererDefaults</span></span><br><span class="line"><span class="attr">            Organizations:</span></span><br><span class="line"><span class="bullet">                -</span> <span class="meta">*OrdererOrg</span></span><br><span class="line"><span class="attr">            Capabilities:</span></span><br><span class="line">                <span class="string">&lt;&lt;:</span> <span class="meta">*OrdererCapabilities</span></span><br><span class="line"><span class="attr">        Consortiums:</span></span><br><span class="line"><span class="attr">            SampleConsortium:</span></span><br><span class="line"><span class="attr">                Organizations:</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="meta">*OrgGo</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="meta">*OrgCPP</span></span><br><span class="line"><span class="attr">    TwoOrgsChannel:</span></span><br><span class="line"><span class="attr">        Consortium:</span> <span class="string">SampleConsortium</span></span><br><span class="line"><span class="attr">        Application:</span></span><br><span class="line">            <span class="string">&lt;&lt;:</span> <span class="meta">*ApplicationDefaults</span></span><br><span class="line"><span class="attr">            Organizations:</span></span><br><span class="line"><span class="bullet">                -</span> <span class="meta">*OrgGo</span></span><br><span class="line"><span class="bullet">                -</span> <span class="meta">*OrgCPP</span></span><br><span class="line"><span class="attr">            Capabilities:</span></span><br><span class="line">                <span class="string">&lt;&lt;:</span> <span class="meta">*ApplicationCapabilities</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1. 在Demo目录下创建新目录 channel-artifacts, 将生成的创始块和通道文件存储在该目录中</span><br><span class="line"><span class="meta">$</span> mkdir channel-artifacts</span><br><span class="line"><span class="meta">#</span> 生成创始块文件</span><br><span class="line"><span class="meta">$</span> configtxgen -profile wumansgyOrdererGenesis -outputBlock ./channel-artifacts/genesis.block</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通道（频道）在Fabric中称为channel， 一个channel表示一个账本。fabric和其他区块链平台最大的区别是支持多账本。每个fabric中至少包含一个channel，下边我们将通过命令将通道创建出来。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 创建channel</span><br><span class="line"><span class="meta">#</span> channel.tx中包含了用于生产channel的信息</span><br><span class="line"><span class="meta">$</span> configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID mychannel</span><br><span class="line"><span class="meta">#</span> 生成相关的锚点文件 - 组织1: Go</span><br><span class="line"><span class="meta">$</span> configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/OrgGoMSPanchors.tx -channelID mychannel -asOrg OrgGoMSP</span><br><span class="line"><span class="meta">#</span> 生成相关的锚点文件 - 组织2: CPP</span><br><span class="line"><span class="meta">$</span> configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/OrgCppMSPanchors.tx -channelID mychannel -asOrg OrgCppMSP</span><br><span class="line"><span class="meta">#</span> 查看channel-artifacts目录下生成的文件</span><br><span class="line"><span class="meta">$</span> tree channel-artifacts/</span><br><span class="line">channel-artifacts/</span><br><span class="line">├── channel.tx				# 通道文件</span><br><span class="line">├── genesis.block			# 创始块文件</span><br><span class="line">├── orgCppMSPanchors.tx		# Cpp组织锚点文件</span><br><span class="line">└── orgGoMSPanchors.tx		# Go组织锚点文件</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-启动docker-compose"><a href="#4-3-启动docker-compose" class="headerlink" title="4.3 启动docker-compose"></a>4.3 启动docker-compose</h3><h4 id="4-3-1-编写配置文件"><a href="#4-3-1-编写配置文件" class="headerlink" title="4.3.1 编写配置文件"></a>4.3.1 编写配置文件</h4><blockquote>
+<p>编写docker-compose启动时加载的配置文件，默认加载的文件名为：<code>`docker-compose.yml/yaml</code>，可通过命令<code>docker-compose --help</code>查看。我们将该文件放到项目目录<code>~/Demo</code>中。</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml</span></span><br><span class="line"><span class="comment"># Copyright IBM Corp. All Rights Reserved.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SPDX-License-Identifier: Apache-2.0</span></span><br><span class="line"><span class="comment"># compose 版本号</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="comment"># 数据卷映射, 本地 -&gt; docker镜像</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="string">ubuntu.wumansgy.com:</span></span><br><span class="line">  <span class="string">peer0.orggo.wumansgy.com:</span></span><br><span class="line">  <span class="string">peer1.orggo.wumansgy.com:</span></span><br><span class="line">  <span class="string">peer0.orgcpp.wumansgy.com:</span></span><br><span class="line">  <span class="string">peer1.orgcpp.wumansgy.com:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span> <span class="comment"># 指定容器运行的网络, 同一网络中的容器才能相互通信</span></span><br><span class="line"><span class="attr">  byfn:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="string">ubuntu.wumansgy.com:</span>  <span class="comment"># 定义的第1个服务名</span></span><br><span class="line"><span class="attr">    extends:</span>          <span class="comment"># 继承自当前yaml文件或者其它文件中定义的服务</span></span><br><span class="line"><span class="attr">      file:</span>   <span class="string">base/docker-compose-base.yaml</span></span><br><span class="line">      <span class="comment"># 要继承上述file文件中对应的名字叫做 ubuntu.wumansgy.com 的服务</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">ubuntu.wumansgy.com</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">ubuntu.wumansgy.com</span>  <span class="comment"># 容器名称, 可以自定义</span></span><br><span class="line"><span class="attr">    networks:</span> <span class="comment"># 指定容器启动后运行的网络名</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">byfn</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer0.orggo.wumansgy.com:</span> <span class="comment"># 定义的第2个服务名</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer0.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span>  <span class="string">base/docker-compose-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer0.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">byfn</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer1.orggo.wumansgy.com:</span> <span class="comment"># 定义的第3个服务名</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer1.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span>  <span class="string">base/docker-compose-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer1.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">byfn</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer0.orgcpp.wumansgy.com:</span>  <span class="comment"># 定义的第4个服务名</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer0.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span>  <span class="string">base/docker-compose-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer0.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">byfn</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer1.orgcpp.wumansgy.com:</span>  <span class="comment"># 定义的第5个服务名</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer1.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span>  <span class="string">base/docker-compose-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer1.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">byfn</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  cli:</span>   <span class="comment"># 定义的第6个服务名</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">cli</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">hyperledger/fabric-tools:latest</span>  <span class="comment"># 指定服务的镜像名称或镜像 ID</span></span><br><span class="line"><span class="attr">    tty:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    stdin_open:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    environment:</span>  <span class="comment"># 环境变量设置</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">GOPATH=/opt/gopath</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_LOGGING_LEVEL=DEBUG</span></span><br><span class="line">        <span class="comment">#- CORE_LOGGING_LEVEL=INFO</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ID=cli</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgGoMSP</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.wumansgy.com/peers/peer0.orggo.wumansgy.com/tls/server.crt</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.wumansgy.com/peers/peer0.orggo.wumansgy.com/tls/server.key</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.wumansgy.com/peers/peer0.orggo.wumansgy.com/tls/ca.crt</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.wumansgy.com/users/Admin@orggo.wumansgy.com/msp</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric/peer</span>   <span class="comment"># 工作目录</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">/bin/bash</span>  <span class="comment"># 容器启动后执行的命令</span></span><br><span class="line"><span class="attr">    volumes:</span>  <span class="comment"># 本地数据卷内容挂载到容器, 挂载到容器中的数据是只读的</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./chaincode/:/opt/gopath/src/github.com/chaincode</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts</span></span><br><span class="line"><span class="attr">    depends_on:</span> <span class="comment"># 指定了容器的启动顺序, 下边5个服务全部启动之后, 启动cli服务</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ubuntu.wumansgy.com</span>         <span class="comment"># 定义的服务器名1</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">peer0.orggo.wumansgy.com</span>    <span class="comment"># 定义的服务器名2</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">peer1.orggo.wumansgy.com</span>    <span class="comment"># 定义的服务器名3</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">peer0.orgcpp.wumansgy.com</span>   <span class="comment"># 定义的服务器名4</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">peer1.orgcpp.wumansgy.com</span>   <span class="comment"># 定义的服务器名5</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">byfn</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>接下来就上面 <code>docker-compose.yaml</code> 文件中依赖的文件<code>docker-compose-base.yaml</code>，根据上面的指定可以知道该文件是放到base目录中，也就是说需要在Demo目录中创建子目录base：<code>mkdir base</code>。</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ~/Demo/base/docker-compose-base.yaml</span></span><br><span class="line"><span class="comment"># Copyright IBM Corp. All Rights Reserved.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SPDX-License-Identifier: Apache-2.0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="string">ubuntu.wumansgy.com:</span>  <span class="comment"># 排序节点服务名称</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">ubuntu.wumansgy.com</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">hyperledger/fabric-orderer:latest</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LOGLEVEL=INFO</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LISTENADDRESS=0.0.0.0</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_GENESISMETHOD=file</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LOCALMSPID=OrdererMSP</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp</span></span><br><span class="line">      <span class="comment"># enabled TLS</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">orderer</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">orderer.example.com:/var/hyperledger/production/orderer</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">7050</span><span class="string">:7050</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer0.orggo.wumansgy.com:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer0.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">peer-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer-base</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ID=peer0.orggo.wumansgy.com</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgGoMSP</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orggo.example.com/peers/peer0.orggo.wumansgy.com/msp:/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orggo.example.com/peers/peer0.orggo.wumansgy.com/tls:/etc/hyperledger/fabric/tls</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">peer0.orggo.wumansgy.com:/var/hyperledger/production</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">7051</span><span class="string">:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">7053</span><span class="string">:7053</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer1.orggo.wumansgy.com:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer1.orggo.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">peer-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer-base</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ID=peer1.orggo.wumansgy.com</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ADDRESS=peer1.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_BOOTSTRAP=peer1.orggo.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgGoMSP</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orggo.wumansgy.com/peers/peer1.orggo.wumansgy.com/msp:/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orggo.wumansgy.com/peers/peer1.orggo.wumansgy.com/tls:/etc/hyperledger/fabric/tls</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">peer1.orggo.wumansgy.com:/var/hyperledger/production</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">8051</span><span class="string">:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">8053</span><span class="string">:7053</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer0.orgcpp.wumansgy.com:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer0.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">peer-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer-base</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ID=peer0.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orgcpp.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgcpp.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orgcpp.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgCppMSP</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orgcpp.wumansgy.com/peers/peer0.orgcpp.wumansgy.com/msp:/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orgcpp.wumansgy.com/peers/peer0.orgcpp.wumansgy.com/tls:/etc/hyperledger/fabric/tls</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">peer0.orgcpp.wumansgy.com:/var/hyperledger/production</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">9051</span><span class="string">:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">9053</span><span class="string">:7053</span></span><br><span class="line"></span><br><span class="line">  <span class="string">peer1.orgcpp.wumansgy.com:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">peer1.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="attr">    extends:</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">peer-base.yaml</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">peer-base</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ID=peer1.orgcpp.wumansgy.com</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_ADDRESS=peer1.orgcpp.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.orgcpp.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_BOOTSTRAP=peer1.orgcpp.wumansgy.com:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_LOCALMSPID=Org2MSP</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orgcpp.example.com/peers/peer1.orgcpp.wumansgy.com/msp:/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">../crypto-config/peerOrganizations/orgcpp.example.com/peers/peer1.orgcpp.wumansgy.com/tls:/etc/hyperledger/fabric/tls</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">peer1.orgcpp.wumansgy.com:/var/hyperledger/production</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">10051</span><span class="string">:7051</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">10053</span><span class="string">:7053</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在上面的docker-compose-base.yaml文件中又引用了文件<code>peer-base.yaml</code>，接下来我们对该文件进行修改。 </p>
+</blockquote>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ~/Demo/base/peer-base.yaml</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  peer-base:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">hyperledger/fabric-peer:latest</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock</span></span><br><span class="line">      <span class="comment"># the following setting starts chaincode containers on the same</span></span><br><span class="line">      <span class="comment"># bridge network as the peers</span></span><br><span class="line">      <span class="comment"># https://docs.docker.com/compose/networking/</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=Demo_byfn</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_LOGGING_LEVEL=INFO</span></span><br><span class="line">      <span class="comment">#- CORE_LOGGING_LEVEL=DEBUG</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_USELEADERELECTION=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_GOSSIP_ORGLEADER=false</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_PROFILE_ENABLED=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric/peer</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">peer</span> <span class="string">node</span> <span class="string">start</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-3-2-通过docker-compose启动容器"><a href="#4-3-2-通过docker-compose启动容器" class="headerlink" title="4.3.2 通过docker-compose启动容器"></a>4.3.2 通过docker-compose启动容器</h4><blockquote>
+<p>docker-compose的配置文件编写完成之后, 我们就可以通过配置文件中的配置将所有节点的容器全部启动起来.</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 启动容器</span><br><span class="line"><span class="meta">#</span> 在 ~/Demo目录下启动docker-compose, 该目录下有编写好的docker-compose.yaml文件</span><br><span class="line"><span class="meta">#</span> 命令启动之后, 会自动加载该文件, 也可以通过-f指定要加载的yaml文件</span><br><span class="line"><span class="meta">$</span> docker-compose up -d </span><br><span class="line">Creating network "demo_byfn" with the default driver</span><br><span class="line">Creating volume "demo_peer1.orggo.wumansgy.com" with default driver</span><br><span class="line">Creating volume "demo_ubuntu.wumansgy.com" with default driver</span><br><span class="line">Creating volume "demo_peer0.orgcpp.wumansgy.com" with default driver</span><br><span class="line">Creating volume "demo_peer0.orggo.wumansgy.com" with default driver</span><br><span class="line">Creating volume "demo_peer1.orgcpp.wumansgy.com" with default driver</span><br><span class="line">Creating peer0.orgcpp.wumansgy.com ... done</span><br><span class="line">Creating peer1.orgcpp.wumansgy.com ... done</span><br><span class="line">Creating peer1.orggo.wumansgy.com  ... done</span><br><span class="line">Creating peer0.orggo.wumansgy.com  ... done</span><br><span class="line">Creating ubuntu.wumansgy.com       ... done</span><br><span class="line">Creating cli                     ... done</span><br><span class="line"><span class="meta">#</span> 查看已启动的容器</span><br><span class="line"><span class="meta">$</span> docker-compose ps</span><br><span class="line">    Name                 Command       State                    Ports                   </span><br><span class="line">-------------------------------------------------------------------------------------------</span><br><span class="line">cli                      /bin/bash      Up   </span><br><span class="line">peer0.orgcpp.wumansgy.com peer node start Up  0.0.0.0:9051-&gt;7051/tcp, 0.0.0.0:9053-&gt;7053/tcp</span><br><span class="line">peer0.orggo.wumansgy.com  peer node start Up  0.0.0.0:7051-&gt;7051/tcp, 0.0.0.0:7053-&gt;7053/tcp </span><br><span class="line">peer1.orgcpp.wumansgy.com peer node start Up  0.0.0.0:10051-&gt;7051/tcp,0.0.0.0:10053-&gt;7053/tcp</span><br><span class="line">peer1.orggo.wumansgy.com  peer node start Up  0.0.0.0:8051-&gt;7051/tcp, 0.0.0.0:8053-&gt;7053/tcp</span><br><span class="line">ubuntu.wumansgy.com       orderer         Up  0.0.0.0:7050-&gt;7050/tcp</span><br></pre></td></tr></table></figure>
+<h3 id="4-4-channel管理"><a href="#4-4-channel管理" class="headerlink" title="4.4 channel管理"></a>4.4 channel管理</h3><h4 id="4-4-1-操作步骤"><a href="#4-4-1-操作步骤" class="headerlink" title="4.4.1 操作步骤"></a>4.4.1 操作步骤</h4><blockquote>
+<p>这个动作需要在cli容器中运行</p>
+</blockquote>
+<ul>
+<li><p>创建channel</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 进入cli容器</span><br><span class="line"><span class="meta">$</span> docker exec -it cli bash</span><br><span class="line"><span class="meta">$</span> peer channel create -o ubuntu.wumansgy.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA</span><br><span class="line"><span class="meta">#</span> 参数说明: </span><br><span class="line">	- ubuntu.wumansgy.com: 连接的orderer的地址，hostname:port</span><br><span class="line">	- $CHANNEL_NAME: channel的名称，如果没有指定,默认为mychannel, 通道创建成功之后会在磁盘生成</span><br><span class="line">					 一个文件, 名字为$CHANNEL_NAME.block(通道名.block)</span><br><span class="line">	- $CORE_PEER_TLS_ENABLED: 和orderer通信时是否启用tls</span><br><span class="line">	- $ORDERER_CA: 使用tls时，所使用的orderer的证书</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>该命令执行过程:</p>
+<ul>
+<li>发送消息，创建了channel，名字为<code>$CHANNEL_NAME</code></li>
+<li>获取创始区块，并且用protobuf进行序列化，本地生成了一个文件<code>$CHANNEL_NAME.block</code></li>
+</ul>
+</blockquote>
+</li>
+<li><p>将peer节点添加到channel中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer channel join -b $CHANNEL_NAME.block</span><br><span class="line"><span class="meta">#</span> 参数说明:</span><br><span class="line"><span class="meta">	$</span>CHANNEL_NAME.block, 创建出的通道文件的名字</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将每个组织的锚节点（anchor peer）更新到orderer</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer channel update -o ubuntu.wumansgy.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/$&#123;CORE_PEER_LOCALMSPID&#125;anchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA</span><br><span class="line"><span class="meta">#</span> 参数说明:</span><br><span class="line">	- ubuntu.wumansgy.com: 连接的orderer的地址，hostname:port</span><br><span class="line">	- $&#123;CORE_PEER_LOCALMSPID&#125;anchors.tx: 组织的锚节点文件, 是通过configtxgen指令生成的</span><br><span class="line">	- $CORE_PEER_TLS_ENABLED: 和orderer通信时是否启用tls</span><br><span class="line">	- $ORDERER_CA: 使用tls时，所使用的orderer的证书</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="4-4-2-脚本编写"><a href="#4-4-2-脚本编写" class="headerlink" title="4.4.2 脚本编写"></a>4.4.2 脚本编写</h4><blockquote>
+<p>上述操作需要对多个节点进行操作，因此我们可以写一个脚本文件， 对这些操作进行统一处理，方便使用者进行操作。为了对编写的脚本统一管理，可以将其放入一个目录中。</p>
+<p>我们可以在<code>~/Demo</code>目录下创建新的子目录<code>scripts</code>, 将所有的脚本文件放到里边。编写的脚本如下：</p>
+</blockquote>
+<p>会被调用多次的操作, 我们将其放到一个单独的脚本文件中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 该脚本文件我们命名为 utils.sh</span><br><span class="line"><span class="meta">#</span> ~/Demo/utils.sh</span><br><span class="line"><span class="meta">#</span> 定义一些变量, 下边的代码中会使用 </span><br><span class="line"><span class="meta">#</span> orderer 节点的证书</span><br><span class="line">ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/wumansgy.com/orderers/ubuntu.wumansgy.com/msp/tlscacerts/tlsca.wumansgy.com-cert.pem</span><br><span class="line"><span class="meta">#</span> Go组织peer0节点证书</span><br><span class="line">PEER0_ORGGO_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.wumansgy.com/peers/peer0.orggo.wumansgy.com/tls/ca.crt</span><br><span class="line"><span class="meta">#</span> CPP组织peer0节点证书</span><br><span class="line">PEER0_ORGCPP_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgcpp.wumansgy.com/peers/peer0.orgcpp.wumansgy.com/tls/ca.crt</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 根据传递进行来的参数读取各个组织中各节点信息</span><br><span class="line"><span class="meta">#</span> 第一次参数表示节点编号, 第二个参数表示组织编号</span><br><span class="line">setGlobals() &#123;</span><br><span class="line">  PEER=$1</span><br><span class="line">  ORG=$2</span><br><span class="line">  if [ $ORG -eq 1 ]; then</span><br><span class="line">    CORE_PEER_LOCALMSPID="OrgGoMSP"		# Go组织的ID, 在configtx.yaml中设置的</span><br><span class="line">    # 客户端cli想要连接哪个节点, 就必须要设置该节点的证书路径</span><br><span class="line">    CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORGGO_CA	# cli可以连接Go组织的peer0节点</span><br><span class="line">    # Go组织的管理员证书</span><br><span class="line">    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/</span><br><span class="line">    peerOrganizations/orggo.wumansgy.com/users/Admin@orggo.wumansgy.com/msp</span><br><span class="line">    if [ $PEER -eq 0 ]; then</span><br><span class="line">      CORE_PEER_ADDRESS=peer0.orggo.wumansgy.com:7051	# go组织peer0地址</span><br><span class="line">    else</span><br><span class="line">      CORE_PEER_ADDRESS=peer1.orggo.wumansgy.com:7051	# go组织peer1地址</span><br><span class="line">    fi</span><br><span class="line">  elif [ $ORG -eq 2 ]; then</span><br><span class="line">    CORE_PEER_LOCALMSPID="OrgCppMSP"	# CPP组织ID</span><br><span class="line">    CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORGCPP_CA	# cli可以连接CPP组织的peer0节点</span><br><span class="line">    # CPP组织的管理员证书</span><br><span class="line">    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/</span><br><span class="line">    peerOrganizations/orgcpp.wumansgy.com/users/Admin@orgcpp.wumansgy.com/msp</span><br><span class="line">    if [ $PEER -eq 0 ]; then</span><br><span class="line">      CORE_PEER_ADDRESS=peer0.orgcpp.wumansgy.com:7051	# cpp组织peer0地址</span><br><span class="line">    else</span><br><span class="line">      CORE_PEER_ADDRESS=peer1.orgcpp.wumansgy.com:7051	# cpp组织peer0地址</span><br><span class="line">    fi</span><br><span class="line">  else</span><br><span class="line">    echo "================== ERROR !!! ORG Unknown =================="</span><br><span class="line">  fi</span><br><span class="line">  if [ "$VERBOSE" == "true" ]; then</span><br><span class="line">    env | grep CORE</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 该函数对命令执行的结果进行验证, 如果验证失败, 直接退出, 不再执行后续操作流程</span><br><span class="line">verifyResult() &#123;</span><br><span class="line">  if [ $1 -ne 0 ]; then</span><br><span class="line">    echo "!!!!!!!!!!!!!!! "$2" !!!!!!!!!!!!!!!!"</span><br><span class="line">    echo "========= ERROR !!! FAILED ==========="</span><br><span class="line">    echo</span><br><span class="line">    exit 1</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建通道操作:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 该脚本文件我们命名为createChannel.sh</span><br><span class="line"><span class="meta">#</span> ~/Demo/createChannel.sh</span><br><span class="line"><span class="meta">#</span> 定义一些变量, 下边的代码中会使用</span><br><span class="line">CHANNEL_NAME="$1"	# 脚本文件执行时接收的第1个参数</span><br><span class="line">DELAY="$2"			# 脚本文件执行时接收的第2个参数</span><br><span class="line">LANGUAGE="$3"		# 脚本文件执行时接收的第3个参数</span><br><span class="line">: $&#123;CHANNEL_NAME:="mychannel"&#125;	# 通道名，如果值为空, 变量CHANNEL_NAME值设置为mychannel</span><br><span class="line">: $&#123;DELAY:="3"&#125;					# 延时时长，如果值为空, 变量DELAY值设置为3, 操作失败重试时使用</span><br><span class="line">: $&#123;LANGUAGE:="golang"&#125;			# 链码语言，如果值为空, 变量LANGUAGE值设置为golang</span><br><span class="line">LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]` # 语言转换为大写，再转换为小写</span><br><span class="line">COUNTER=1			# 计数器</span><br><span class="line">MAX_RETRY=5			# 操作失败，重试的次数</span><br><span class="line"><span class="meta">#</span> 链码文件路径</span><br><span class="line">CC_SRC_PATH="github.com/chaincode/chaincode_example02/go/" # go链码</span><br><span class="line">if [ "$LANGUAGE" = "node" ]; then						   # node.js链码</span><br><span class="line">	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/chaincode_example02/node/"</span><br><span class="line">fi</span><br><span class="line">echo "Channel name : "$CHANNEL_NAME		# 打印通道的名字</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> ====================================================</span><br><span class="line"><span class="meta">#</span>						创建通道</span><br><span class="line"><span class="meta">#</span> ====================================================</span><br><span class="line"><span class="meta">#</span> 引用 utils.sh 脚本, 该文件也被创建在scripts目录中</span><br><span class="line">. scripts/utils.sh</span><br><span class="line">createChannel() &#123;</span><br><span class="line">	setGlobals 0 1</span><br><span class="line">	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then</span><br><span class="line">        set -x</span><br><span class="line">        # 创建通道, 不使用tls加密, 结果重定向到文件log.txt中</span><br><span class="line">		peer channel create -o ubuntu.wumansgy.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx &gt;&amp;log.txt</span><br><span class="line">		res=$?	# 保存 peer channel create 命令的返回值</span><br><span class="line">        set +x</span><br><span class="line">	else</span><br><span class="line">		set -x</span><br><span class="line"><span class="meta">		#</span> 创建通道, 使用tls加密, 结果重定向到文件log.txt中</span><br><span class="line">		peer channel create -o ubuntu.wumansgy.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA &gt;&amp;log.txt</span><br><span class="line">		res=$?	# 保存 peer channel create 命令的返回值</span><br><span class="line">		set +x</span><br><span class="line">	fi</span><br><span class="line">	cat log.txt	# 将log文件内容输出到终端</span><br><span class="line">	verifyResult $res "Channel creation failed"	# 验证操作是否成功</span><br><span class="line">	echo "===================== Channel '$CHANNEL_NAME' created ===================== "</span><br><span class="line">	echo</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span> 调用创建通道的函数</span><br><span class="line">createChannel</span><br></pre></td></tr></table></figure>
+<p>将节点添加到通道中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 该脚本文件我们命名为joinChannel.sh</span><br><span class="line"><span class="meta">#</span> ~/Demo/joinChannel.sh</span><br><span class="line"><span class="meta">#</span> 定义一些变量, 下边的代码中会使用</span><br><span class="line"><span class="meta">#</span> ====================================================</span><br><span class="line"><span class="meta">#</span>						加入通道</span><br><span class="line"><span class="meta">#</span> ====================================================</span><br><span class="line"><span class="meta">#</span> 引用 utils.sh, createChannel.sh 脚本, 该文件也被创建在scripts目录中</span><br><span class="line">. scripts/utils.sh</span><br><span class="line">. scripts/createChannel.sh</span><br><span class="line">joinChannel () &#123;</span><br><span class="line">	for org in 1 2; do</span><br><span class="line">	    for peer in 0 1; do</span><br><span class="line">		joinChannelWithRetry $peer $org</span><br><span class="line">		echo "======== peer$&#123;peer&#125;.org$&#123;org&#125; joined channel '$CHANNEL_NAME' ======== "</span><br><span class="line">		sleep $DELAY</span><br><span class="line">		echo</span><br><span class="line">	    done</span><br><span class="line">	done</span><br><span class="line">&#125;</span><br><span class="line">joinChannelWithRetry() &#123;</span><br><span class="line">  PEER=$1</span><br><span class="line">  ORG=$2</span><br><span class="line">  setGlobals $PEER $ORG</span><br><span class="line"></span><br><span class="line">  set -x</span><br><span class="line">  peer channel join -b $CHANNEL_NAME.block &gt;&amp;log.txt</span><br><span class="line">  res=$?</span><br><span class="line">  set +x</span><br><span class="line">  cat log.txt</span><br><span class="line">  if [ $res -ne 0 -a $COUNTER -lt $MAX_RETRY ]; then</span><br><span class="line">    COUNTER=$(expr $COUNTER + 1)</span><br><span class="line">    echo "peer$&#123;PEER&#125;.org$&#123;ORG&#125; failed to join the channel, Retry after $DELAY seconds"</span><br><span class="line">    sleep $DELAY</span><br><span class="line">    joinChannelWithRetry $PEER $ORG</span><br><span class="line">  else</span><br><span class="line">    COUNTER=1</span><br><span class="line">  fi</span><br><span class="line">  verifyResult $res "After $MAX_RETRY attempts, peer$&#123;PEER&#125;.org$&#123;ORG&#125; has failed to join channel '$CHANNEL_NAME' "</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span> 函数调用</span><br><span class="line">joinChannel</span><br></pre></td></tr></table></figure>
+<p>将每个组织的锚节点（anchor peer）更新到orderer</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 该脚本文件我们命名为updateChannel.sh</span><br><span class="line"><span class="meta">#</span> ~/Demo/updateChannel.sh</span><br><span class="line"><span class="meta">#</span> 引用 utils.sh, createChannel.sh 脚本, 该文件也被创建在scripts目录中</span><br><span class="line">. scripts/utils.sh</span><br><span class="line">. scripts/createChannel.sh</span><br><span class="line">updateAnchorPeers() &#123;</span><br><span class="line">  PEER=$1</span><br><span class="line">  ORG=$2</span><br><span class="line">  setGlobals $PEER $ORG</span><br><span class="line">  if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then</span><br><span class="line">    set -x</span><br><span class="line">    # 更新锚节点不使用tls加密, 得到的结果保存到log.txt中</span><br><span class="line">    peer channel update -o ubuntu.wumansgy.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/$&#123;CORE_PEER_LOCALMSPID&#125;anchors.tx &gt;&amp;log.txt</span><br><span class="line">    res=$?</span><br><span class="line">    set +x</span><br><span class="line">  else</span><br><span class="line">    set -x</span><br><span class="line">    # 更新锚节点使用tls加密, 得到的结果保存到log.txt中</span><br><span class="line">    peer channel update -o ubuntu.wumansgy.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/$&#123;CORE_PEER_LOCALMSPID&#125;anchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA &gt;&amp;log.txt</span><br><span class="line">    res=$?</span><br><span class="line">    set +x</span><br><span class="line">  fi</span><br><span class="line">  cat log.txt</span><br><span class="line">  verifyResult $res "Anchor peer update failed"</span><br><span class="line">  echo " Anchor peers updated for org '$CORE_PEER_LOCALMSPID' on channel '$CHANNEL_NAME' "</span><br><span class="line">  sleep $DELAY	# 休眠</span><br><span class="line">  echo</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span> 函数调用</span><br><span class="line">echo "Updating anchor peers for orggo..."</span><br><span class="line">updateAnchorPeers 0 1</span><br><span class="line">echo "Updating anchor peers for orgcpp..."</span><br><span class="line">updateAnchorPeers 0 2</span><br></pre></td></tr></table></figure>
+<h3 id="4-5-chaincode安装和实例化"><a href="#4-5-chaincode安装和实例化" class="headerlink" title="4.5 chaincode安装和实例化"></a>4.5 chaincode安装和实例化</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 该脚本文件我们命名为installChainCode.sh</span><br><span class="line"><span class="meta">#</span> ~/Demo/installChainCode.sh</span><br><span class="line"><span class="meta">#</span> 引用 utils.sh, createChannel.sh 脚本, 该文件也被创建在scripts目录中</span><br><span class="line">. scripts/utils.sh</span><br><span class="line">. scripts/createChannel.sh</span><br><span class="line"><span class="meta">#</span> 安装链码</span><br><span class="line">installChaincode() </span><br><span class="line">&#123;</span><br><span class="line">  PEER=$1</span><br><span class="line">  ORG=$2</span><br><span class="line">  setGlobals $PEER $ORG</span><br><span class="line">  VERSION=$&#123;3:-1.0&#125;</span><br><span class="line">  set -x</span><br><span class="line">  peer chaincode install -n mycc -v $&#123;VERSION&#125; -l $&#123;LANGUAGE&#125; -p $&#123;CC_SRC_PATH&#125; &gt;&amp;log.txt</span><br><span class="line">  res=$?</span><br><span class="line">  set +x</span><br><span class="line">  cat log.txt</span><br><span class="line">  verifyResult $res "Chaincode installation on peer$&#123;PEER&#125;.org$&#123;ORG&#125; has failed"</span><br><span class="line">  echo "===================== Chaincode is installed on peer$&#123;PEER&#125;.org$&#123;ORG&#125; ===================== "</span><br><span class="line">  echo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 链码初始化</span><br><span class="line">instantiateChaincode() </span><br><span class="line">&#123;</span><br><span class="line">  PEER=$1</span><br><span class="line">  ORG=$2</span><br><span class="line">  setGlobals $PEER $ORG</span><br><span class="line">  VERSION=$&#123;3:-1.0&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">  #</span> while 'peer chaincode' command can get the orderer endpoint from the peer</span><br><span class="line"><span class="meta">  #</span> (if join was successful), let's supply it directly as we know it using</span><br><span class="line"><span class="meta">  #</span> the "-o" option</span><br><span class="line">  if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then</span><br><span class="line">    set -x</span><br><span class="line">    peer chaincode instantiate -o ubuntu.wumansgy.com:7050 -C $CHANNEL_NAME -n mycc -l $&#123;LANGUAGE&#125; -v $&#123;VERSION&#125; -c '&#123;"Args":["init","a","100","b","200"]&#125;' -P "AND ('OrgGoMSP.peer','OrgCppMSP.peer')" &gt;&amp;log.txt</span><br><span class="line">    res=$?</span><br><span class="line">    set +x</span><br><span class="line">  else</span><br><span class="line">    set -x</span><br><span class="line">    peer chaincode instantiate -o ubuntu.wumansgy.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -l $&#123;LANGUAGE&#125; -v 1.0 -c '&#123;"Args":["init","a","100","b","200"]&#125;' -P "AND ('OrgGoMSP.peer','OrgCppMSP.peer')" &gt;&amp;log.txt</span><br><span class="line">    res=$?</span><br><span class="line">    set +x</span><br><span class="line">  fi</span><br><span class="line">  cat log.txt</span><br><span class="line">  verifyResult $res "Chaincode instantiation on peer$&#123;PEER&#125;.org$&#123;ORG&#125; on channel '$CHANNEL_NAME' failed"</span><br><span class="line">  echo " Chaincode is instantiated on peer$&#123;PEER&#125;.org$&#123;ORG&#125; on channel '$CHANNEL_NAME'"</span><br><span class="line">  echo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 函数调用</span><br><span class="line"><span class="meta">#</span> go组织的peer0, peer1安装链码</span><br><span class="line">echo "Install chaincode on peer0.orggo..."</span><br><span class="line"><span class="meta">#</span>nstallChaincode 0 1</span><br><span class="line">echo "Install chaincode on peer0.orggo..."</span><br><span class="line">installChaincode 0 2</span><br><span class="line"><span class="meta">#</span> cpp组织的peer0, peer1安装链码</span><br><span class="line"><span class="meta">#</span> go组织的peer0进行初始化</span><br><span class="line">echo "Instantiating chaincode on peer0.org2..."</span><br><span class="line">instantiateChaincode 0 2</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/01/06/Fabric网络搭建/">Fabric网络搭建</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2019年01月06日 - 20:01</p>
+  <p><span>最后更新:</span>2019年01月06日 - 21:01</p>
+  <p><span>原始链接:</span><a href="/2019/01/06/Fabric网络搭建/" title="Fabric网络搭建">http://yoursite.com/2019/01/06/Fabric网络搭建/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/01/06/Fabric网络搭建/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HyperLedger-Fabric/" rel="tag"><i class="fa fa-tag"></i> HyperLedger-Fabric</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/03/Fabric核心模块/" rel="next" title="Fabric核心模块">
+                <i class="fa fa-chevron-left"></i> Fabric核心模块
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">169</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">300.6k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-搭建第一个自己的网络"><span class="nav-number">1.</span> <span class="nav-text">4 搭建第一个自己的网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-生成Fabric的证书"><span class="nav-number">1.1.</span> <span class="nav-text">4.1 生成Fabric的证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-创始块和通道文件的创建"><span class="nav-number">1.2.</span> <span class="nav-text">4.2 创始块和通道文件的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-启动docker-compose"><span class="nav-number">1.3.</span> <span class="nav-text">4.3 启动docker-compose</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-1-编写配置文件"><span class="nav-number">1.3.1.</span> <span class="nav-text">4.3.1 编写配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-2-通过docker-compose启动容器"><span class="nav-number">1.3.2.</span> <span class="nav-text">4.3.2 通过docker-compose启动容器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-channel管理"><span class="nav-number">1.4.</span> <span class="nav-text">4.4 channel管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-1-操作步骤"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.4.1 操作步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-2-脚本编写"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.4.2 脚本编写</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-chaincode安装和实例化"><span class="nav-number">1.5.</span> <span class="nav-text">4.5 chaincode安装和实例化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+

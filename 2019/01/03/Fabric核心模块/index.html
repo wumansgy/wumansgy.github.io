@@ -117,7 +117,7 @@
 <meta property="og:site_name" content="Wuman&#39;s Blog">
 <meta property="og:description" content="3.  Fabric核心模块Fabric是一个由五个核心模块组成的程序组. 在fabric在成功编译完成之后, 一共会有五个核心模块, 如下:     模块名称 功能     peer 主节点模块, 负责存储区块链数据, 运行维护链码   orderer 交易打包, 排序模块   cryptogen 组织和证书生成模块   configtxgen 区块和交易生成模块   configtxlator">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-03T13:14:42.621Z">
+<meta property="og:updated_time" content="2019-01-03T13:34:35.862Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fabric核心模块">
 <meta name="twitter:description" content="3.  Fabric核心模块Fabric是一个由五个核心模块组成的程序组. 在fabric在成功编译完成之后, 一共会有五个核心模块, 如下:     模块名称 功能     peer 主节点模块, 负责存储区块链数据, 运行维护链码   orderer 交易打包, 排序模块   cryptogen 组织和证书生成模块   configtxgen 区块和交易生成模块   configtxlator">
@@ -371,7 +371,7 @@
                 
               
 
-              <time title="创建时间：2019-01-03 21:02:03 / 修改时间：21:14:42" itemprop="dateCreated datePublished" datetime="2019-01-03T21:02:03+08:00">2019-01-03</time>
+              <time title="创建时间：2019-01-03 21:02:03 / 修改时间：21:34:35" itemprop="dateCreated datePublished" datetime="2019-01-03T21:02:03+08:00">2019-01-03</time>
             
 
             
@@ -487,20 +487,20 @@
 <ul>
 <li>编写yaml配置文件 - crypto-config.yaml<ul>
 <li>一个排序节点： orader<ul>
-<li>根域名：itcast.com</li>
+<li>根域名：wumansgy.com</li>
 </ul>
 </li>
 <li>两个组织： java， go<ul>
 <li>go<ul>
 <li>peer节点数： 3个</li>
 <li>用户个数： 2个</li>
-<li>根域名：go.itcast.com</li>
+<li>根域名：go.wumansgy.com</li>
 </ul>
 </li>
 <li>java<ul>
 <li>peer节点数： 3个</li>
 <li>用户个数： 2个</li>
-<li>根域名: java.itcast.com</li>
+<li>根域名: java.wumansgy.com</li>
 </ul>
 </li>
 </ul>
@@ -516,7 +516,7 @@
 <li><p>Fabric证书文件结构</p>
 <ul>
 <li><p>orderer节点</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 查看TestNetWork目录</span><br><span class="line">sgy@ubuntu:~/TestNetWork$ tree -L 2</span><br><span class="line">.</span><br><span class="line">├── crypto-config</span><br><span class="line">│   ├── ordererOrganizations	# orderer节点相关的证书文件</span><br><span class="line">│   └── peerOrganizations		# 组织相关的证书文件(组织的节点数, 用户数等证书文件)</span><br><span class="line">└── crypto-config.yaml			# 配置文件</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查看排序节点的证书目录, 进入到 ordererOrganizations 子目录中</span><br><span class="line">sgy@ubuntu:ordererOrganizations$ tree -L 4</span><br><span class="line">.</span><br><span class="line">└── wumansgy.com	# 根域名为umansgy.com的orderer节点的相关证书文件</span><br><span class="line">    ├── ca	# CA服务器的签名文件</span><br><span class="line">    │   ├── 94db924d3be00c5adda6ac3c3cb7a5f8b80868681c3dd04b58c2920cdf56fdc7_sk</span><br><span class="line">    │   └── ca.wumansgy.com-cert.pem</span><br><span class="line">    ├── msp</span><br><span class="line">    │   ├── admincerts	# orderer管理员的证书</span><br><span class="line">    │   │   └── Admin@wumansgy.com-cert.pem</span><br><span class="line">    │   ├── cacerts		# orderer根域名服务器的签名证书</span><br><span class="line">    │   │   └── ca.wumansgy.com-cert.pem</span><br><span class="line">    │   └── tlscacerts	# tls连接用的身份证书</span><br><span class="line">    │       └── tlsca.wumansgy.com-cert.pem</span><br><span class="line">    ├── orderers	# orderer节点需要的相关的证书文件</span><br><span class="line">    │   └── ubuntu.wumansgy.com</span><br><span class="line">    │       ├── msp	# orderer节点相关证书</span><br><span class="line">    │       └── tls	# orderer节点和其他节点连接用的身份证书</span><br><span class="line">    ├── tlsca</span><br><span class="line">    │   ├── de45aeb112ee820197f7d4d475f2edbeb1705d53a690f3537dd794b66de1d6ba_sk</span><br><span class="line">    │   └── tlsca.wumansgy.com-cert.pem</span><br><span class="line">    └── users	# orderer节点用户相关的证书</span><br><span class="line">        └── Admin@wumansgy.com</span><br><span class="line">            ├── msp</span><br><span class="line">            └── tls</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 查看TestNetWork目录</span><br><span class="line">sgy@ubuntu:~/TestNetWork$ tree -L 2</span><br><span class="line">.</span><br><span class="line">├── crypto-config</span><br><span class="line">│   ├── ordererOrganizations	# orderer节点相关的证书文件</span><br><span class="line">│   └── peerOrganizations		# 组织相关的证书文件(组织的节点数, 用户数等证书文件)</span><br><span class="line">└── crypto-config.yaml			# 配置文件</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查看排序节点的证书目录, 进入到 ordererOrganizations 子目录中</span><br><span class="line">sgy@ubuntu:ordererOrganizations$ tree -L 4</span><br><span class="line">.</span><br><span class="line">└── wumansgy.com	# 根域名为wumansgy.com的orderer节点的相关证书文件</span><br><span class="line">    ├── ca	# CA服务器的签名文件</span><br><span class="line">    │   ├── 94db924d3be00c5adda6ac3c3cb7a5f8b80868681c3dd04b58c2920cdf56fdc7_sk</span><br><span class="line">    │   └── ca.wumansgy.com-cert.pem</span><br><span class="line">    ├── msp</span><br><span class="line">    │   ├── admincerts	# orderer管理员的证书</span><br><span class="line">    │   │   └── Admin@wumansgy.com-cert.pem</span><br><span class="line">    │   ├── cacerts		# orderer根域名服务器的签名证书</span><br><span class="line">    │   │   └── ca.wumansgy.com-cert.pem</span><br><span class="line">    │   └── tlscacerts	# tls连接用的身份证书</span><br><span class="line">    │       └── tlsca.wumansgy.com-cert.pem</span><br><span class="line">    ├── orderers	# orderer节点需要的相关的证书文件</span><br><span class="line">    │   └── ubuntu.wumansgy.com</span><br><span class="line">    │       ├── msp	# orderer节点相关证书</span><br><span class="line">    │       └── tls	# orderer节点和其他节点连接用的身份证书</span><br><span class="line">    ├── tlsca</span><br><span class="line">    │   ├── de45aeb112ee820197f7d4d475f2edbeb1705d53a690f3537dd794b66de1d6ba_sk</span><br><span class="line">    │   └── tlsca.wumansgy.com-cert.pem</span><br><span class="line">    └── users	# orderer节点用户相关的证书</span><br><span class="line">        └── Admin@wumansgy.com</span><br><span class="line">            ├── msp</span><br><span class="line">            └── tls</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在实际开发中orderer节点这些证书其实不需要直接使用, 只是在orderer节点启动时指明项目的位置即可。</p>
 </blockquote>
@@ -580,7 +580,7 @@
 <p>peer channel的子命令可以通过 <code>peer channel --help</code>进行查看. 这里介绍一个这些子命令可以共用的一些参数:</p>
 <ul>
 <li><p><code>--cafile</code>:  当前orderer节点pem格式的tls证书文件, <font color="red">要使用绝对路径</font>.</p>
-<p><code>crypto-config/ordererOrganizations/itcast.com/orderers/ubuntu.itcast.com/msp/tlscacerts/tlsca.itcast.com-cert.pem</code></p>
+<p><code>crypto-config/ordererOrganizations/wumansgy.com/orderers/ubuntu.wumansgy.com/msp/tlscacerts/tlsca.wumansgy.com-cert.pem</code></p>
 </li>
 <li><p><code>-o, --orderer</code>: orderer节点的地址</p>
 </li>
@@ -856,6 +856,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/01/06/Fabric网络搭建/" rel="prev" title="Fabric网络搭建">
+                Fabric网络搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -924,7 +928,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">168</span>
+                    <span class="site-state-item-count">169</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1050,7 +1054,7 @@
      <span class="site-state-item-name">访客量</span>
 </div>
 <div class="site-state-item site-state-posts">
-      <span class="site-state-item-count">294.8k</span>
+      <span class="site-state-item-count">300.6k</span>
       <span class="site-state-item-name">总字数</span>
 </div>
 
