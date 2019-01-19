@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="7. Solo多机多节点部署7.1. 准备工作所有的节点分离部署, 每台主机上有一个节点, 节点的分布如下表:     名称 IP Hostname 组织机构     orderer 192.168.247.129 orderer.wumansgy.com Orderer   peer0 192.168.247.141 peer0.orggo.com OrgGo   peer1 192.168.2">
+<meta name="keywords" content="HyperLedger-Fabric">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka多机多节点部署">
+<meta property="og:url" content="http://yoursite.com/2019/01/19/kafka多机多节点部署/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="7. Solo多机多节点部署7.1. 准备工作所有的节点分离部署, 每台主机上有一个节点, 节点的分布如下表:     名称 IP Hostname 组织机构     orderer 192.168.247.129 orderer.wumansgy.com Orderer   peer0 192.168.247.141 peer0.orggo.com OrgGo   peer1 192.168.2">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-19T12:31:21.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kafka多机多节点部署">
+<meta name="twitter:description" content="7. Solo多机多节点部署7.1. 准备工作所有的节点分离部署, 每台主机上有一个节点, 节点的分布如下表:     名称 IP Hostname 组织机构     orderer 192.168.247.129 orderer.wumansgy.com Orderer   peer0 192.168.247.141 peer0.orggo.com OrgGo   peer1 192.168.2">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/19/kafka多机多节点部署/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>kafka多机多节点部署 | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/19/kafka多机多节点部署/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">kafka多机多节点部署
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-19 20:28:45 / 修改时间：20:31:21" itemprop="dateCreated datePublished" datetime="2019-01-19T20:28:45+08:00">2019-01-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Docker以及HyperLedger-Fabric/" itemprop="url" rel="index"><span itemprop="name">Docker以及HyperLedger-Fabric</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="7-Solo多机多节点部署"><a href="#7-Solo多机多节点部署" class="headerlink" title="7. Solo多机多节点部署"></a>7. Solo多机多节点部署</h2><h3 id="7-1-准备工作"><a href="#7-1-准备工作" class="headerlink" title="7.1. 准备工作"></a>7.1. 准备工作</h3><p>所有的节点分离部署, 每台主机上有一个节点, 节点的分布如下表:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">IP</th>
+<th style="text-align:center">Hostname</th>
+<th style="text-align:center">组织机构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">orderer</td>
+<td style="text-align:center">192.168.247.129</td>
+<td style="text-align:center">orderer.wumansgy.com</td>
+<td style="text-align:center">Orderer</td>
+</tr>
+<tr>
+<td style="text-align:center">peer0</td>
+<td style="text-align:center">192.168.247.141</td>
+<td style="text-align:center">peer0.orggo.com</td>
+<td style="text-align:center">OrgGo</td>
+</tr>
+<tr>
+<td style="text-align:center">peer1</td>
+<td style="text-align:center">192.168.247.142</td>
+<td style="text-align:center">peer1.orggo.com</td>
+<td style="text-align:center">OrgGo</td>
+</tr>
+<tr>
+<td style="text-align:center">peer0</td>
+<td style="text-align:center">192.168.247.131</td>
+<td style="text-align:center">peer0.orgcpp.com</td>
+<td style="text-align:center">OrgCpp</td>
+</tr>
+<tr>
+<td style="text-align:center">peer1</td>
+<td style="text-align:center">192.168.247.1451</td>
+<td style="text-align:center">peer1.orgcpp.com</td>
+<td style="text-align:center">OrgCpp</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>下面的操作在任意一台主机上做都可以, 下面的例子中, 生成证书和创始块、通道文件操作是在 <code>Orderer节点</code>对应的主机上进行的。</p>
+</blockquote>
+<h4 id="7-1-1-准备工作-创建工作目录"><a href="#7-1-1-准备工作-创建工作目录" class="headerlink" title="7.1.1 准备工作 - 创建工作目录"></a>7.1.1 准备工作 - 创建工作目录</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> N台主机需要创建一个名字相同的工作目录, 该工作目录名字自己定, 切记名字一定要相同</span><br><span class="line"><span class="meta">#</span> 192.168.247.129</span><br><span class="line"><span class="meta">$</span> mkdir ~/testwork</span><br><span class="line"><span class="meta">#</span> 192.168.247.141</span><br><span class="line"><span class="meta">$</span> mkdir ~/testwork</span><br><span class="line"><span class="meta">#</span> 192.168.247.131</span><br><span class="line"><span class="meta">$</span> mkdir ~/testwork</span><br><span class="line"><span class="meta">#</span> 192.168.247.142</span><br><span class="line"><span class="meta">$</span> mkdir ~/testwork</span><br><span class="line"><span class="meta">#</span> 192.168.247.145</span><br><span class="line"><span class="meta">$</span> mkdir ~/testwork</span><br></pre></td></tr></table></figure>
+<h4 id="7-1-2-生成组织节点和用户证书"><a href="#7-1-2-生成组织节点和用户证书" class="headerlink" title="7.1.2 生成组织节点和用户证书"></a>7.1.2 生成组织节点和用户证书</h4><ul>
+<li><p><strong>编写配置文件</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># crypto-config.yaml -&gt; 名字可以改, 一般起名为crypto-config.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">OrdererOrgs:</span></span><br><span class="line">  <span class="comment"># ---------------------------------------------------------------------------</span></span><br><span class="line">  <span class="comment"># Orderer</span></span><br><span class="line">  <span class="comment"># ---------------------------------------------------------------------------</span></span><br><span class="line"><span class="attr">  - Name:</span> <span class="string">Orderer</span></span><br><span class="line"><span class="attr">    Domain:</span> <span class="string">test.com</span></span><br><span class="line"><span class="attr">    Specs:</span></span><br><span class="line"><span class="attr">      - Hostname:</span> <span class="string">orderer</span></span><br><span class="line"></span><br><span class="line"><span class="attr">PeerOrgs:</span></span><br><span class="line">  <span class="comment"># ---------------------------------------------------------------------------</span></span><br><span class="line">  <span class="comment"># Org1</span></span><br><span class="line">  <span class="comment"># ---------------------------------------------------------------------------</span></span><br><span class="line"><span class="attr">  - Name:</span> <span class="string">OrgGo</span></span><br><span class="line"><span class="attr">    Domain:</span> <span class="string">orggo.test.com</span></span><br><span class="line"><span class="attr">    EnableNodeOUs:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    Template:</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">2</span></span><br><span class="line"><span class="attr">    Users:</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">1</span></span><br><span class="line">  <span class="comment"># ---------------------------------------------------------------------------</span></span><br><span class="line">  <span class="comment"># Org2: See "Org1" for full specification</span></span><br><span class="line">  <span class="comment"># ---------------------------------------------------------------------------</span></span><br><span class="line"><span class="attr">  - Name:</span> <span class="string">OrgCpp</span></span><br><span class="line"><span class="attr">    Domain:</span> <span class="string">orgcpp.test.com</span></span><br><span class="line"><span class="attr">    EnableNodeOUs:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    Template:</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">2</span></span><br><span class="line"><span class="attr">    Users:</span></span><br><span class="line"><span class="attr">      Count:</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>cryptogen</code>生成证书</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cryptogen generate --config=crypto-config.yaml</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="7-1-3-生成通道文件和创始块文件"><a href="#7-1-3-生成通道文件和创始块文件" class="headerlink" title="7.1.3 生成通道文件和创始块文件"></a>7.1.3 生成通道文件和创始块文件</h4><ul>
+<li><p>编写配置文件, 名字为 <code>configtx.yaml</code>, 该名字不能改, 是固定的.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># configtx.yaml -&gt; 名字不能变</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   Section: Organizations</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Organizations:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="meta">&amp;OrdererOrg</span></span><br><span class="line"><span class="attr">        Name:</span> <span class="string">OrdererOrg</span></span><br><span class="line"><span class="attr">        ID:</span> <span class="string">OrdererMSP</span></span><br><span class="line"><span class="attr">        MSPDir:</span> <span class="string">./crypto-config/ordererOrganizations/test.com/msp</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">    -</span> <span class="meta">&amp;OrgGo</span></span><br><span class="line"><span class="attr">        Name:</span> <span class="string">OrgGoMSP</span></span><br><span class="line"><span class="attr">        ID:</span> <span class="string">OrgGoMSP</span></span><br><span class="line"><span class="attr">        MSPDir:</span> <span class="string">./crypto-config/peerOrganizations/orggo.test.com/msp</span></span><br><span class="line"><span class="attr">        AnchorPeers:</span></span><br><span class="line"><span class="attr">            - Host:</span> <span class="string">peer0.orggo.test.com</span></span><br><span class="line"><span class="attr">              Port:</span> <span class="number">7051</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">    -</span> <span class="meta">&amp;OrgCpp</span></span><br><span class="line"><span class="attr">        Name:</span> <span class="string">OrgCppMSP</span></span><br><span class="line"><span class="attr">        ID:</span> <span class="string">OrgCppMSP</span></span><br><span class="line"><span class="attr">        MSPDir:</span> <span class="string">./crypto-config/peerOrganizations/orgcpp.test.com/msp</span></span><br><span class="line"><span class="attr">        AnchorPeers:</span></span><br><span class="line"><span class="attr">            - Host:</span> <span class="string">peer0.orgcpp.test.com</span></span><br><span class="line"><span class="attr">              Port:</span> <span class="number">7051</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   SECTION: Capabilities</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Capabilities:</span></span><br><span class="line"><span class="attr">    Global:</span> <span class="meta">&amp;ChannelCapabilities</span></span><br><span class="line"><span class="attr">        V1_1:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    Orderer:</span> <span class="meta">&amp;OrdererCapabilities</span></span><br><span class="line"><span class="attr">        V1_1:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    Application:</span> <span class="meta">&amp;ApplicationCapabilities</span></span><br><span class="line"><span class="attr">        V1_2:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   SECTION: Application</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Application:</span> <span class="meta">&amp;ApplicationDefaults</span></span><br><span class="line"><span class="attr">    Organizations:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   SECTION: Orderer</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Orderer:</span> <span class="meta">&amp;OrdererDefaults</span></span><br><span class="line">    <span class="comment"># Available types are "solo" and "kafka"</span></span><br><span class="line"><span class="attr">    OrdererType:</span> <span class="string">solo</span></span><br><span class="line"><span class="attr">    Addresses:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">orderer.test.com:7050</span></span><br><span class="line"><span class="attr">    BatchTimeout:</span> <span class="number">2</span><span class="string">s</span></span><br><span class="line"><span class="attr">    BatchSize:</span></span><br><span class="line"><span class="attr">        MaxMessageCount:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">        AbsoluteMaxBytes:</span> <span class="number">99</span> <span class="string">MB</span></span><br><span class="line"><span class="attr">        PreferredMaxBytes:</span> <span class="number">512</span> <span class="string">KB</span></span><br><span class="line"><span class="attr">    Kafka:</span></span><br><span class="line"><span class="attr">        Brokers:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:9092</span></span><br><span class="line"><span class="attr">    Organizations:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   Profile</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="attr">Profiles:</span></span><br><span class="line"><span class="attr">    TwoOrgsOrdererGenesis:</span></span><br><span class="line"><span class="attr">        Capabilities:</span></span><br><span class="line">            <span class="string">&lt;&lt;:</span> <span class="meta">*ChannelCapabilities</span></span><br><span class="line"><span class="attr">        Orderer:</span></span><br><span class="line">            <span class="string">&lt;&lt;:</span> <span class="meta">*OrdererDefaults</span></span><br><span class="line"><span class="attr">            Organizations:</span></span><br><span class="line"><span class="bullet">                -</span> <span class="meta">*OrdererOrg</span></span><br><span class="line"><span class="attr">            Capabilities:</span></span><br><span class="line">                <span class="string">&lt;&lt;:</span> <span class="meta">*OrdererCapabilities</span></span><br><span class="line"><span class="attr">        Consortiums:</span></span><br><span class="line"><span class="attr">            SampleConsortium:</span></span><br><span class="line"><span class="attr">                Organizations:</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="meta">*OrgGo</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="meta">*OrgCpp</span></span><br><span class="line"><span class="attr">    TwoOrgsChannel:</span></span><br><span class="line"><span class="attr">        Consortium:</span> <span class="string">SampleConsortium</span></span><br><span class="line"><span class="attr">        Application:</span></span><br><span class="line">            <span class="string">&lt;&lt;:</span> <span class="meta">*ApplicationDefaults</span></span><br><span class="line"><span class="attr">            Organizations:</span></span><br><span class="line"><span class="bullet">                -</span> <span class="meta">*OrgGo</span></span><br><span class="line"><span class="bullet">                -</span> <span class="meta">*OrgCpp</span></span><br><span class="line"><span class="attr">            Capabilities:</span></span><br><span class="line">                <span class="string">&lt;&lt;:</span> <span class="meta">*ApplicationCapabilities</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过命令<code>configtxgen</code>生成创始块和通道文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 我们先创建一个目录 channel-artifacts 存储生成的文件, 目的是为了和后边的配置文件模板的配置项保持一致</span><br><span class="line"><span class="meta">$</span> mkdir channel-artifacts</span><br><span class="line"><span class="meta">#</span> 生成通道文件</span><br><span class="line"><span class="meta">$</span> configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block</span><br><span class="line"><span class="meta">#</span> 生成创始块文件</span><br><span class="line"><span class="meta">$</span> configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID testchannel</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="7-2-部署-orderer-排序节点"><a href="#7-2-部署-orderer-排序节点" class="headerlink" title="7.2 部署 orderer 排序节点"></a>7.2 部署 orderer 排序节点</h3><h4 id="7-2-1-编写配置文件"><a href="#7-2-1-编写配置文件" class="headerlink" title="7.2.1 编写配置文件"></a>7.2.1 编写配置文件</h4><blockquote>
+<p>编写启动<code>orderer</code>节点容器使用的配置文件 - <code>docker-compose.yaml</code></p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"></span><br><span class="line">  <span class="string">orderer.test.com:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">orderer.test.com</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">hyperledger/fabric-orderer:latest</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=testwork_default</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LOGLEVEL=INFO</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LISTENADDRESS=0.0.0.0</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LISTENPORT=7050</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_GENESISMETHOD=file</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LOCALMSPID=OrdererMSP</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp</span></span><br><span class="line">      <span class="comment"># enabled TLS</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">orderer</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">./crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/msp:/var/hyperledger/orderer/msp</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">./crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/tls/:/var/hyperledger/orderer/tls</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="attr">        default:</span></span><br><span class="line"><span class="attr">          aliases:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="string">testwork</span>  <span class="comment"># 这个名字使用当前配置文件所在的目录 的名字</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">7050</span><span class="string">:7050</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意的细节:</p>
+<ul>
+<li><code>networks</code>的名字要跟<code>当前配置文件所在的目录名</code>相同</li>
+<li>环境变量<code>CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=testwork_default</code>的名字是<code>网络名_default</code></li>
+</ul>
+</blockquote>
+<h4 id="7-2-2-启动orderer容器"><a href="#7-2-2-启动orderer容器" class="headerlink" title="7.2.2 启动orderer容器"></a>7.2.2 启动orderer容器</h4><blockquote>
+<p>通过上面编写好的docker-compose配置文件就可以启动<code>orderer</code>容器了</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker-compose up -d</span><br><span class="line">Creating network "testwork_default" with the default driver</span><br><span class="line">Creating orderer.test.com ... done</span><br><span class="line"><span class="meta">#</span> 检测是否启动成功</span><br><span class="line"><span class="meta">$</span> docker-compose  ps</span><br><span class="line">      Name         Command   State           Ports         </span><br><span class="line">-----------------------------------------------------------</span><br><span class="line">orderer.test.com   orderer   Up      0.0.0.0:7050-&gt;7050/tcp</span><br></pre></td></tr></table></figure>
+<h3 id="7-3-部署-peer0-orggo-节点"><a href="#7-3-部署-peer0-orggo-节点" class="headerlink" title="7.3 部署 peer0.orggo 节点"></a>7.3 部署 peer0.orggo 节点</h3><h4 id="7-3-1-准备工作"><a href="#7-3-1-准备工作" class="headerlink" title="7.3.1 准备工作"></a>7.3.1 准备工作</h4><ul>
+<li><p>切换到<code>peer0.orggo</code>主机 - <code>192.168.247.141</code></p>
+</li>
+<li><p>进入到工作目录中:  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cd ~/testwork</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>拷贝文件</p>
+<blockquote>
+<p>将<code>orderer</code>节点所在宿主机上生成的<code>crypto-config</code>和<code>channel-artifacts</code>目录拷贝到当前<code>testwork</code>目录中。</p>
+<p>我们可以通过<code>scp</code>命令实现远程拷贝, 从<code>orderer</code>节点宿主机拷贝到当前<code>peer0.orggo</code>节点.</p>
+<ul>
+<li>orderer节点宿主机<code>IP: 192.168.247.129</code>, 登录用户名: <code>wumansgy</code> </li>
+</ul>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 通过scp命令远程拷贝</span><br><span class="line"><span class="meta">#</span> -r : 表示要拷贝的是目录, 执行递归操作</span><br><span class="line"><span class="meta">#</span> wumansgy@192.168.247.129:/home/wumansgy/testwork/channel-artifacts</span><br><span class="line"><span class="meta">#</span> 	wumansgy@192.168.247.129: 从192.168.247.129上拷贝数据, 登录用户名为wumansgy</span><br><span class="line"><span class="meta">#</span>   /home/wumansgy/testwork/channel-artifacts: 要拷贝192.168.247.129上wumansgy用户的哪个目录</span><br><span class="line"><span class="meta">#</span>   ./ : 远程目录拷贝到本地的什么地方</span><br><span class="line"><span class="meta">$</span> scp -r wumansgy@192.168.247.129:/home/wumansgy/testwork/channel-artifacts  ./</span><br><span class="line"><span class="meta">$</span> scp -r wumansgy@192.168.247.129:/home/wumansgy/testwork/crypto-config  ./</span><br><span class="line"><span class="meta">#</span> 查看拷贝结果</span><br><span class="line"><span class="meta">$</span> tree ./ -L 1</span><br><span class="line">.</span><br><span class="line">├── channel-artifacts</span><br><span class="line">└── crypto-config</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="7-3-2-编写-配置文件"><a href="#7-3-2-编写-配置文件" class="headerlink" title="7.3.2 编写 配置文件"></a>7.3.2 编写 配置文件</h4><blockquote>
+<p>编写启动 <code>peer0-orggo</code>节点的配置文件 - <code>docker-compose.yaml</code></p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yaml</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">    <span class="string">peer0.orggo.test.com:</span></span><br><span class="line"><span class="attr">      container_name:</span> <span class="string">peer0.orggo.test.com</span></span><br><span class="line"><span class="attr">      image:</span> <span class="string">hyperledger/fabric-peer:latest</span></span><br><span class="line"><span class="attr">      environment:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=testwork_default</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_LOGGING_LEVEL=INFO</span></span><br><span class="line">        <span class="comment">#- CORE_LOGGING_LEVEL=DEBUG</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_USELEADERELECTION=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_ORGLEADER=false</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_PROFILE_ENABLED=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgGoMSP</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ID=peer0.orggo.test.com</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orggo.test.com:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orggo.test.com:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orggo.test.com:7051</span></span><br><span class="line">        <span class="comment"># TLS</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt</span></span><br><span class="line"><span class="attr">      volumes:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./crypto-config/peerOrganizations/orggo.test.com/peers/peer0.orggo.test.com/msp:/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./crypto-config/peerOrganizations/orggo.test.com/peers/peer0.orggo.test.com/tls:/etc/hyperledger/fabric/tls</span></span><br><span class="line"><span class="attr">      working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric/peer</span></span><br><span class="line"><span class="attr">      command:</span> <span class="string">peer</span> <span class="string">node</span> <span class="string">start</span></span><br><span class="line"><span class="attr">      networks:</span></span><br><span class="line"><span class="attr">        default:</span></span><br><span class="line"><span class="attr">          aliases:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="string">testwork</span></span><br><span class="line"><span class="attr">      ports:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">7051</span><span class="string">:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">7053</span><span class="string">:7053</span></span><br><span class="line"><span class="attr">      extra_hosts:</span>  <span class="comment"># 声明域名和IP的对应关系</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"orderer.test.com:192.168.247.129"</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"peer0.orgcpp.test.com:192.168.247.131"</span></span><br><span class="line">        </span><br><span class="line"><span class="attr">    cli:</span></span><br><span class="line"><span class="attr">      container_name:</span> <span class="string">cli</span></span><br><span class="line"><span class="attr">      image:</span> <span class="string">hyperledger/fabric-tools:latest</span></span><br><span class="line"><span class="attr">      tty:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">      stdin_open:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">      environment:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">GOPATH=/opt/gopath</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock</span></span><br><span class="line">        <span class="comment">#- CORE_LOGGING_LEVEL=DEBUG</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_LOGGING_LEVEL=INFO</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ID=cli</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orggo.test.com:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgGoMSP</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.test.com/peers/peer0.orggo.test.com/tls/server.crt</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.test.com/peers/peer0.orggo.test.com/tls/server.key</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.test.com/peers/peer0.orggo.test.com/tls/ca.crt</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orggo.test.com/users/Admin@orggo.test.com/msp</span></span><br><span class="line"><span class="attr">      working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric/peer</span></span><br><span class="line"><span class="attr">      command:</span> <span class="string">/bin/bash</span></span><br><span class="line"><span class="attr">      volumes:</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">./chaincode/:/opt/gopath/src/github.com/chaincode</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts</span></span><br><span class="line"><span class="attr">      depends_on:</span>   <span class="comment"># 启动顺序</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">peer0.orggo.test.com</span></span><br><span class="line">      </span><br><span class="line"><span class="attr">      networks:</span></span><br><span class="line"><span class="attr">          default:</span></span><br><span class="line"><span class="attr">            aliases:</span></span><br><span class="line"><span class="bullet">              -</span> <span class="string">testwork</span></span><br><span class="line"><span class="attr">      extra_hosts:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"orderer.test.com:192.168.247.129"</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"peer0.orggo.test.com:192.168.247.141"</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"peer0.orgcpp.test.com:192.168.247.131"</span></span><br></pre></td></tr></table></figure>
+<h4 id="7-3-3-启动容器"><a href="#7-3-3-启动容器" class="headerlink" title="7.3.3 启动容器"></a>7.3.3 启动容器</h4><ul>
+<li><p>启动容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker-compose up -d</span><br><span class="line">Creating network "testwork_default" with the default driver</span><br><span class="line">Creating peer0.orgGo.test.com ... done</span><br><span class="line">Creating cli                  ... done</span><br><span class="line"><span class="meta">#</span> 查看启动状态</span><br><span class="line"><span class="meta">$</span> docker-compose ps</span><br><span class="line">        Name               Command       State                       Ports                     </span><br><span class="line">-----------------------------------------------------------------------------------------------</span><br><span class="line">cli                    /bin/bash         Up                                                    </span><br><span class="line">peer0.orgGo.test.com   peer node start   Up      0.0.0.0:7051-&gt;7051/tcp, 0.0.0.0:7053-&gt;7053/tcp</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="7-3-4-对peer0-orggo节点的操作"><a href="#7-3-4-对peer0-orggo节点的操作" class="headerlink" title="7.3.4 对peer0.orggo节点的操作"></a>7.3.4 对peer0.orggo节点的操作</h4><ul>
+<li><p>进入到客户端容器中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec -it cli bash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建通道</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer channel create -o orderer.test.com:7050 -c testchannel -f ./channel-artifacts/channel.tx --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/test.com/msp/tlscacerts/tlsca.test.com-cert.pem</span><br><span class="line"><span class="meta">$</span> ls</span><br><span class="line">channel-artifacts  crypto  `testchannel.block`  --&gt; 生成的通道块文件</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将当前节点加入到通道中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer channel join -b testchannel.block</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装链码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode install -n testcc -v 1.0 -l golang -p github.com/chaincode</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>初始化链码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode instantiate -o orderer.test.com:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/test.com/msp/tlscacerts/tlsca.test.com-cert.pem -C testchannel -n testcc -v 1.0 -l golang -c '&#123;"Args":["init","a","100","b","200"]&#125;' -P "AND ('OrgGoMSP.member', 'OrgCppMSP.member')"</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode query -C testchannel -n testcc -c '&#123;"Args":["query","a"]&#125;'</span><br><span class="line"><span class="meta">$</span> peer chaincode query -C testchannel -n testcc -c '&#123;"Args":["query","b"]&#125;'</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将生成的通道文件 <code>testchannel.block</code> 从cli容器拷贝到宿主机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 从客户端容器退出到宿主机</span><br><span class="line"><span class="meta">$</span> exit</span><br><span class="line"><span class="meta">#</span> 拷贝操作要在宿主机中进行</span><br><span class="line"><span class="meta">$</span> docker cp cli:/opt/gopath/src/github.com/hyperledger/fabric/peer/testchannel.block ./</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="7-4-部署-peer0-orgcpp-节点"><a href="#7-4-部署-peer0-orgcpp-节点" class="headerlink" title="7.4 部署 peer0.orgcpp 节点"></a>7.4 部署 peer0.orgcpp 节点</h3><h4 id="7-4-1-准备工作"><a href="#7-4-1-准备工作" class="headerlink" title="7.4.1 准备工作"></a>7.4.1 准备工作</h4><ul>
+<li><p>切换到<code>peer0.orgcpp</code>主机 - <code>192.168.247.131</code></p>
+</li>
+<li><p>进入到工作目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cd ~/testwork</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>远程拷贝文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 从主机192.168.247.141的zoro用户下拷贝目录crypto-config到当前目录下</span><br><span class="line"><span class="meta">$</span> scp -r zoro@192.168.247.141:/home/zoro/testwork/crypto-config  ./	</span><br><span class="line"><span class="meta">#</span> 链码拷贝</span><br><span class="line"><span class="meta">$</span> scp -r zoro@192.168.247.141:/home/zoro/testwork/chaincode  ./</span><br><span class="line"><span class="meta">#</span> 从主机192.168.247.141的zoro用户下拷贝文件testchannel.block到当前目录下</span><br><span class="line"><span class="meta">$</span> scp zoro@192.168.247.141:/home/zoro/testwork/testchannel.block  ./</span><br><span class="line"><span class="meta">#</span> 查看结果</span><br><span class="line"><span class="meta">$</span> tree ./ -L 1</span><br><span class="line">./</span><br><span class="line">├── chaincode</span><br><span class="line">├── crypto-config</span><br><span class="line">└── testchannel.block</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了方便操作可以将<code>通道块文件</code>放入到客户端容器挂载的目录中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 创建目录</span><br><span class="line"><span class="meta">$</span> mkdir channel-artifacts  </span><br><span class="line"><span class="meta">#</span> 移动</span><br><span class="line"><span class="meta">$</span> mv testchannel.block channel-artifacts/</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="7-4-2-编写配置文件"><a href="#7-4-2-编写配置文件" class="headerlink" title="7.4.2 编写配置文件"></a>7.4.2 编写配置文件</h4><blockquote>
+<p>编写启动<code>peer0.orgcpp</code>节点的配置文件 <code>docker-compose.yaml</code></p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yaml</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">    <span class="string">peer0.orgcpp.test.com:</span></span><br><span class="line"><span class="attr">      container_name:</span> <span class="string">peer0.orgcpp.test.com</span></span><br><span class="line"><span class="attr">      image:</span> <span class="string">hyperledger/fabric-peer:latest</span></span><br><span class="line"><span class="attr">      environment:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=testwork_default</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_LOGGING_LEVEL=INFO</span></span><br><span class="line">        <span class="comment">#- CORE_LOGGING_LEVEL=DEBUG</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_USELEADERELECTION=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_ORGLEADER=false</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_PROFILE_ENABLED=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgCppMSP</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ID=peer0.orgcpp.test.com</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orgcpp.test.com:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orgcpp.test.com:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgcpp.test.com:7051</span></span><br><span class="line">        <span class="comment"># TLS</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt</span></span><br><span class="line"><span class="attr">      volumes:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./crypto-config/peerOrganizations/orgcpp.test.com/peers/peer0.orgcpp.test.com/msp:/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">./crypto-config/peerOrganizations/orgcpp.test.com/peers/peer0.orgcpp.test.com/tls:/etc/hyperledger/fabric/tls</span></span><br><span class="line"><span class="attr">      working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric/peer</span></span><br><span class="line"><span class="attr">      command:</span> <span class="string">peer</span> <span class="string">node</span> <span class="string">start</span></span><br><span class="line"><span class="attr">      networks:</span></span><br><span class="line"><span class="attr">        default:</span></span><br><span class="line"><span class="attr">          aliases:</span></span><br><span class="line"><span class="bullet">            -</span> <span class="string">testwork</span></span><br><span class="line"><span class="attr">      ports:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">7051</span><span class="string">:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">7053</span><span class="string">:7053</span></span><br><span class="line"><span class="attr">      extra_hosts:</span>  <span class="comment"># 声明域名和IP的对应关系</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"orderer.test.com:192.168.247.129"</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"peer0.orggo.test.com:192.168.247.141"</span></span><br><span class="line">        </span><br><span class="line"><span class="attr">    cli:</span></span><br><span class="line"><span class="attr">      container_name:</span> <span class="string">cli</span></span><br><span class="line"><span class="attr">      image:</span> <span class="string">hyperledger/fabric-tools:latest</span></span><br><span class="line"><span class="attr">      tty:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">      stdin_open:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">      environment:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">GOPATH=/opt/gopath</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock</span></span><br><span class="line">        <span class="comment">#- CORE_LOGGING_LEVEL=DEBUG</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_LOGGING_LEVEL=INFO</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ID=cli</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_ADDRESS=peer0.orgcpp.test.com:7051</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_LOCALMSPID=OrgCppMSP</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ENABLED=true</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgcpp.test.com/peers/peer0.orgcpp.test.com/tls/server.crt</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgcpp.test.com/peers/peer0.orgcpp.test.com/tls/server.key</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgcpp.test.com/peers/peer0.orgcpp.test.com/tls/ca.crt</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgcpp.test.com/users/Admin@orgcpp.test.com/msp</span></span><br><span class="line"><span class="attr">      working_dir:</span> <span class="string">/opt/gopath/src/github.com/hyperledger/fabric/peer</span></span><br><span class="line"><span class="attr">      command:</span> <span class="string">/bin/bash</span></span><br><span class="line"><span class="attr">      volumes:</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">/var/run/:/host/var/run/</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">./chaincode/:/opt/gopath/src/github.com/chaincode</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts</span></span><br><span class="line"><span class="attr">      depends_on:</span>   <span class="comment"># 启动顺序</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">peer0.orgcpp.test.com</span></span><br><span class="line">      </span><br><span class="line"><span class="attr">      networks:</span></span><br><span class="line"><span class="attr">          default:</span></span><br><span class="line"><span class="attr">            aliases:</span></span><br><span class="line"><span class="bullet">              -</span> <span class="string">testwork</span></span><br><span class="line"><span class="attr">      extra_hosts:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"orderer.test.com:192.168.247.129"</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"peer0.orggo.test.com:192.168.247.141"</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">"peer0.orgcpp.test.com:192.168.247.131"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<font color="red">注意: 该配置文件中已经将` ` 映射删掉了</font>
+
+</blockquote>
+<h4 id="7-4-3-启动当前节点"><a href="#7-4-3-启动当前节点" class="headerlink" title="7.4.3 启动当前节点"></a>7.4.3 启动当前节点</h4><ul>
+<li><p>启动客户端容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker-compose up -d</span><br><span class="line">Creating network "testwork_default" with the default driver</span><br><span class="line">Creating peer0.orgcpp.test.com ... done</span><br><span class="line">Creating cli                   ... done</span><br><span class="line"><span class="meta">#</span> 查看启动情况</span><br><span class="line"><span class="meta">$</span> docker-compose ps</span><br><span class="line">        Name                Command       State                       Ports                     </span><br><span class="line">------------------------------------------------------------------------------------------------</span><br><span class="line">cli                     /bin/bash         Up                                                    </span><br><span class="line">peer0.orgcpp.test.com   peer node start   Up      0.0.0.0:7051-&gt;7051/tcp, 0.0.0.0:7053-&gt;7053/tcp</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="7-4-4-对peer0-orgcpp节点的操作"><a href="#7-4-4-对peer0-orgcpp节点的操作" class="headerlink" title="7.4.4 对peer0.orgcpp节点的操作"></a>7.4.4 对peer0.orgcpp节点的操作</h4><ul>
+<li><p>进入到操作该节点的客户端中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec -it cli bash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>加入到通道中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer channel join -b ./channel-artifacts/testchannel.block</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装链码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode install -n testcc -v 1.0 -l golang -p github.com/chaincode</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode query -C testchannel -n testcc -c '&#123;"Args":["query","a"]&#125;' </span><br><span class="line"><span class="meta">$</span> peer chaincode query -C testchannel -n testcc -c '&#123;"Args":["query","b"]&#125;'</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>交易</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 转账</span><br><span class="line"><span class="meta">$</span> peer chaincode invoke -o orderer.test.com:7050  -C testchannel -n testcc --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/test.com/orderers/orderer.test.com/msp/tlscacerts/tlsca.test.com-cert.pem --peerAddresses peer0.orgGo.test.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgGo.test.com/peers/peer0.orgGo.test.com/tls/ca.crt --peerAddresses peer0.orgcpp.test.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgcpp.test.com/peers/peer0.orgcpp.test.com/tls/ca.crt -c '&#123;"Args":["invoke","a","b","10"]&#125;'</span><br><span class="line"><span class="meta">#</span> 查询</span><br><span class="line"><span class="meta">$</span> peer chaincode query -C testchannel -n testcc -c '&#123;"Args":["query","a"]&#125;' </span><br><span class="line"><span class="meta">$</span> peer chaincode query -C testchannel -n testcc -c '&#123;"Args":["query","b"]&#125;'</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="7-5-其余节点的部署"><a href="#7-5-其余节点的部署" class="headerlink" title="7.5. 其余节点的部署"></a>7.5. 其余节点的部署</h3><blockquote>
+<p>关于其余节点的部署, 在此不再过多赘述, 部署方式请参考 第 7.4节内容, 步骤是完全一样的</p>
+</blockquote>
+<h3 id="7-6-链码的打包"><a href="#7-6-链码的打包" class="headerlink" title="7.6. 链码的打包"></a>7.6. 链码的打包</h3><blockquote>
+<p>我们在进行多机多节点部署的时候, 所有的peer节点都需要安装链码, 有时候会出现链码安装失败的问题, 提示链码的指纹（哈希）不匹配，我们可以通过以下方法解决</p>
+</blockquote>
+<ol>
+<li><p>通过客户端在第1个peer节点中安装好链码之后， 将链码打包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode package -n testcc -p github.com/chaincode -v 1.0 mycc.1.0.out</span><br><span class="line">	-n: 链码的名字</span><br><span class="line">	-p: 链码的路径</span><br><span class="line">	-v: 链码的版本号</span><br><span class="line">	-mycc.1.0.out: 打包之后生成的文件</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将打包之后的链码从容器中拷贝出来</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker cp cli:/xxxx/mycc.1.0.out ./</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将得到的打包之后的链码文件拷贝到其他的peer节点上</p>
+</li>
+<li><p>通过客户端在其他peer节点上安装链码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode install mycc.1.0.out</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/01/19/kafka多机多节点部署/">kafka多机多节点部署</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2019年01月19日 - 20:01</p>
+  <p><span>最后更新:</span>2019年01月19日 - 20:01</p>
+  <p><span>原始链接:</span><a href="/2019/01/19/kafka多机多节点部署/" title="kafka多机多节点部署">http://yoursite.com/2019/01/19/kafka多机多节点部署/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/01/19/kafka多机多节点部署/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HyperLedger-Fabric/" rel="tag"><i class="fa fa-tag"></i> HyperLedger-Fabric</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/19/solo多机多节点部署/" rel="next" title="solo多机多节点部署">
+                <i class="fa fa-chevron-left"></i> solo多机多节点部署
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">173</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">314.3k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Solo多机多节点部署"><span class="nav-number">1.</span> <span class="nav-text">7. Solo多机多节点部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-准备工作"><span class="nav-number">1.1.</span> <span class="nav-text">7.1. 准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-1-准备工作-创建工作目录"><span class="nav-number">1.1.1.</span> <span class="nav-text">7.1.1 准备工作 - 创建工作目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-2-生成组织节点和用户证书"><span class="nav-number">1.1.2.</span> <span class="nav-text">7.1.2 生成组织节点和用户证书</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-3-生成通道文件和创始块文件"><span class="nav-number">1.1.3.</span> <span class="nav-text">7.1.3 生成通道文件和创始块文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-部署-orderer-排序节点"><span class="nav-number">1.2.</span> <span class="nav-text">7.2 部署 orderer 排序节点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-1-编写配置文件"><span class="nav-number">1.2.1.</span> <span class="nav-text">7.2.1 编写配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-2-启动orderer容器"><span class="nav-number">1.2.2.</span> <span class="nav-text">7.2.2 启动orderer容器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-部署-peer0-orggo-节点"><span class="nav-number">1.3.</span> <span class="nav-text">7.3 部署 peer0.orggo 节点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-1-准备工作"><span class="nav-number">1.3.1.</span> <span class="nav-text">7.3.1 准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-2-编写-配置文件"><span class="nav-number">1.3.2.</span> <span class="nav-text">7.3.2 编写 配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-3-启动容器"><span class="nav-number">1.3.3.</span> <span class="nav-text">7.3.3 启动容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-4-对peer0-orggo节点的操作"><span class="nav-number">1.3.4.</span> <span class="nav-text">7.3.4 对peer0.orggo节点的操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-部署-peer0-orgcpp-节点"><span class="nav-number">1.4.</span> <span class="nav-text">7.4 部署 peer0.orgcpp 节点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-4-1-准备工作"><span class="nav-number">1.4.1.</span> <span class="nav-text">7.4.1 准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-4-2-编写配置文件"><span class="nav-number">1.4.2.</span> <span class="nav-text">7.4.2 编写配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-4-3-启动当前节点"><span class="nav-number">1.4.3.</span> <span class="nav-text">7.4.3 启动当前节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-4-4-对peer0-orgcpp节点的操作"><span class="nav-number">1.4.4.</span> <span class="nav-text">7.4.4 对peer0.orgcpp节点的操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-其余节点的部署"><span class="nav-number">1.5.</span> <span class="nav-text">7.5. 其余节点的部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-6-链码的打包"><span class="nav-number">1.6.</span> <span class="nav-text">7.6. 链码的打包</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
