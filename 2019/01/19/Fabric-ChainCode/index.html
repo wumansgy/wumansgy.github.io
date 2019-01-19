@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/time.jpg?v=6.4.0">
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="5. 智能合约 智能合约是区块链中的一个非常重要的概念和组成部分。在Fabric中将智能合约称之为ChainCode - 链码。 下面将会介绍ChainCode的基本概念、代码结构、开发等过程。  5.1 ChainCode介绍 Fabric中的Chaicode包含了Chaicode代码和Chaicode管理命令这两部分的内容。 其中：  Chaicode代码是业务的承载体，负责具体的业务逻辑；">
+<meta name="keywords" content="HyperLedger-Fabric">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fabric-ChainCode">
+<meta property="og:url" content="http://yoursite.com/2019/01/19/Fabric-ChainCode/index.html">
+<meta property="og:site_name" content="Wuman&#39;s Blog">
+<meta property="og:description" content="5. 智能合约 智能合约是区块链中的一个非常重要的概念和组成部分。在Fabric中将智能合约称之为ChainCode - 链码。 下面将会介绍ChainCode的基本概念、代码结构、开发等过程。  5.1 ChainCode介绍 Fabric中的Chaicode包含了Chaicode代码和Chaicode管理命令这两部分的内容。 其中：  Chaicode代码是业务的承载体，负责具体的业务逻辑；">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-19T12:10:46.591Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fabric-ChainCode">
+<meta name="twitter:description" content="5. 智能合约 智能合约是区块链中的一个非常重要的概念和组成部分。在Fabric中将智能合约称之为ChainCode - 链码。 下面将会介绍ChainCode的基本概念、代码结构、开发等过程。  5.1 ChainCode介绍 Fabric中的Chaicode包含了Chaicode代码和Chaicode管理命令这两部分的内容。 其中：  Chaicode代码是业务的承载体，负责具体的业务逻辑；">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/19/Fabric-ChainCode/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Fabric-ChainCode | Wuman's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/wumansgy" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wuman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/19/Fabric-ChainCode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wuman">
+      <meta itemprop="description" content="编程语言，区块连，Linux等相关技术">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wuman's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Fabric-ChainCode
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-19 20:08:51 / 修改时间：20:10:46" itemprop="dateCreated datePublished" datetime="2019-01-19T20:08:51+08:00">2019-01-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Docker以及HyperLedger-Fabric/" itemprop="url" rel="index"><span itemprop="name">Docker以及HyperLedger-Fabric</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="5-智能合约"><a href="#5-智能合约" class="headerlink" title="5. 智能合约"></a>5. 智能合约</h2><blockquote>
+<p>智能合约是区块链中的一个非常重要的概念和组成部分。在Fabric中将智能合约称之为ChainCode - 链码。</p>
+<p>下面将会介绍ChainCode的基本概念、代码结构、开发等过程。</p>
+</blockquote>
+<h3 id="5-1-ChainCode介绍"><a href="#5-1-ChainCode介绍" class="headerlink" title="5.1 ChainCode介绍"></a>5.1 ChainCode介绍</h3><blockquote>
+<p>Fabric中的Chaicode包含了Chaicode代码和Chaicode管理命令这两部分的内容。</p>
+<p>其中：</p>
+<ul>
+<li>Chaicode代码是业务的承载体，负责具体的业务逻辑；</li>
+<li>Chaincode管理命令负责Chaincdoe的部署、安装、维护等工作。</li>
+</ul>
+<p><strong>1.  Chaincode代码</strong></p>
+<p>Fabric的Chaincode是一段运行在容器中的程序，这些程序可以是Go、Java、Node-js等语言开发的。                            Chaincode是客户端程序和Fabric之间的桥梁。通过客户端程序可以发起交易、查询交易。Chaincode是运行在                Docker容器中的，因此Chaincode相对比较安全。在Chaincode开发语言的支持中，目前Fabric支持使用Golang、Java和node.js这三种程语言开发Chaincode。在这些开发语言中，Golang是比较成熟稳定的，Java和Node.js这两个语言的版本还在完善中。</p>
+<p><strong>2．Chaincode管理命令</strong></p>
+<p>Chaincode管理命令主要用来对Chaincode进行安装、实例化、调用、打包、签名等操作。</p>
+<p>Chaincode命令包含在peer模块中，是peer模块的一个子命令，该子命令的名称为<code>chaincode</code>，该子命令的格式如下所示：</p>
+<p><code>peer chaincode</code></p>
+<p>peer模块的Chaincode子命令及其参数选项的作用，<code>请参考第3.4章节</code>。</p>
+</blockquote>
+<h3 id="5-2-Golang版本的ChainCode的代码结构"><a href="#5-2-Golang版本的ChainCode的代码结构" class="headerlink" title="5.2 Golang版本的ChainCode的代码结构"></a>5.2 Golang版本的ChainCode的代码结构</h3><ul>
+<li><p><strong>包名</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个chaincode通常是一个Golang源代码文件, 在这份源代码中, 包名必须是main</span></span><br><span class="line"><span class="keyword">package</span> main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>引入包</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ChainCode需要引入Fabric提供的一些系统包, 这些系统提供了ChainCode和Fabric进行通信的接口.</span></span><br><span class="line"><span class="comment">// 必须要引入包的如下:</span></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"github.com/hyperledger/fabric/core/chaincode/shim"</span></span><br><span class="line">    pb <span class="string">"github.com/hyperledger/fabric/protos/peer"</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">在引入包中 "github.com/hyperledger/fabric/core/chaincode/shim" 是Fabric提供的上下文环境,包含了Fabric和ChainCode交互的接口。在ChainCode中，执行赋值、查询等功能都需要通过shim。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>定义结构体并实现</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">每个ChainCode都需要定义一个结构体，结构体的名字可以是任意符合Golang命名规范的字符串。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 自定义结构体名为: chainCodeStudy</span></span><br><span class="line"><span class="keyword">type</span> TestStudy <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Chaincode结构体是ChainCode的主体结构。ChainCode结构体需要实现Fabric提供的接口：</span></span><br><span class="line"><span class="comment">"github.com/hyperledger/fabric/protos/peer"，其中必须实现下面两个方法：</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 系统初始化</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Init</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;&#125;;</span><br><span class="line"><span class="comment">// 数据写入</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span>&#123;&#125;；</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Init方法</strong></p>
+<blockquote>
+<p>Init方法是系统初始化方法。当执行命令<code>peer chaincode instantiate</code>实例化chaincode时候会调用该方法，同时命令中<code>-c</code>选项后面内容会作为参数传入<code>Init</code>方法中。以下面的chaincode实例化命令为例：</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode instantiate -o orderer.test.com:7050 -C mychanne -n mytestcc -v 1.0 -c '&#123;"Args": ["init"，"a"， "100"，"b"，"200"]&#125;'</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面命令给Chaincode传入4个参数<code>“a”</code>、<code>“100”</code>、<code>“b”</code>、<code>“200”</code>。注意命令中Args后面一共有5个参数，其中第一个参数<code>init</code>是固定值，后面的才是参数。传参数的个数是没有限制的，但是实际应用的时候不要太多。如果有很多参数需要传递给ChainCode，可以采用一些数据格式（比如Json），把数据格式化之后传递给ChainCode。在Init方法中可以通过下列方法获取传入参数。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Init</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="comment">// 获取客户端传入的参数, args是一个字符串, 存储传入的字符串参数</span></span><br><span class="line">    _, args := stub.GetFunctionAndParameters()</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"sucess init!!!"</span>))</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Invoke方法</strong></p>
+<blockquote>
+<p>Invoke方法的主要作用是写入数据，比如发起交易等。在执行命令<code>peer chaincode invoke</code>的时候系统会调用该方法，同时会把命令中<code>-c</code>后面的参数传入<code>Invoke</code>方法中，以下面的Invoke命令为例:</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode invoke -o 192.168.1.100:7050 -C mychanne -n mytestcc -c '&#123;"Args": ["invoke"，"a"，"b"，"10"]&#125;'</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的命令调用Chaincode的Invoke方法并且传入三个参数<code>“a”</code>、<code>&quot;b”</code>、<code>“10”</code>。注意Args后面数组中的第一个值<code>“invoke”</code>是默认的固定参数。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="comment">// 进行交易操作的源代码, 调用ChaincodeStubInterface接口中的方法</span></span><br><span class="line">    <span class="comment">// stub.xxx()</span></span><br><span class="line">    <span class="comment">// stub.yyy()</span></span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"sucess invoke!!!"</span>))</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>shim包的核心方法</strong></p>
+<blockquote>
+<p>在Fabric的Golang语言的Chaincode源代码中如需要引入系统包<code>&quot;github.com/hyperledger/fabric/core/chaincode/shim&quot;</code>。shim包主要负责和客户端进行通信。shim提供了一组核心方法和客户端进行交互，这些方法如下所示。 </p>
+<p>shim中API 查看地址: <code>https://godoc.org/github.com/hyperledger/fabric/core/chaincode/shim</code></p>
+</blockquote>
+<ul>
+<li><p><strong>Success</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Sucess 方法负责将正确的消息返回给调用ChainCode的客户端, Sucess方法的定义和调用如下:</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 方法定义</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Success</span><span class="params">(payload []<span class="keyword">byte</span>)</span> <span class="title">pb</span>.<span class="title">Response</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"sucess invoke!!!"</span>))</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Error</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Error方法负责将错误信息返回给调用ChainCode的客户端, Error方法的定义和调用如下</span></span><br><span class="line"><span class="comment">// 方法定义</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Error</span><span class="params">(msg <span class="keyword">string</span>)</span> <span class="title">pb</span>.<span class="title">Response</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> shim.Error(<span class="string">"operation fail!!!"</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>LogLevel</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LogLevel方法负责修改ChainCode中运行日志的级别, LogLevel方法的定义和调用如下</span></span><br><span class="line"><span class="comment">// 将日志级别描述字符串转为 LoggingLevel 类型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LogLevel</span><span class="params">(levelString <span class="keyword">string</span>)</span> <span class="params">(LoggingLevel, error)</span>;</span></span><br><span class="line"><span class="function">	- <span class="title">levelString</span>可用参数:</span></span><br><span class="line"><span class="function">		- <span class="title">CRITICAL</span>, 级别最高, 写日志最少</span></span><br><span class="line"><span class="function">		- <span class="title">ERROR</span></span></span><br><span class="line"><span class="function">		- <span class="title">WARNING</span></span></span><br><span class="line"><span class="function">		- <span class="title">NOTICE</span></span></span><br><span class="line"><span class="function">		- <span class="title">INFO</span> </span></span><br><span class="line"><span class="function">		- <span class="title">DEBUG</span>, 级别最低, 写日志最多</span></span><br><span class="line"><span class="function">// 设置日志级别</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">SetLoggingLevel</span><span class="params">(level LoggingLevel)</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    loglevel, _ := shim.LogLevel(<span class="string">"debug"</span>)</span><br><span class="line">    shim.setLoggingLevel(loglevel)</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"operation fail!!!"</span>))</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>ChaincodeStubInterface接口中的核心方法</strong></p>
+<blockquote>
+<p>在shim包中有一个接口ChaincodeStubInterface，该接口提供了一组方法，通过这组方法可以非常方便的操作Fabric中账本数据。ChaincodeStubInterface接口的核心方法大概可以分为四大类：系统管理、存储管理、交易管理、调动外部chaincode。</p>
+</blockquote>
+<ul>
+<li><p>系统管理相关的方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode invoke -o orderer.example.com:<span class="number">7050</span>  -C mychannel -n mycc -c <span class="string">'&#123;"Args":["invoke","a","b","10"]&#125;'</span>peer chaincode invoke -o orderer.wumansgy.com:<span class="number">7050</span></span><br><span class="line"><span class="comment">// 赋值接收调用chaincode的客户端传递过来的参数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetFunctionAndParameters</span><span class="params">()</span> <span class="params">(function <span class="keyword">string</span>, params []<span class="keyword">string</span>)</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="comment">// 获取客户端传入的参数, args是一个字符串, 存储传入的字符串参数</span></span><br><span class="line">    _, args := stub.GetFunctionAndParameters()</span><br><span class="line">   	<span class="keyword">var</span> a_param = args[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">var</span> b_param = args[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">var</span> c_param = args[<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"sucess init!!!"</span>))</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>存储管理相关的方法</p>
+<ul>
+<li><p>PutState</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 把客户端传递过来的数据保存到Fabric中, 数据格式为键值对</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PutState</span><span class="params">(key <span class="keyword">string</span>, value []<span class="keyword">byte</span>)</span> <span class="title">error</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="comment">// 数据写入</span></span><br><span class="line">    stub.PutState(<span class="string">"user1"</span>, []<span class="keyword">byte</span>(<span class="string">"putvalue"</span>))</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"sucess invoke user1"</span>))</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GetState</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从Fabric中取出数据, 然后把这些数据交给chaincode处理.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetState</span><span class="params">(key <span class="keyword">string</span>)</span> <span class="params">([]<span class="keyword">byte</span>, error)</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="comment">// 读数据</span></span><br><span class="line">    keyvalue, err := stub.GetState(<span class="string">"user1"</span>) </span><br><span class="line">    <span class="keyword">return</span> shim.Success(keyvalue)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GetStateByRange</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据key的访问查询相关数据</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStateByRange</span><span class="params">(startKey,endKey <span class="keyword">string</span>)</span><span class="params">(StateQueryIteratorInterface, error)</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    startKey := <span class="string">"startkey"</span></span><br><span class="line">    endKey := <span class="string">"endkey"</span></span><br><span class="line">    <span class="comment">// 根据范围查询, 得到StateQueryIteratorInterface迭代器接口</span></span><br><span class="line">    keysIter, err := stub.getStateByRange(startKey, endKey)</span><br><span class="line">    <span class="comment">// 最后关闭迭代器接口</span></span><br><span class="line">    <span class="keyword">defer</span> keysIter.Close()</span><br><span class="line">    <span class="keyword">var</span> keys []<span class="keyword">string</span></span><br><span class="line">    <span class="keyword">for</span> keysIter.HasNext() &#123;	<span class="comment">// 如果有下一个节点</span></span><br><span class="line">        <span class="comment">// 得到下一个键值对</span></span><br><span class="line">        response, iterErr := keysIter.Next()</span><br><span class="line">        <span class="keyword">if</span> iterErr != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> shim.Error(fmt.Sprintf(<span class="string">"find an error %s"</span>, iterErr))</span><br><span class="line">        &#125;</span><br><span class="line">        keys = <span class="built_in">append</span>(keys, response.Key)	<span class="comment">// 存储键值到数组中</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 遍历keys数组</span></span><br><span class="line">    <span class="keyword">for</span> key, value := <span class="keyword">range</span> keys &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"key %d contains %s\n"</span>, key, value)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 编码keys数组成json格式</span></span><br><span class="line">    jsonKeys, err := json.Marshal(keys)</span><br><span class="line">    <span class="keyword">if</span> err := <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> shim.Error(fmt.Sprintf(<span class="string">"data Marshal json error: %s"</span>, err))</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 将编码之后的json字符串传递给客户端</span></span><br><span class="line">    <span class="keyword">return</span> shim.Success(jsonKeys)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GetHistoryForKey</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询某个键的历史记录</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetHistoryForKey</span><span class="params">(key <span class="keyword">string</span>)</span> <span class="params">(HistoryQueryIteratorInterface, error)</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    keysIter, err := stub.GetHistoryForKey(<span class="string">"user1"</span>)	<span class="comment">// user1是一个假设的键值</span></span><br><span class="line">    <span class="keyword">if</span> err := <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> shim.Error(fmt.Sprintf(<span class="string">"GetHistoryForKey error: %s"</span>, err))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> keysIter.Close()</span><br><span class="line">    <span class="keyword">var</span> keys []<span class="keyword">string</span></span><br><span class="line">    <span class="keyword">for</span> keysIter.HasNext() &#123;	<span class="comment">// 遍历集合,如果有下一个节点</span></span><br><span class="line">        <span class="comment">// 得到下一个键值对</span></span><br><span class="line">        response, iterErr := keysIter.Next()</span><br><span class="line">        <span class="keyword">if</span> iterErr != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> shim.Error(fmt.Sprintf(<span class="string">"find an error %s"</span>, iterErr))</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 交易编号</span></span><br><span class="line">        txid := response.TxId</span><br><span class="line">        <span class="comment">// 交易的值</span></span><br><span class="line">        txvalue := response.Value</span><br><span class="line">        <span class="comment">// 当前交易的状态</span></span><br><span class="line">        txStatus := response.IsDelete</span><br><span class="line">        <span class="comment">// 交易发生的时间戳</span></span><br><span class="line">        txtimestamp := response.Timestamp</span><br><span class="line">        <span class="comment">// 计算从1970.1.1到时间戳的秒数</span></span><br><span class="line">        tm := time.Unix(txtimestamp.Seconds, <span class="number">0</span>)</span><br><span class="line">        <span class="comment">// 根据指定的格式将日期格式化</span></span><br><span class="line">        datestr := tm.Format(<span class="string">"2018-11-11 11:11:11 AM"</span>)</span><br><span class="line">        fmt.Printf(<span class="string">"info - txid:%s, value:%s, isDel:%t, dateTime:%s\n"</span>, txid, <span class="keyword">string</span>(txvalue), txStatus, datestr)</span><br><span class="line">        keys = <span class="built_in">append</span>(keys, txid)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将数组中历史信息的key编码为json格式</span></span><br><span class="line">    jsonKeys, err := json.Marshal(keys)</span><br><span class="line">    <span class="keyword">if</span> err := <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> shim.Error(fmt.Sprintf(<span class="string">"data Marshal json error: %s"</span>, err))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将编码之后的json字符串传递给客户端</span></span><br><span class="line">    <span class="keyword">return</span> shim.Success(jsonKeys)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DelState</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 删除一个key</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DelState</span><span class="params">(key <span class="keyword">string</span>)</span> <span class="title">error</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    err := stub.DelState(<span class="string">"delKey"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    	<span class="keyword">return</span> shim.Error(<span class="string">"delete key error !!!"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> shim.Success(<span class="string">"delete key Success !!!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CreateCompositeKey</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 给定一组属性，将这些属性组合起来构造一个复合键</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateCompositeKey</span><span class="params">(objectType <span class="keyword">string</span>, attributes []<span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    parms := []<span class="keyword">string</span>(<span class="string">"go1"</span>, <span class="string">"go2"</span>, <span class="string">"go3"</span>, <span class="string">"go4"</span>, <span class="string">"go5"</span>, <span class="string">"go6"</span>)</span><br><span class="line">    ckey, _ := stub.CreateCompositeKey(<span class="string">"testkey"</span>, parms)</span><br><span class="line">    <span class="comment">// 复合键存储到账本中</span></span><br><span class="line">    err := stub.putState(ckey, []<span class="keyword">byte</span>(<span class="string">"hello, go"</span>))</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"find errors %s"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// print value: testkeygo1go2go3go4go5go6</span></span><br><span class="line">    fmt.Println(ckey)</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(ckey))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GetStateByPartialCompositeKey / SplitCompositeKey</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据局部的复合键返回所有的匹配的键值</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStateByPartialCompositeKey</span><span class="params">(objectType <span class="keyword">string</span>, keys []<span class="keyword">string</span>)</span><span class="params">(StateQueryIteratorInterface, error)</span>;</span></span><br><span class="line"><span class="function">// 给定一个复合键，将其拆分为复合键所有的属性</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">SplitCompositeKey</span><span class="params">(compositeKey <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, []<span class="keyword">string</span>, error)</span></span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    searchparm := []<span class="keyword">string</span>&#123;<span class="string">"go1"</span>&#125;</span><br><span class="line">    rs, err := stub.GetStateByPartialCompositeKey(<span class="string">"testkey"</span>, searchparm)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        error_str := fmt.Sprintf(<span class="string">"find error %s"</span>, err)</span><br><span class="line">        <span class="keyword">return</span> shim.Error(error_str)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> rs.Close()</span><br><span class="line">    <span class="keyword">var</span> tlist []<span class="keyword">string</span></span><br><span class="line">    <span class="keyword">for</span> rs.HasNext() &#123;</span><br><span class="line">        responseRange, err := rs.Next()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            error_str := fmt.Sprintf(<span class="string">"find error %s"</span>, err)</span><br><span class="line">            fmt.Println(error_str)</span><br><span class="line">            <span class="keyword">return</span> shim.Error(error_str)</span><br><span class="line">        &#125;</span><br><span class="line">        value1,compositeKeyParts,_ := stub.SplitCompositeKey(responseRange)</span><br><span class="line">        value2 := compositeKeyParts[<span class="number">0</span>]</span><br><span class="line">        value3 := compositeKeyParts[<span class="number">1</span>]</span><br><span class="line">        <span class="comment">// print: find value v1:testkey, v2:go1, v3go2</span></span><br><span class="line">        fmt.Printf(<span class="string">"find value v1:%s, v2:%s, V3:%s\n"</span>, value1, value2, value3)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> shim.Success(<span class="string">"success"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>交易管理相关的方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取当前客户端发送的交易时间戳</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetTxTimestamp</span><span class="params">()</span> <span class="params">(*timestamp.Timestamp, error)</span>;</span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    txtime, err := stub.GetTxTimestamp()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.printf(<span class="string">"Error getting transaction timestamp: %s"</span>, error)</span><br><span class="line">        <span class="keyword">return</span> shim.Error(fmt.Sprintf(<span class="string">"get transaction timestamp error: %s"</span>, error))</span><br><span class="line">    &#125;</span><br><span class="line">    tm := time.Unix(txtime.Second, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(fmt.Sprint(<span class="string">"time is: %s"</span>, tm.Format(<span class="string">"2018-11-11 23:23:32"</span>))))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用其他chaincode的方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用另一个链码中的Invoke方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InvokeChaincode</span><span class="params">(chaincodeName <span class="keyword">string</span>,args [][]<span class="keyword">byte</span>,channel <span class="keyword">string</span>)</span> <span class="title">pb</span>.<span class="title">Response</span></span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    <span class="comment">// 设置参数, a向b转转11</span></span><br><span class="line">    trans:=[][]<span class="keyword">byte</span>&#123;[]<span class="keyword">byte</span>(<span class="string">"invoke"</span>),[]<span class="keyword">byte</span>(<span class="string">"a"</span>),[]<span class="keyword">byte</span>(<span class="string">"b"</span>),[]<span class="keyword">byte</span>(<span class="string">"11"</span>)&#125;</span><br><span class="line">    <span class="comment">// 调用chaincode</span></span><br><span class="line">	response := stub.InvokeChaincode(<span class="string">"mycc"</span>, trans, <span class="string">"mychannel"</span>)</span><br><span class="line">    <span class="comment">// 判断是否操作成功了</span></span><br><span class="line">    <span class="comment">// 课查询: https://godoc.org/github.com/hyperledger/fabric/protos/peer#Response</span></span><br><span class="line">    <span class="keyword">if</span> response.Status != shim.OK &#123;</span><br><span class="line">        errStr := fmt.Sprintf(<span class="string">"Invoke failed, error: %s"</span>, response.Payload)</span><br><span class="line">        <span class="keyword">return</span> shim.Error(errStr)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(<span class="string">"转账成功..."</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ==================================================</span></span><br><span class="line"><span class="comment">// 获取客户端发送的交易编号</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetTxID</span><span class="params">()</span> <span class="title">string</span></span></span><br><span class="line"><span class="function">// 示例代码</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(t *TestStudy)</span> <span class="title">Invoke</span><span class="params">(stub shim.ChaincodeStubInterface)</span> <span class="title">pb</span>.<span class="title">Response</span></span> &#123;</span><br><span class="line">    txid := stub.GetTxID()</span><br><span class="line">    <span class="keyword">return</span> shim.Success([]<span class="keyword">byte</span>(txid))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-3-ChainCode交易的背书（endorse）"><a href="#5-3-ChainCode交易的背书（endorse）" class="headerlink" title="5.3 ChainCode交易的背书（endorse）"></a>5.3 ChainCode交易的背书（endorse）</h3><blockquote>
+<p>区块链是一个去中心的，所有参与方集体维护的公共账本。Fabric作为一个典型的区块链的技平台当然也具备这样的特点。Fabric中对数据参与方对数据的确认是通过Chaincode来进行的。</p>
+<p>在Fabric中有一个非常重要的概念称为Endorsement，中文名为背书。背书的过程是一笔交易被确认的过程。而背书策略被用来指示对相关的参与方如何对交易讲行确认。当一个节点接收到一个交易请求的时候，会调用VSCC（系统Chaincode，专门负责处理背书相关的操作）与交易的chaincode共同来验证交易的合法性。在VSCC和交易的Chaincode共同对交易的确认中， 通常会做以下的校验。</p>
+<ul>
+<li>所有的背书是否有效（参与的背书的签名是否有效）。</li>
+<li>参与背书的数量是否满足要求。</li>
+<li>所有背书参与方是否满足要求。</li>
+</ul>
+<p>背书政策是指定第二和第三点的一种方式。这些概念看起来还是比较难懂的，理解它们最好的办法是通过一个具体的实例。背书策略的设置是通过部署时<code>instantiate</code>命令中<code>-P</code>-参数来设置的。命令样式如下： &amp;&amp;</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> peer chaincode instantiate -o oraderer.test.com:7050 -C mychannel -n mycc —v 1.0 -c '&#123;"Args":["init", "a", "100", "b", "200"]&#125;' -P "AND ('Org1MSP.member', 'Org2MSP.member')" </span><br><span class="line"><span class="meta">#</span> 上述命令是对Chaincode进行实例化的操作，我们提取-P后面的参数：</span><br><span class="line">"AND ('Org1MSP.member', 'Org2MSP.member')"</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个参数包说明的是当前Chaincode发起的交易，需要组织编号为<code>Org1MSP</code>和组织编号为<code>Org2MSP</code>的组织中的任何一个用户共同参与交易的确认并且同意，这样交易才能生效并被记录到区块链中。通过上述背书策略的实例我们可以知道背书策略是通过一定的关键字和系统的属性组成的。根据Fabric的系统定义，可以将上面的背书策略拆解如下：</p>
+<p><code>AND</code>参与背书者之间的关系，<code>AND</code>表示<font color="red">所有参与方共同对交易进行确认</font>。除了AND之外还可以使用关键字OR,如果使用关键字<code>OR</code>表示<font color="red">参与方的任何一方参与背书即完成交易的确认</font>。</p>
+<p>Org1MSP.member表示参与背书的组和组织中参与背书的用户。Org1MSP表示组织的编号，这个值是怎么来的呢？之前我们介绍过<code>cryptogen</code>模块，该模块根据配置文件生成系统的配置和账号信息。在<code>cryptogen</code>的配置文件中有一个节点<code>Organizations-&gt;ID</code>，该节点的值就是该组织的编号，也是在配置背书策略时需要用到的组织的编号。<code>member</code>泛指组织内的任何一个用户，当然也可以是组织某个具体的用户。</p>
+<p>通过上面的描述，基本上可以了解背书策略的编写规则，下面通过几个实例进一步了解背书策略的编写规则。</p>
+</blockquote>
+<ul>
+<li><p><strong>背书规则示例1</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 按照该背书规则进行交易, 必须通过组织Org1MSP，Org2MSP，Org3MSP中的用户共同验证交易才能生效</span><br><span class="line">"AND ('Org1MSP.member', 'Org2MSP.member', 'Org3MSP.member')"</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>背书规则示例2</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 按照该背书规则进行交易,只需要通过组织 Org1MSP 或 Org2MSP 或 Org3MSP 中的任何一个成员验证，即可生效</span><br><span class="line">"OR ('Org1MSP.member', 'Org2MSP.member', 'Org3MSP.member')"</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>背书规则示例3</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 按照该背书规则进行交易,有两种办法让交易生效</span><br><span class="line"><span class="meta">#</span> 	1. 组织Org1MSP中的某个成员对交易进行验证。</span><br><span class="line"><span class="meta">#</span>	2. 组织Org2MSP和组织Org3MSP中的成员共同就交易进行验证。</span><br><span class="line">"OR ('Org1MSP.member', AND（'Org2MSP.member', 'Org3MSP.member'）)" </span><br><span class="line">"AND ('Org1MSP.member', OR（'Org2MSP.member', 'Org3MSP.member'）)"</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>以上介绍了背书的规则，有一点需要注意：<font color="red">背书规则只针对chaincode中写入数据的操作进行校验，对于查询类操作不背书。</font>以golang版本的chaincode为例， 需要利用背书规则对操作进行校验的方法如下：</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PutState(key <span class="keyword">string</span>, value []<span class="keyword">byte</span>) error;</span><br><span class="line">DelState(key <span class="keyword">string</span>) error;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<font color="red">Fabric中的背书是发生在客户端的，需要进行相关的代码的编写才能完成整个背书的操作。</font>
+
+</blockquote>
+
+      
+    </div>
+
+    
+
+
+<div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+</div>
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/01/19/Fabric-ChainCode/">Fabric-ChainCode</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wuman 的个人博客">Wuman</a></p>
+  <p><span>发布时间:</span>2019年01月19日 - 20:01</p>
+  <p><span>最后更新:</span>2019年01月19日 - 20:01</p>
+  <p><span>原始链接:</span><a href="/2019/01/19/Fabric-ChainCode/" title="Fabric-ChainCode">http://yoursite.com/2019/01/19/Fabric-ChainCode/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/01/19/Fabric-ChainCode/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+</div>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HyperLedger-Fabric/" rel="tag"><i class="fa fa-tag"></i> HyperLedger-Fabric</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/06/Fabric网络搭建/" rel="next" title="Fabric网络搭建">
+                <i class="fa fa-chevron-left"></i> Fabric网络搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wuman</p>
+              <p class="site-description motion-element" itemprop="description">编程语言，区块连，Linux等相关技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">170</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+			  <br>
+<br>
+<div class="site-state-item site-state-posts" style="border-left:none;">
+       <span class="site-state-item-count" id="busuanzi_value_site_pv"></span>
+       <span class="site-state-item-name">浏览量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count" id="busuanzi_value_site_uv"></span>
+     <span class="site-state-item-name">访客量</span>
+</div>
+<div class="site-state-item site-state-posts">
+      <span class="site-state-item-count">304.7k</span>
+      <span class="site-state-item-name">总字数</span>
+</div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/wumansgy" target="_blank" title="Github"><i class="fa fa-fw fa-github"></i>Github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://blog.csdn.net/sgsgy5" target="_blank" title="csdn"><i class="fa fa-fw fa-globe"></i>csdn</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:a869087033@gmail.com" target="_blank" title="E-mail"><i class="fa fa-fw fa-envelope"></i>E-mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:869087033@qq.com" target="_blank" title="E-mail2"><i class="fa fa-fw fa-envelope"></i>E-mail2</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-智能合约"><span class="nav-number">1.</span> <span class="nav-text">5. 智能合约</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-ChainCode介绍"><span class="nav-number">1.1.</span> <span class="nav-text">5.1 ChainCode介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Golang版本的ChainCode的代码结构"><span class="nav-number">1.2.</span> <span class="nav-text">5.2 Golang版本的ChainCode的代码结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-ChainCode交易的背书（endorse）"><span class="nav-number">1.3.</span> <span class="nav-text">5.3 ChainCode交易的背书（endorse）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wuman</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.4.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="true"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
